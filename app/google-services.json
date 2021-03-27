@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "789333707188",
+    "project_id": "welink-6a0e1",
+    "storage_bucket": "welink-6a0e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789333707188:android:3176101f5a95ae1f724ae1",
+        "android_client_info": {
+          "package_name": "edu.neu.madcourse.welink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789333707188-47ich207h8u8hq3p368hhn2ivru44opi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFdjyPxfQdj8h4pGyQiC_QtcUweuRR-8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789333707188-47ich207h8u8hq3p368hhn2ivru44opi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
