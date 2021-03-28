@@ -21,10 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.sql.SQLOutput;
 
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.utility.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -120,11 +122,26 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User myUser = snapshot.getValue(User.class);
-                            System.out.println(myUser.getDisplayName());
-                            System.out.println(myUser.getEmail());
-                            System.out.println(myUser.getToken());
-                            System.out.println(myUser.getUid());
+                            Intent intent = new Intent(MainActivity.this, FollowingActivity.class);
 
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (task.isSuccessful()) {
+                                        myUser.setToken(task.getResult());
+                                        mDatabaseReference.child("users").child(myUser.getUid()).child("token").setValue(task.getResult());
+                                        intent.putExtra("displayName", myUser.getDisplayName());
+                                        intent.putExtra("email", myUser.getEmail());
+                                        intent.putExtra("token", myUser.getToken());
+                                        intent.putExtra("uid", myUser.getUid());
+                                        startActivity(intent);
+
+                                    }
+                                    else {
+                                        showError("can't get new token");
+                                    }
+                                }
+                            });
                         }
 
                         @Override
@@ -133,10 +150,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-
                 }
                 else {
-                    showError("Login failed");
+                    showError("Login failed, check password and email");
                 }
 
             }
