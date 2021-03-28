@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:backgroundTint="#FAF5F5"
+        android:backgroundTint="#FFFFFF"
         android:minHeight="@dimen/button_height"
         android:text="@string/register_button_value"
         android:textColor="#1E57CA" />

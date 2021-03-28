@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean checkEmail(String email) {
-        String regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
     }
 
