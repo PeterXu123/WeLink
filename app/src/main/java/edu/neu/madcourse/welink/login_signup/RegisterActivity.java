@@ -167,6 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             user1.setLocation(null);
                                             user1.setUid(user.getUid());
                                             user1.setEmail(email_);
+                                            user1.setIconUrl(null);
                                             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<String> task) {
