@@ -26,7 +26,7 @@
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         android:textIsSelectable="false"
- />
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/login_password"
@@ -38,7 +38,7 @@
         android:maxLines="1"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
- />
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/sign_in_button"
@@ -46,8 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         android:backgroundTint="#07C679"
-        android:minHeight="60dip"
-        android:text="Sign in" />
+        android:minHeight="@dimen/button_height"
+        android:text="@string/sign_in_button_value" />
 
     <Button
         android:id="@+id/register_button"
@@ -55,8 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         android:backgroundTint="#FAF5F5"
-        android:minHeight="60dip"
-        android:text="Register"
+        android:minHeight="@dimen/button_height"
+        android:text="@string/register_button_value"
         android:textColor="#1E57CA" />
 
 
