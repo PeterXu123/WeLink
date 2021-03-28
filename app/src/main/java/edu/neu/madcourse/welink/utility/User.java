@@ -5,6 +5,7 @@ public class User {
     private String uid;
     private String token;
     private String location;
+    private String email;
     public User(String displayName) {
         this.displayName = displayName;
     }
@@ -39,5 +40,13 @@ public class User {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

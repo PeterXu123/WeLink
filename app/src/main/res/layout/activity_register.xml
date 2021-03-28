@@ -5,17 +5,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_login_signup"
-    android:gravity="bottom"
+    android:background="@drawable/register"
+    android:gravity="top"
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
     android:paddingBottom="10dp"
-    tools:context=".login_signup.MainActivity">
+    tools:context=".login_signup.RegisterActivity">
 
     <EditText
-        android:id="@+id/login_email"
+        android:id="@+id/register_displayName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:autofillHints=""
+        android:hint="@string/prompt_displayName"
+        android:imeOptions="actionNext"
+        android:inputType="textNoSuggestions"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textIsSelectable="false" />
+
+    <EditText
+        android:id="@+id/register_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -29,7 +43,19 @@
         android:textIsSelectable="false" />
 
     <EditText
-        android:id="@+id/login_password"
+        android:id="@+id/register_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_confirm_password"
+        android:imeOptions="actionUnspecified"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+    <EditText
+        android:id="@+id/register_confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/prompt_password"
@@ -41,16 +67,7 @@
         android:textColorHint="@color/white" />
 
     <Button
-        android:id="@+id/sign_in_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:backgroundTint="#07C679"
-        android:minHeight="@dimen/button_height"
-        android:text="@string/sign_in_button_value" />
-
-    <Button
-        android:id="@+id/register_button_in_login"
+        android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
