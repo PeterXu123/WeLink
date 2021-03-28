@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WeLink</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
 </resources>
