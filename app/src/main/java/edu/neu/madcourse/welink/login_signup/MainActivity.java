@@ -23,10 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.sql.SQLOutput;
-import android.view.View;
-import android.widget.Button;
-
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.utility.User;
@@ -92,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //TODO: temp nearby button, remove later
         Button nearBy = findViewById(R.id.temp_nearby_posts);
         nearBy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //TODO: temp for testing, remove later
     private void launchNearbyActivity() {
         Intent intent = new Intent(this, NearbyActivity.class);
         startActivity(intent);
