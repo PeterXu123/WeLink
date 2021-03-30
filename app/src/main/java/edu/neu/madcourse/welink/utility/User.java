@@ -5,8 +5,22 @@ public class User {
     private String uid;
     private String token;
     private String location;
+    private String email;
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    private String iconUrl;
     public User(String displayName) {
         this.displayName = displayName;
+    }
+    public User() {
+
     }
 
     public String getDisplayName() {
@@ -39,5 +53,13 @@ public class User {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
