@@ -3,12 +3,12 @@ package edu.neu.madcourse.welink.posts;
 public class PostDAO {
     private String text;
     private String location;
-    private String time;
+    private long time;
     private String authorUID;
 
     public PostDAO(){};
 
-    public PostDAO(String text, String location, String time, String authorUID) {
+    public PostDAO(String text, String location, long time, String authorUID) {
         this.text = text;
         this.location = location;
         this.time = time;
@@ -31,11 +31,11 @@ public class PostDAO {
         this.location = location;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

@@ -16,8 +16,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.utility.TimeFormatter;
 import edu.neu.madcourse.welink.utility.User;
 import edu.neu.madcourse.welink.utility.UserDAO;
 
@@ -62,7 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ChildEventListener listener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            postSnapshots.add(snapshot);
+            postSnapshots.add(0,snapshot);
             PostDAO postDAO = snapshot.getValue(PostDAO.class);
             String postId = snapshot.getKey();
             String authorUID = postDAO.getAuthorUID();
@@ -70,8 +72,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     UserDAO author = snapshot.child(authorUID).getValue(UserDAO.class);
-                    PostDTO postDTO = new PostDTO(postId,postDAO.getText(),postDAO.getLocation(),postDAO.getTime(),author);
-                    postDTOs.add(postDTO);
+                    PostDTO postDTO = new PostDTO(postId,postDAO.getText(),postDAO.getLocation(), TimeFormatter.STORAGE_TIME_FORMATTER.format(postDAO.getTime()),author);
+                    postDTOs.add(0,postDTO);
                     notifyItemInserted(0);
                 }
 
