@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.follower.FollowerActivity;
 import edu.neu.madcourse.welink.following.search.SearchResultActivity;
 import edu.neu.madcourse.welink.following.search.SearchResultAdapter;
 import edu.neu.madcourse.welink.utility.BothFollowAdapter;
@@ -34,10 +35,19 @@ public class FollowingActivity extends AppCompatActivity {
     private RecyclerView followingListView;
     private BothFollowAdapter mFollowingAdapter;
     private Handler handler;
+    private Button deleted;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
+        deleted = findViewById(R.id.deleted);
+        deleted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FollowingActivity.this, FollowerActivity.class);
+                startActivity(intent);
+            }
+        });
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         handler = new Handler(Looper.myLooper());
         mAuth =  FirebaseAuth.getInstance();
