@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import edu.neu.madcourse.welink.R;
-import edu.neu.madcourse.welink.utility.UserDAO;
+import edu.neu.madcourse.welink.utility.User;
 import edu.neu.madcourse.welink.utility.UserDTO;
 
 public class NearbyActivity extends AppCompatActivity {
@@ -55,8 +55,8 @@ public class NearbyActivity extends AppCompatActivity {
         ref.child("users").child(currUserUID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UserDAO userDAO = snapshot.getValue(UserDAO.class);
-                currUser.setByUserDAO(userDAO);
+                User user = snapshot.getValue(User.class);
+                currUser.setByUser(user);
             }
 
             @Override
@@ -82,7 +82,6 @@ public class NearbyActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 

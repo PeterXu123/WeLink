@@ -6,6 +6,14 @@ public class User {
     private String token;
     private String location;
     private String email;
+    private String iconUrl;
+
+    public User(String displayName) {
+        this.displayName = displayName;
+    }
+    public User() {
+
+    }
 
     public String getIconUrl() {
         return iconUrl;
@@ -13,14 +21,6 @@ public class User {
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
-    }
-
-    private String iconUrl;
-    public User(String displayName) {
-        this.displayName = displayName;
-    }
-    public User() {
-
     }
 
     public String getDisplayName() {

@@ -1,17 +1,17 @@
 package edu.neu.madcourse.welink.posts;
 
-import edu.neu.madcourse.welink.utility.UserDAO;
+import edu.neu.madcourse.welink.utility.User;
 
 public class PostDTO {
     private String postID;
     private String text;
     private String location;
     private String displayTime;
-    private UserDAO author;
+    private User author;
 
     public PostDTO(){};
 
-    public PostDTO(String postID, String text, String location, String time, UserDAO author) {
+    public PostDTO(String postID, String text, String location, String time, User author) {
         this.postID = postID;
         this.text = text;
         this.location = location;
@@ -51,11 +51,11 @@ public class PostDTO {
         this.displayTime = time;
     }
 
-    public UserDAO getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(UserDAO author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 }

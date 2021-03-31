@@ -16,12 +16,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.TimeFormatter;
 import edu.neu.madcourse.welink.utility.User;
-import edu.neu.madcourse.welink.utility.UserDAO;
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
@@ -71,7 +69,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
             ref.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    UserDAO author = snapshot.child(authorUID).getValue(UserDAO.class);
+                    User author = snapshot.child(authorUID).getValue(User.class);
                     PostDTO postDTO = new PostDTO(postId,postDAO.getText(),postDAO.getLocation(), TimeFormatter.STORAGE_TIME_FORMATTER.format(postDAO.getTime()),author);
                     postDTOs.add(0,postDTO);
                     notifyItemInserted(0);

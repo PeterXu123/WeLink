@@ -8,22 +8,26 @@ public class UserDTO {
     private String email;
     private String token;
     private String uid;
+    private String iconUrl;
+    private String location;
 
     public UserDTO(){};
 
-    public UserDTO(String displayName, String email, String token, String uid, Set<String> followers) {
-        this.followers = followers;
-        this.displayName = displayName;
-        this.email = email;
-        this.token = token;
-        this.uid = uid;
-    }
+//    public UserDTO(String displayName, String email, String token, String uid, Set<String> followers) {
+//        this.followers = followers;
+//        this.displayName = displayName;
+//        this.email = email;
+//        this.token = token;
+//        this.uid = uid;
+//    }
 
-    public void setByUserDAO(UserDAO user) {
+    public void setByUser(User user) {
         this.displayName = user.getDisplayName();
         this.email = user.getEmail();
         this.token = user.getToken();
         this.uid = user.getToken();
+        this.iconUrl = user.getIconUrl();
+        this.location = user.getLocation();
     }
 
     public Set<String> getFollowers() {
