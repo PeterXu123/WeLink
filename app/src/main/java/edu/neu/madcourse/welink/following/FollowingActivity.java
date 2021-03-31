@@ -3,7 +3,11 @@ package edu.neu.madcourse.welink.following;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +26,8 @@ public class FollowingActivity extends AppCompatActivity {
     private String displayName;
     private String email;
     private String token;
+    private Button searchButton;
+    private EditText searchName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,18 @@ public class FollowingActivity extends AppCompatActivity {
             displayName = u.getDisplayName();
             email = u.getEmail();
         }
+        searchName = findViewById(R.id.searchName);
+        searchButton = findViewById(R.id.searchUserButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!searchName.getText().toString().equals("")) {
+                    Intent intent = new Intent(FollowingActivity.this, SearchResultActivity.class);
+                    intent.putExtra("search_name", searchName.getText().toString());
+                    startActivity(intent);
+                }
+            }
+        });
 
 
     }
