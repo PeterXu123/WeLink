@@ -18,23 +18,41 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import edu.neu.madcourse.welink.R;
-import edu.neu.madcourse.welink.utility.TimeFormatter;
+import edu.neu.madcourse.welink.utility.PostDAO;
+import edu.neu.madcourse.welink.utility.PostDTO;
 import edu.neu.madcourse.welink.utility.User;
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    private ArrayList<DataSnapshot> postSnapshots;
     private ArrayList<PostDTO> postDTOs;
     RecyclerView rv;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-    String currUser = "MxOJGG6VRuZPVaQKVJ9Dzth2omd2";
 
-    PostAdapter() {
-        ref.child("post_self").child(currUser).addChildEventListener(listener);
-        postSnapshots = new ArrayList<>();
+    //TODO: dummy current user uid and location
+    String currUser = "MxOJGG6VRuZPVaQKVJ9Dzth2omd2";
+    String currLocation = "37_25_38_45";
+
+    PostAdapter(String type) {
+        switch (type) {
+            case "nearby":
+                ref.child("posts_location").child(currLocation).addChildEventListener(listener);
+                break;
+            case "self":
+                ref.child("posts_self").child(currUser).addChildEventListener(listener);
+                break;
+            case "friends":
+                ref.child("posts_followings").child(currUser).addChildEventListener(listener);
+                break;
+            default:
+        }
         postDTOs = new ArrayList<>();
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        rv = recyclerView;
+    }
 
     @NonNull
     @Override
@@ -62,24 +80,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ChildEventListener listener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            postSnapshots.add(0,snapshot);
-            PostDAO postDAO = snapshot.getValue(PostDAO.class);
             String postId = snapshot.getKey();
-            String authorUID = postDAO.getAuthorUID();
-            ref.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    User author = snapshot.child(authorUID).getValue(User.class);
-                    PostDTO postDTO = new PostDTO(postId,postDAO.getText(),postDAO.getLocation(), TimeFormatter.STORAGE_TIME_FORMATTER.format(postDAO.getTime()),author);
-                    postDTOs.add(0,postDTO);
-                    notifyItemInserted(0);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+            //get Post and author information
+            if(postId != null) {
+                ref.child("posts").child(postId).addListenerForSingleValueEvent(findPostById());
+            }
         }
 
         @Override
@@ -104,4 +109,43 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     };
 
 
+    private ValueEventListener findPostById() {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                PostDAO post = snapshot.getValue(PostDAO.class);
+                PostDTO postDTO = new PostDTO();
+                postDTO.setByPostDAO(post);
+                ref.child("users").child(post.getAuthorUID()).addListenerForSingleValueEvent(findUserById(postDTO));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+    }
+
+
+    private ValueEventListener findUserById(PostDTO postDTO) {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User author = snapshot.getValue(User.class);
+                postDTO.setAuthor(author);
+                addNewPostToList(postDTO);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+    }
+
+    private void addNewPostToList(PostDTO post) {
+        postDTOs.add(0,post);
+        notifyItemInserted(0);
+        rv.smoothScrollToPosition(0);
+    }
 }

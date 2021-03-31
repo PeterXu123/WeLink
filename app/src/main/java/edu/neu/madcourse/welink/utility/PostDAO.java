@@ -1,4 +1,4 @@
-package edu.neu.madcourse.welink.posts;
+package edu.neu.madcourse.welink.utility;
 
 public class PostDAO {
     private String text;

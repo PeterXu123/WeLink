@@ -1,6 +1,4 @@
-package edu.neu.madcourse.welink.posts;
-
-import edu.neu.madcourse.welink.utility.User;
+package edu.neu.madcourse.welink.utility;
 
 public class PostDTO {
     private String postID;
@@ -17,6 +15,12 @@ public class PostDTO {
         this.location = location;
         this.displayTime = time;
         this.author = author;
+    }
+
+    public void setByPostDAO(PostDAO post) {
+        this.text = post.getText();
+        this.location = post.getLocation();
+        this.displayTime = TimeFormatter.STORAGE_TIME_FORMATTER.format(post.getTime());
     }
 
     public String getText() {

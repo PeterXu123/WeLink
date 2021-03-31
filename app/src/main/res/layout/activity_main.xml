@@ -24,7 +24,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="temp_nearby" />
+            android:text="nearby" />
+
+        <Button
+            android:id="@+id/temp_self_posts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="self_post" />
+
+        <Button
+            android:id="@+id/temp_friends_posts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="friends_post" />
 
     </LinearLayout>
 

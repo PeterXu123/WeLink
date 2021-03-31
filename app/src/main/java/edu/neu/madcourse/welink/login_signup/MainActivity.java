@@ -26,7 +26,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.utility.User;
-import edu.neu.madcourse.welink.posts.NearbyActivity;
+import edu.neu.madcourse.welink.posts.PostActivity;
 
 public class MainActivity extends AppCompatActivity {
     private EditText email;
@@ -88,20 +88,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: temp nearby button, remove later
+        //TODO: temp buttons, remove later
         Button nearBy = findViewById(R.id.temp_nearby_posts);
         nearBy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchNearbyActivity();
+                launchNearbyActivity("nearby");
+            }
+        });
+
+        Button self = findViewById(R.id.temp_self_posts);
+        self.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchNearbyActivity("self");
+            }
+        });
+
+        Button friends = findViewById(R.id.temp_friends_posts);
+        friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchNearbyActivity("friends");
             }
         });
 
     }
 
     //TODO: temp for testing, remove later
-    private void launchNearbyActivity() {
-        Intent intent = new Intent(this, NearbyActivity.class);
+    private void launchNearbyActivity(String post_type) {
+        Intent intent = new Intent(this, PostActivity.class);
+        intent.putExtra("type", post_type);
         startActivity(intent);
     }
 

@@ -1,5 +1,6 @@
 package edu.neu.madcourse.welink.posts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,10 +22,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.utility.PostDAO;
 import edu.neu.madcourse.welink.utility.User;
 import edu.neu.madcourse.welink.utility.UserDTO;
 
-public class NearbyActivity extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {
 
     private RecyclerView.LayoutManager layoutManger;
     private RecyclerView recyclerView;
@@ -43,7 +45,9 @@ public class NearbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.posts_list);
-        createRecyclerView();
+        Intent intent = getIntent();
+        String type = intent.getExtras().getString("type");
+        createRecyclerView(type);
         tempAdd = findViewById(R.id.temp_buttom);
         tempAdd.setOnClickListener(tempListener);
         count = 0; //TODO:temp
@@ -85,11 +89,11 @@ public class NearbyActivity extends AppCompatActivity {
     }
 
 
-    private void createRecyclerView() {
+    private void createRecyclerView(String adapterType) {
         layoutManger = new LinearLayoutManager(this);
         recyclerView = findViewById(R.id.post_rv);
         recyclerView.setHasFixedSize(true);
-        postAdapter = new PostAdapter();
+        postAdapter = new PostAdapter(adapterType);
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }
