@@ -52,6 +52,7 @@
             android:id="@+id/detailButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#0783E1"
             android:minHeight="50dip"
             android:text="Detail"
             app:layout_constraintBottom_toBottomOf="parent"

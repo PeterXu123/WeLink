@@ -1,4 +1,4 @@
-package edu.neu.madcourse.welink.following;
+package edu.neu.madcourse.welink.following.search;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +15,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private String searchName;
     private RecyclerView mSearchResultListView;
     private DatabaseReference mDatabaseReference;
-    private FollowingAdapter mFollowingAdapter;
+    private SearchResultAdapter mSearchResultAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +25,7 @@ public class SearchResultActivity extends AppCompatActivity {
         }
         mSearchResultListView = findViewById(R.id.searchResultView);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFollowingAdapter = new FollowingAdapter(mDatabaseReference, this, searchName);
+        mSearchResultAdapter = new SearchResultAdapter(mDatabaseReference, this, searchName);
 
 
     }
@@ -33,7 +33,7 @@ public class SearchResultActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mSearchResultListView.setAdapter(mFollowingAdapter);
+        mSearchResultListView.setAdapter(mSearchResultAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mSearchResultListView.setLayoutManager(layoutManager);
     }
