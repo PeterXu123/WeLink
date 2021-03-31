@@ -114,8 +114,9 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull FollowingHolder holder, int position) {
-        System.out.println(listOfUsers.get(position).getEmail());
-        holder.displayName.setText(listOfUsers.get(position).getDisplayName());
+        User u =  listOfUsers.get(position);
+        String shortUserName = u.getDisplayName().length() >= 8 ? u.getDisplayName().substring(0,8) : u.getDisplayName();
+        holder.displayName.setText(shortUserName);
         holder.profileIcon.setImageResource(R.drawable.profile_icon);
 
     }
