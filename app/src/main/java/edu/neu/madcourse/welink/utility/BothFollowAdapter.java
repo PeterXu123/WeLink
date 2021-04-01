@@ -141,7 +141,6 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
 
     @Override
     public int getItemCount() {
-        System.out.println(1123321);
         return listOfUsers.size();
     }
 }
