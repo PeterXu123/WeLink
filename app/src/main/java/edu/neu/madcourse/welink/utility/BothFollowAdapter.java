@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +136,13 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
         User u =  listOfUsers.get(position);
         String shortUserName = u.getDisplayName().length() >= 8 ? u.getDisplayName().substring(0,8) : u.getDisplayName();
         holder.displayName.setText(shortUserName);
-        holder.profileIcon.setImageResource(R.drawable.profile_icon);
+        if (u.getIconUrl() != null) {
+            Picasso.with(context).load(u.getIconUrl()).into(holder.profileIcon);
+        }
+        else {
+            holder.profileIcon.setImageResource(R.drawable.profile_icon);
+        }
+
 
     }
 

@@ -27,6 +27,7 @@ import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.follower.FollowerActivity;
 import edu.neu.madcourse.welink.following.search.SearchResultActivity;
 import edu.neu.madcourse.welink.utility.BothFollowAdapter;
+import edu.neu.madcourse.welink.utility.UploadProfileIconActivity;
 
 
 public class FollowingFragment extends Fragment {
@@ -75,6 +76,13 @@ public class FollowingFragment extends Fragment {
         searchName = view.findViewById(R.id.searchName1);
         searchButton = view.findViewById(R.id.searchUserButton1);
         followingListView = view.findViewById(R.id.followingList1);
+        view.findViewById(R.id.uploadButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), UploadProfileIconActivity.class);
+                startActivity(intent);
+            }
+        });
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
