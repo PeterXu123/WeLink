@@ -101,7 +101,7 @@ public class UploadProfileIconActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (uri != null) {
                 StorageReference ref = storage.getReference().
-                        child("profileIcon/" + UUID.randomUUID().toString());
+                        child("profileIcon/" + mAuth.getCurrentUser().getUid());
                 try {
                     Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -123,16 +123,7 @@ public class UploadProfileIconActivity extends AppCompatActivity {
                                             finish();
                                         }
                                     });
-//                                    if (user_iconUrl.isSuccessful()) {
-//                                        System.out.println("herrrrrrrrrrrrrrrrrrrrr");
-//                                        user.setIconUrl(user_iconUrl.getResult().toString());
-//                                        mDatabaseReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
-//                                        finish();
-//                                    }
-//                                    else {
-//                                        System.out.println(user_iconUrl.getResult().toString());
-//                                        System.out.println("eeeeeeeeeeeeeeeeeeeeeeee");
-//                                    }
+
 
                                 }
 
@@ -148,38 +139,7 @@ public class UploadProfileIconActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-//                ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-////                        mDatabaseReference.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-////                            @Override
-////                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                                User user = snapshot.getValue(User.class);
-////                                Task<Uri> user_iconUrl = taskSnapshot.getStorage().getDownloadUrl();
-////                                if (user_iconUrl.isSuccessful()) {
-////                                    System.out.println("herrrrrrrrrrrrrrrrrrrrr");
-////                                    user.setIconUrl(user_iconUrl.getResult().toString());
-////                                    mDatabaseReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
-////                                    finish();
-////                                }
-////                                else {
-////                                    System.out.println("eeeeeeeeeeeeeeeeeeeeeeee");
-////                                }
-////
-////                            }
-////
-////                            @Override
-////                            public void onCancelled(@NonNull DatabaseError error) {
-////
-////                            }
-////                        });
-////                        Toast
-////                                .makeText(UploadProfileIconActivity.this,
-////                                        "Uploaded image successfully",
-////                                        Toast.LENGTH_SHORT)
-////                                .show();
-//                    }
-//                });
+
 
             }
         }

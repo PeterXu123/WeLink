@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -86,10 +87,15 @@ public class FollowingFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!searchName.getText().toString().equals("")) {
+//                Firebase Database paths must not contain '.', '#', '$', '[', or ']'
+                if (!searchName.getText().toString().equals("") && !searchName.getText().toString().contains(".") && !searchName.getText().toString().contains("#") && !searchName.getText().toString().contains("$")
+                && !searchName.getText().toString().contains("[") && !searchName.getText().toString().contains("]")) {
                     Intent intent = new Intent(getActivity(), SearchResultActivity.class);
                     intent.putExtra("search_name", searchName.getText().toString());
                     startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getContext(), "Search name is either empty or contains invalid character", Toast.LENGTH_LONG).show();
                 }
             }
         });
