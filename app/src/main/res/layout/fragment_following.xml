@@ -38,14 +38,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchUserButton1" />
 
-        <Button
-            android:id="@+id/deleted1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Follower"
-            app:layout_constraintBottom_toBottomOf="@+id/searchUserButton1"
-            app:layout_constraintEnd_toStartOf="@+id/searchUserButton1"
-            app:layout_constraintHorizontal_bias="0.238"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchName1" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>

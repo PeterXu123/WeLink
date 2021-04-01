@@ -42,7 +42,7 @@ public class FollowingFragment extends Fragment {
     private RecyclerView followingListView;
     private BothFollowAdapter mFollowingAdapter;
     private Handler handler;
-    private Button deleted;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,18 +59,10 @@ public class FollowingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        deleted = view.findViewById(R.id.deleted1);
         String test = "Test";
         Bundle bundle = new Bundle();
         bundle.putString("test", test);
-        deleted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(FollowingFragment.this)
-                        .navigate(R.id.action_FollowingFragment_to_FollowerFragment, bundle);
 
-            }
-        });
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         handler = new Handler(Looper.myLooper());
         mAuth =  FirebaseAuth.getInstance();
