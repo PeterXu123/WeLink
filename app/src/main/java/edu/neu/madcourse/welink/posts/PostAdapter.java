@@ -76,6 +76,44 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         return postDTOs.size();
     }
 
+    private ValueEventListener findPostById() {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                PostDAO post = snapshot.getValue(PostDAO.class);
+                PostDTO postDTO = new PostDTO();
+                postDTO.setByPostDAO(post);
+                ref.child("users").child(post.getAuthorUID()).addListenerForSingleValueEvent(findUserById(postDTO));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+    }
+
+    private ValueEventListener findUserById(PostDTO postDTO) {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User author = snapshot.getValue(User.class);
+                postDTO.setAuthor(author);
+                addNewPostToList(postDTO);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+    }
+
+    private void addNewPostToList(PostDTO post) {
+        postDTOs.add(0,post);
+        notifyItemInserted(0);
+        rv.smoothScrollToPosition(0);
+    }
 
     private ChildEventListener listener = new ChildEventListener() {
         @Override
@@ -107,45 +145,4 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
         }
     };
-
-
-    private ValueEventListener findPostById() {
-        return new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                PostDAO post = snapshot.getValue(PostDAO.class);
-                PostDTO postDTO = new PostDTO();
-                postDTO.setByPostDAO(post);
-                ref.child("users").child(post.getAuthorUID()).addListenerForSingleValueEvent(findUserById(postDTO));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-    }
-
-
-    private ValueEventListener findUserById(PostDTO postDTO) {
-        return new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User author = snapshot.getValue(User.class);
-                postDTO.setAuthor(author);
-                addNewPostToList(postDTO);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-    }
-
-    private void addNewPostToList(PostDTO post) {
-        postDTOs.add(0,post);
-        notifyItemInserted(0);
-        rv.smoothScrollToPosition(0);
-    }
 }

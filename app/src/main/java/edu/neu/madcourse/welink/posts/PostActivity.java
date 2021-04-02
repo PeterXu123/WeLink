@@ -1,11 +1,15 @@
 package edu.neu.madcourse.welink.posts;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -102,24 +106,47 @@ public class PostActivity extends AppCompatActivity {
     private View.OnClickListener tempListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Date now = new Date();
-            PostDAO dummyPost = new PostDAO(count + " post in weLink!","37_25_38_45", now.getTime(), "MxOJGG6VRuZPVaQKVJ9Dzth2omd2");
-            count++;
-            //add to posts
-            DatabaseReference res = ref.child("posts").push();
-            res.setValue(dummyPost);
-            String postId = res.getKey();
-            //add to self post
-            if(postId != null) {
-                ref.child("posts_self").child(currUserUID).child(postId).setValue(postId);
-                //add to follower's list
-                for(String followersUID : currUser.getFollowers()) {
-                    ref.child("posts_followings").child(followersUID).child(postId).setValue(postId);
-                }
-                //add to location list
-                ref.child("posts_location").child(dummyPost.getLocation()).child(postId).setValue(postId);
-            }
+            LayoutInflater inflater = LayoutInflater.from(PostActivity.this);
+            View input = inflater.inflate(R.layout.new_post_prompt,null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(PostActivity.this);
+            final EditText content = input.findViewById(R.id.new_post_content);
+            builder.setView(input)
+                    .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            addPost(content.getText().toString());
+                        }
+                    })
+                    .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setCancelable(false);
+            builder.create();
+            builder.show();
         }
     };
+
+    private void addPost(String content) {
+        Date now = new Date();
+        PostDAO dummyPost = new PostDAO(content,"37_25_38_45", now.getTime(), "MxOJGG6VRuZPVaQKVJ9Dzth2omd2");
+        count++;
+        //add to posts
+        DatabaseReference res = ref.child("posts").push();
+        res.setValue(dummyPost);
+        String postId = res.getKey();
+        //add to self post
+        if(postId != null) {
+            ref.child("posts_self").child(currUserUID).child(postId).setValue(postId);
+            //add to follower's list
+            for(String followersUID : currUser.getFollowers()) {
+                ref.child("posts_followings").child(followersUID).child(postId).setValue(postId);
+            }
+            //add to location list
+            ref.child("posts_location").child(dummyPost.getLocation()).child(postId).setValue(postId);
+        }
+    }
 
 }
