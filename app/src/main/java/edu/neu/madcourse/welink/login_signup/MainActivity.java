@@ -25,6 +25,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.following.FollowingActivity;
+import edu.neu.madcourse.welink.fragmentActivity.FragmentActivity;
 import edu.neu.madcourse.welink.utility.User;
 import edu.neu.madcourse.welink.posts.PostActivity;
 
@@ -153,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User myUser = snapshot.getValue(User.class);
-                            Intent intent = new Intent(MainActivity.this, FollowingActivity.class);
-
+//                            Intent intent = new Intent(MainActivity.this, FollowingActivity.class);
+                            Intent intent = new Intent(MainActivity.this, FragmentActivity.class);
                             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                                 @Override
                                 public void onComplete(@NonNull Task<String> task) {

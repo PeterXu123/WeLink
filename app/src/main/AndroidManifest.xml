@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeLink">
-        <activity android:name=".following.SearchResultActivity"></activity>
+        <activity android:name=".utility.UploadProfileIconActivity"></activity>
+        <activity android:name=".fragmentActivity.FragmentActivity" />
+        <activity android:name=".follower.FollowerActivity" />
+        <activity android:name=".following.search.SearchResultActivity" />
         <activity android:name=".following.FollowingActivity" />
         <activity android:name=".login_signup.RegisterActivity" />
         <activity android:name=".login_signup.MainActivity">
@@ -19,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".posts.PostActivity"/>
+        <activity android:name=".posts.PostActivity" />
     </application>
 
 </manifest>

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".following.search.SearchResultActivity">
+    tools:context=".follower.FollowerActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchResultView"
+        android:id="@+id/followerList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

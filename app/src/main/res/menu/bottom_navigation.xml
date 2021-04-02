@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_following"
+        android:icon="@drawable/following"
+        android:title="Following"/>
+    <item android:id="@+id/nav_follower"
+        android:icon="@drawable/follower"
+        android:title="Follower"/>
+
+</menu>

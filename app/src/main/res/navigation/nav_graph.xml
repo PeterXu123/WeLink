@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FollowingFragment">
+    <fragment
+        android:id="@+id/FollowingFragment"
+        android:name="edu.neu.madcourse.welink.following.FollowingFragment"
+        tools:layout="@layout/fragment_following">
+
+        <action
+            android:id="@+id/action_FollowingFragment_to_FollowerFragment"
+            app:destination="@id/FollowerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/FollowerFragment"
+        android:name="edu.neu.madcourse.welink.follower.FollowerFragment"
+        tools:layout="@layout/fragment_follower">
+    <action
+        android:id="@+id/action_FollowerFragment_to_FollowingFragment"
+        app:destination="@id/FollowingFragment" />
+    </fragment>
+
+
+
+
+</navigation>
