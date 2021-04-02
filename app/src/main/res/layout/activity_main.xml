@@ -14,34 +14,6 @@
     android:paddingBottom="10dp"
     tools:context=".login_signup.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/temp_nearby_posts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="nearby" />
-
-        <Button
-            android:id="@+id/temp_self_posts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="self_post" />
-
-        <Button
-            android:id="@+id/temp_friends_posts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="friends_post" />
-
-    </LinearLayout>
-
     <EditText
         android:id="@+id/login_email"
         android:layout_width="match_parent"

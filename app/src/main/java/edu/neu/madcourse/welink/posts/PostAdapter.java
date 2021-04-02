@@ -16,32 +16,36 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.PostDAO;
 import edu.neu.madcourse.welink.utility.PostDTO;
 import edu.neu.madcourse.welink.utility.User;
+import edu.neu.madcourse.welink.utility.UserDTO;
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     private ArrayList<PostDTO> postDTOs;
-    RecyclerView rv;
-    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private RecyclerView rv;
+    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private String currUID;
 
     //TODO: dummy current user uid and location
-    String currUser = "MxOJGG6VRuZPVaQKVJ9Dzth2omd2";
     String currLocation = "37_25_38_45";
 
-    PostAdapter(String type) {
+    PostAdapter(String currUID, String type) {
+        this.currUID = currUID;
         switch (type) {
             case "nearby":
-                ref.child("posts_location").child(currLocation).addChildEventListener(listener);
+                ref.child("posts_location").child(currLocation).addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             case "self":
-                ref.child("posts_self").child(currUser).addChildEventListener(listener);
+                ref.child("posts_self").child(currUID).addChildEventListener(childAddListener);
                 break;
             case "friends":
-                ref.child("posts_followings").child(currUser).addChildEventListener(listener);
+                ref.child("posts_followings").child(currUID).addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             default:
         }
@@ -67,8 +71,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         holder.username.setText(post.getAuthor().getDisplayName());
         holder.time.setText(post.getTime());
         holder.content.setText(post.getText());
-
-
     }
 
     @Override
@@ -115,7 +117,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         rv.smoothScrollToPosition(0);
     }
 
-    private ChildEventListener listener = new ChildEventListener() {
+    private ValueEventListener getChildrenOnceListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            Iterable<DataSnapshot> snapshotIterator = snapshot.getChildren();
+            Iterator<DataSnapshot> iterator = snapshotIterator.iterator();
+            List<String> posts = new ArrayList<>();
+            while(iterator.hasNext()) {
+                DataSnapshot next = iterator.next();
+                posts.add(next.getKey());
+            }
+            for(String postId : posts) {
+                ref.child("posts").child(postId).addListenerForSingleValueEvent(findPostById());
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+    private ChildEventListener childAddListener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
             String postId = snapshot.getKey();

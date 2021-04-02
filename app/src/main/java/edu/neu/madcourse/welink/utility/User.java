@@ -1,6 +1,9 @@
 package edu.neu.madcourse.welink.utility;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
     private String displayName;
     private String uid;
     private String token;
@@ -14,6 +17,42 @@ public class User {
     public User() {
 
     }
+
+    protected User(Parcel in) {
+        displayName = in.readString();
+        uid = in.readString();
+        token = in.readString();
+        location = in.readString();
+        email = in.readString();
+        iconUrl = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(displayName);
+        dest.writeString(uid);
+        dest.writeString(token);
+        dest.writeString(location);
+        dest.writeString(email);
+        dest.writeString(iconUrl);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getIconUrl() {
         return iconUrl;

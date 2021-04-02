@@ -1,9 +1,22 @@
 package edu.neu.madcourse.welink.utility;
 
-import java.util.Set;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class UserDTO {
-    private Set<String> followers;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class UserDTO implements Parcelable {
+    private List<String> followers;
     private String displayName;
     private String email;
     private String token;
@@ -13,28 +26,42 @@ public class UserDTO {
 
     public UserDTO(){};
 
-//    public UserDTO(String displayName, String email, String token, String uid, Set<String> followers) {
-//        this.followers = followers;
-//        this.displayName = displayName;
-//        this.email = email;
-//        this.token = token;
-//        this.uid = uid;
-//    }
+    protected UserDTO(Parcel in) {
+        followers = in.createStringArrayList();
+        displayName = in.readString();
+        email = in.readString();
+        token = in.readString();
+        uid = in.readString();
+        iconUrl = in.readString();
+        location = in.readString();
+    }
+
+    public static final Creator<UserDTO> CREATOR = new Creator<UserDTO>() {
+        @Override
+        public UserDTO createFromParcel(Parcel in) {
+            return new UserDTO(in);
+        }
+
+        @Override
+        public UserDTO[] newArray(int size) {
+            return new UserDTO[size];
+        }
+    };
 
     public void setByUser(User user) {
         this.displayName = user.getDisplayName();
         this.email = user.getEmail();
         this.token = user.getToken();
-        this.uid = user.getToken();
+        this.uid = user.getUid();
         this.iconUrl = user.getIconUrl();
         this.location = user.getLocation();
     }
 
-    public Set<String> getFollowers() {
+    public List<String> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(Set<String> followers) {
+    public void setFollowers(List<String> followers) {
         this.followers = followers;
     }
 
@@ -68,5 +95,21 @@ public class UserDTO {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringList(followers);
+        dest.writeString(displayName);
+        dest.writeString(email);
+        dest.writeString(token);
+        dest.writeString(uid);
+        dest.writeString(iconUrl);
+        dest.writeString(location);
     }
 }
