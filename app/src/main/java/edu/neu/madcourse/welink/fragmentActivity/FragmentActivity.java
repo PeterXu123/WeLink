@@ -102,12 +102,15 @@ public class FragmentActivity extends AppCompatActivity {
     }
 
     private void loadImageToIcon() {
-        ref.child("users").child(currUID).child("iconUrl").addValueEventListener(new ValueEventListener() {
+        ref.child("users").child(currUID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if (snapshot.getValue(String.class) != null) {
-                    Picasso.with(getApplicationContext()).load(snapshot.getValue(String.class)).into(icon);
+                if (snapshot.getValue(User.class).getIconUrl() != null) {
+                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+                }
+                else {
+                    icon.setImageResource(R.drawable.profile_icon);
                 }
             }
 
