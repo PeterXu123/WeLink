@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,6 +41,8 @@ public class FragmentActivity extends AppCompatActivity {
     DatabaseReference ref;
     private String currUID;
     private FloatingActionButton addPost;
+    private androidx.appcompat.widget.Toolbar iconToolBar;
+    private ImageView icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,9 @@ public class FragmentActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FollowingFragment()).commit();
         getCurrentUserUID();
         addPost = findViewById(R.id.add_post_button);
+        iconToolBar = findViewById(R.id.iconToolbar);
+        icon = findViewById(R.id.profileIcon);
+        loadImageToIcon();
         addPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +63,7 @@ public class FragmentActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -90,6 +99,35 @@ public class FragmentActivity extends AppCompatActivity {
         FirebaseUser u = mAuth.getCurrentUser();
         ref = FirebaseDatabase.getInstance().getReference();
         currUID = u.getUid();
+    }
+
+    private void loadImageToIcon() {
+        ref.child("users").child(currUID).child("iconUrl").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (snapshot.getValue(String.class) != null) {
+                    Picasso.with(getApplicationContext()).load(snapshot.getValue(String.class)).into(icon);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+//        ref.child("users").child(currUID).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     private void luanchAddPostActivity() {

@@ -5,6 +5,24 @@
     android:layout_height="match_parent"
     tools:context=".fragmentActivity.FragmentActivity">
 
+
+
+<!--    <com-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/iconToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/profileIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/profile_icon" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_post_button"
         android:layout_width="wrap_content"
@@ -19,7 +37,10 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/iconToolbar"
+
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

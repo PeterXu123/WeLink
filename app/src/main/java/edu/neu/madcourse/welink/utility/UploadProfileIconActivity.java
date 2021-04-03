@@ -105,7 +105,7 @@ public class UploadProfileIconActivity extends AppCompatActivity {
                 try {
                     Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+                    bmp.compress(Bitmap.CompressFormat.PNG, 25, baos);
                     byte[] data = baos.toByteArray();
                     ref.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
