@@ -20,7 +20,7 @@ public class PostDTO {
     public void setByPostDAO(PostDAO post) {
         this.text = post.getText();
         this.location = post.getLocation();
-        this.displayTime = TimeFormatter.STORAGE_TIME_FORMATTER.format(post.getTime());
+        this.displayTime = Formatter.STORAGE_TIME_FORMATTER.format(post.getTime());
     }
 
     public String getText() {

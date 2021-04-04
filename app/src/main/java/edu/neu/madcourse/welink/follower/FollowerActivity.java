@@ -30,9 +30,11 @@ public class FollowerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_follower);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         handler = new Handler(Looper.myLooper());
-        mAuth =  FirebaseAuth.getInstance();
-        uid = mAuth.getCurrentUser().getUid();
         followerListView = findViewById(R.id.followerList);
+        if (getIntent().getExtras() != null) {
+            uid = getIntent().getExtras().getString("uid");
+
+        }
     }
 
 
@@ -47,9 +49,9 @@ public class FollowerActivity extends AppCompatActivity {
     class showFollowerList extends Thread {
         @Override
         public void run() {
-            FirebaseUser u = mAuth.getCurrentUser();
+
             mFollowerAdapter = new BothFollowAdapter(mDatabaseReference,
-                    FollowerActivity.this, false, u.getUid());
+                    FollowerActivity.this, false, uid);
             handler.post(new Runnable() {
                 @Override
                 public void run() {

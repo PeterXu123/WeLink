@@ -6,28 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".following.FollowingActivity">
 
-    <EditText
-        android:id="@+id/searchName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="search name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
-
-    <Button
-        android:id="@+id/searchUserButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchName" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/followingList"
@@ -36,16 +14,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchUserButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/deleted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Follower"
-        app:layout_constraintBottom_toBottomOf="@+id/searchUserButton"
-        app:layout_constraintEnd_toStartOf="@+id/searchUserButton"
-        app:layout_constraintHorizontal_bias="0.238"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchName" />
+<!--    <Button-->
+<!--        android:id="@+id/deleted"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Follower"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/searchUserButton"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/searchUserButton"-->
+<!--        app:layout_constraintHorizontal_bias="0.238"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/searchName" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

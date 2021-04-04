@@ -4,11 +4,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragmentActivity.FragmentActivity">
+
+
+
+<!--    <com-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/iconToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue">
+        <androidx.cardview.widget.CardView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="50dp"
+            app:cardBackgroundColor="@color/white">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="50dp"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/profileIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+
+                    android:scaleType="centerCrop"/>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/displayNameInToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/profileIcon"
+            android:text="default"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/profileIcon"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:src="@drawable/profile_icon" />-->
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_post_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_alignEnd="@id/fragment_container"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/add_post_button" />
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-/>
+        android:layout_below="@id/iconToolbar"
+
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -21,8 +87,6 @@
         >
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-
 
 
 </RelativeLayout>
