@@ -8,4 +8,15 @@
     <string name="prompt_displayName">Username</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="grinning_face">😀</string>
+    <string name="grinning_face_with_smiling_eyes">😄</string>
+    <string name="grinning_squinting_face">😆</string>
+    <string name="rolling_on_the_floor_laughing">🤣</string>
+    <string name="face_with_tears_of_joy">😂</string>
+    <string name="slightly_smiling_face">🙂</string>
+    <string name="upside_down_face">🙃</string>
+    <string name="smiling_face_with_heart_eyes">😍</string>
+    <string name="face_blowing_a_kiss">😘</string>
+
 </resources>
