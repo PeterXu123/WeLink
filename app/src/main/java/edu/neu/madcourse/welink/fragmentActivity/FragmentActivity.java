@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,6 +41,7 @@ public class FragmentActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     DatabaseReference ref;
     private String currUID;
+    private String displayName;
     private FloatingActionButton addPost;
     private androidx.appcompat.widget.Toolbar iconToolBar;
     private ImageView icon;
@@ -56,6 +58,8 @@ public class FragmentActivity extends AppCompatActivity {
         iconToolBar = findViewById(R.id.iconToolbar);
         icon = findViewById(R.id.profileIcon);
         loadImageToIcon();
+        TextView tv = findViewById(R.id.displayNameInToolbar);
+        tv.setText(displayName);
         addPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +103,7 @@ public class FragmentActivity extends AppCompatActivity {
         FirebaseUser u = mAuth.getCurrentUser();
         ref = FirebaseDatabase.getInstance().getReference();
         currUID = u.getUid();
+        displayName = u.getDisplayName();
     }
 
     private void loadImageToIcon() {
