@@ -30,53 +30,34 @@ public class FollowingActivity extends AppCompatActivity {
     private String displayName;
     private String email;
     private String token;
-    private Button searchButton;
-    private EditText searchName;
     private RecyclerView followingListView;
     private BothFollowAdapter mFollowingAdapter;
     private Handler handler;
-    private Button deleted;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
-        deleted = findViewById(R.id.deleted);
-        deleted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FollowingActivity.this, FollowerActivity.class);
-                startActivity(intent);
-            }
-        });
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         handler = new Handler(Looper.myLooper());
         mAuth =  FirebaseAuth.getInstance();
+
         if (getIntent().getExtras() != null) {
             uid = getIntent().getExtras().getString("uid");
             displayName = getIntent().getExtras().getString("displayName");
             email = getIntent().getExtras().getString("email");
             token = getIntent().getExtras().getString("token");
         }
-        if (uid == null || displayName == null || email == null) {
-            FirebaseUser u = mAuth.getCurrentUser();
-            uid = u.getUid();
-            displayName = u.getDisplayName();
-            email = u.getEmail();
-        }
+//        if (uid == null || displayName == null || email == null) {
+//            FirebaseUser u = mAuth.getCurrentUser();
+//            uid = u.getUid();
+//            displayName = u.getDisplayName();
+//            email = u.getEmail();
+//        }
 
-        searchName = findViewById(R.id.searchName);
-        searchButton = findViewById(R.id.searchUserButton);
         followingListView = findViewById(R.id.followingList);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!searchName.getText().toString().equals("")) {
-                    Intent intent = new Intent(FollowingActivity.this, SearchResultActivity.class);
-                    intent.putExtra("search_name", searchName.getText().toString());
-                    startActivity(intent);
-                }
-            }
-        });
+
 
 
 
@@ -88,8 +69,7 @@ public class FollowingActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            FirebaseUser u = mAuth.getCurrentUser();
-            mFollowingAdapter = new BothFollowAdapter(mDatabaseReference, FollowingActivity.this, true, u.getUid());
+            mFollowingAdapter = new BothFollowAdapter(mDatabaseReference, FollowingActivity.this, true, uid);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
