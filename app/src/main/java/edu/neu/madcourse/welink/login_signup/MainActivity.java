@@ -1,15 +1,15 @@
 package edu.neu.madcourse.welink.login_signup;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import edu.neu.madcourse.welink.R;
-import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.fragmentActivity.FragmentActivity;
 import edu.neu.madcourse.welink.utility.User;
 

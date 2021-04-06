@@ -1,7 +1,6 @@
 package edu.neu.madcourse.welink.chat;
 
 
-import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +16,7 @@ public class ChatListHolder extends RecyclerView.ViewHolder {
     ImageView profileIcon;
     TextView displayName;
     private String clickMessage;
-    public ChatListHolder(@NonNull View itemView, @NonNull Context context) {
+    public ChatListHolder(@NonNull View itemView) {
         super(itemView);
         this.profileIcon = itemView.findViewById(R.id.profileImage);
         this.displayName = itemView.findViewById(R.id.displayName);

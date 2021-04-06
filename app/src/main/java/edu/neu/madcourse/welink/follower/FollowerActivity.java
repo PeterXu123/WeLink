@@ -1,20 +1,18 @@
 package edu.neu.madcourse.welink.follower;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import edu.neu.madcourse.welink.R;
-import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.utility.BothFollowAdapter;
 
 public class FollowerActivity extends AppCompatActivity {

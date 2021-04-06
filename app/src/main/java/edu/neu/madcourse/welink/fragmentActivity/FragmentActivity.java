@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +24,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.chat.ChatListFragment;
 import edu.neu.madcourse.welink.follower.FollowerFragment;
 import edu.neu.madcourse.welink.following.FollowingFragment;
 import edu.neu.madcourse.welink.posts.AddPostActivity;
@@ -80,7 +86,20 @@ public class FragmentActivity extends AppCompatActivity {
                     fragment = new PostFragment("friends");
                     break;
                 case R.id.nav_self:
-                    fragment = new PostFragment("self");
+                    List<String> list = new LinkedList<>();
+                    if(list.isEmpty()) {
+                        list.add("MxOJGG6VRuZPVaQKVJ9Dzth2omd2_"+System.currentTimeMillis());
+                    }
+
+                    ref.child("chater_relation").child("pb45lhhtwVMlpt2kF1w5DUbMQi13")
+                            .setValue(list).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+                    fragment = new ChatListFragment();
+
             }
             Bundle bundle = new Bundle();
             bundle.putString("currUID", currUID);
@@ -105,7 +124,8 @@ public class FragmentActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.getValue(User.class).getIconUrl() != null) {
-                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+                    Picasso.get().load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+//                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
                 }
                 else {
                     icon.setImageResource(R.drawable.profile_icon);

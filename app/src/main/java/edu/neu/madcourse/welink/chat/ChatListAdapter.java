@@ -1,7 +1,6 @@
 package edu.neu.madcourse.welink.chat;
 
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,21 +29,19 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
     private LinkedList<ChatListRow> listOfChat;  // we need a lot of inserts and deletes
 //    private DatabaseReference ref;
 //    private User currentUser;
-    private Context context;
+//    private Context context;
     public ChatListAdapter(DatabaseReference ref, User currentUser,
-                           List<User> curChatersOfCurrentUser, Context context) {
+                           List<User> curChatersOfCurrentUser) {
 //        this.ref = ref;
 //        String curUserId = currentUser.getUid();
 //        ref.child("message_record").addChildEventListener(someListener);
 //        ref.child("chater_relation").addChildEventListener(mListener);
         listOfChat = new LinkedList<>();
 //        this.currentUser = currentUser;
-        this.context = context;
+//        this.context = context;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
+
 
     public void addNewChaterToAdapter(String imgUrl, String username) {
         listOfChat.add(0, new ChatListRow(imgUrl, username));
@@ -56,7 +53,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
     @Override
     public ChatListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_row, parent, false);
-        return new ChatListHolder(view, context);
+//        return new ChatListHolder(view, context);
+        ChatListHolder viewHolder = new ChatListHolder(view);
+        return viewHolder;
     }
 
     @Override
