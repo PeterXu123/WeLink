@@ -119,7 +119,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultHolder
         String shortUserName = u.getDisplayName().length() >= 8 ? u.getDisplayName().substring(0,8) : u.getDisplayName();
         holder.displayName.setText(shortUserName);
         if (u.getIconUrl() != null) {
-            Picasso.with(context).load(u.getIconUrl()).into(holder.profileIcon);
+//            Picasso.with(context).load(u.getIconUrl()).into(holder.profileIcon);
+            Picasso.get().load(u.getIconUrl()).into(holder.profileIcon);
         }
         else {
             holder.profileIcon.setImageResource(R.drawable.profile_icon);

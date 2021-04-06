@@ -112,7 +112,8 @@ public class FragmentActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.getValue(User.class).getIconUrl() != null) {
-                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+                    Picasso.get().load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+//                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
                 }
                 else {
                     icon.setImageResource(R.drawable.profile_icon);
