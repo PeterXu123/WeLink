@@ -10,15 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeLink">
-<<<<<<< HEAD
         <activity android:name=".chat.ChatDetailActivity"></activity>
         <activity android:name=".chat.ChatListActivity" />
         <activity android:name=".utility.UploadProfileIconActivity" />
         <activity android:name=".fragmentActivity.FragmentActivity" />
-=======
-        <activity android:name=".utility.UploadProfileIconActivity"></activity>
-        <activity android:name=".fragmentActivity.FragmentActivity"   android:configChanges="keyboard|orientation|screenSize" />
->>>>>>> 42e4eec8d16530a32b767273442e6274d99953a1
         <activity android:name=".follower.FollowerActivity" />
         <activity android:name=".following.search.SearchResultActivity" />
         <activity android:name=".following.FollowingActivity" />

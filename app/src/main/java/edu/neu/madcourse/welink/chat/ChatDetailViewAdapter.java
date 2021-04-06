@@ -18,7 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 import edu.neu.madcourse.welink.R;
-import edu.neu.madcourse.welink.utility.ChatMessage;
 
 public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHolder>{
     private ArrayList<DataSnapshot> msgSnapshots;
@@ -76,16 +75,16 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ChatDetailViewHolder holder, int position) {
-        DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
-        String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
-        String message = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
-        holder.message.setText(message);
-        if(name.equals(currUser)) {
-            changeDisplayForSelfMessage(holder,name);
-        } else {
-            changeDisplayForFriendMessage(holder,name);
-        }
-        holder.sender.setText(formatName(name));
+//        DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
+//        String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
+//        String message = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
+//        holder.message.setText(message);
+//        if(name.equals(currUser)) {
+//            changeDisplayForSelfMessage(holder,name);
+//        } else {
+//            changeDisplayForFriendMessage(holder,name);
+//        }
+//        holder.sender.setText(formatName(name));
     }
 
     @Override

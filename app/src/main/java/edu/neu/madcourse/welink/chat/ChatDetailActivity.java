@@ -6,16 +6,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +24,6 @@ import java.net.URL;
 import java.util.Scanner;
 
 import edu.neu.madcourse.welink.R;
-import edu.neu.madcourse.welink.utility.ChatMessage;
 
 //import androidx.fragment.app.FragmentContainerView;
 
@@ -53,26 +48,26 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
 
     private int singleChatStickerCount = 0;
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        dbRef.child("sentCount").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Long newCount = 0L;
-                if(snapshot.hasChild(fromUser)) {
-                    newCount = (Long)snapshot.child(fromUser).getValue();
-                }
-                newCount += singleChatStickerCount;
-                dbRef.child("sentCount").child(fromUser).setValue(newCount);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        dbRef.child("sentCount").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Long newCount = 0L;
+//                if(snapshot.hasChild(fromUser)) {
+//                    newCount = (Long)snapshot.child(fromUser).getValue();
+//                }
+//                newCount += singleChatStickerCount;
+//                dbRef.child("sentCount").child(fromUser).setValue(newCount);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
     @Override
     protected void onStart() {
@@ -87,7 +82,6 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             fromUser = intent.getExtras().getString("fromUser");
-//            toUser = intent.getExtras().getString("toUser");
             keypair = intent.getExtras().getString("pairKey");
             friendToken = intent.getExtras().getString("friend_token");
 
@@ -108,14 +102,13 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
 
     @Override
     public void launchAction(String selected) {
-        singleChatStickerCount++;
-        dbRef.child("messages").child(keypair).push().setValue(new ChatMessage(selected, fromUser));
-        sendMessageToDevice(fromUser, selected);
+//        singleChatStickerCount++;
+//        dbRef.child("messages").child(keypair).push().setValue(new ChatMessage(selected, fromUser));
+//        sendMessageToDevice(fromUser, selected);
     }
 
     public void sendMessageToDevice(String fromWhom, String selected) {
 
-//        final String targetToken = ((EditText)findViewById(R.id.tokenEditText)).getText().toString();
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -14,6 +14,6 @@
         android:title="Posts"/>
     <item android:id="@+id/nav_self"
         android:icon="@drawable/self_post"
-        android:title="Me"/>
+        android:title="Chat"/>
 <!--    max 5 item-->
 </menu>

@@ -1,38 +1,33 @@
 package edu.neu.madcourse.welink.fragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.follower.FollowerFragment;
 import edu.neu.madcourse.welink.following.FollowingFragment;
 import edu.neu.madcourse.welink.posts.AddPostActivity;
 import edu.neu.madcourse.welink.posts.PostFragment;
+import edu.neu.madcourse.welink.utility.User;
 
 public class FragmentActivity extends AppCompatActivity {
 
@@ -86,8 +81,6 @@ public class FragmentActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_self:
                     fragment = new PostFragment("self");
-//                case R.id.nav_chat:
-//                    fragment = new PostFragment("chat");
             }
             Bundle bundle = new Bundle();
             bundle.putString("currUID", currUID);
