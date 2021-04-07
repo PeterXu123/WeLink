@@ -66,9 +66,10 @@ public class RegisterActivity extends AppCompatActivity {
         return pass.length() >= 6
                 && confirm.equals(pass);
     }
-
+    //                Firebase Database paths must not contain '.', '#', '$', '[', or ']'
     private boolean checkUsername(String username) {
-        return !TextUtils.isEmpty(username);
+        return
+                !TextUtils.isEmpty(username) && !username.contains(".") && !username.contains("#") && !username.contains("$") && !username.contains("[") && !username.contains("]");
     }
 
     private void register() {
@@ -99,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (!checkUsername(username)) {
-            displayName.setError("This field is required");
+            displayName.setError("This field is required and it shouldn't contain '.', '#', '$', '[', or ']'");
             errorView = displayName;
             success = false;
         }
