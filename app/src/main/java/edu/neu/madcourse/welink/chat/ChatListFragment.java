@@ -30,10 +30,6 @@ import edu.neu.madcourse.welink.utility.ChaterRelation;
 import edu.neu.madcourse.welink.utility.User;
 
 public class ChatListFragment extends Fragment {
-    //    private String curUserName;
-//    private User curUser;
-//    private String currentUserToken;
-//    private EditText searchName;
     private RecyclerView chatListRecyclerView;
     private DatabaseReference mDatabaseReference;
     private ChatListAdapter chatListAdapter;
@@ -192,82 +188,5 @@ public class ChatListFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-
-//        goSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!searchName.getText().toString().equals("")) {
-//                    String newChaterName = searchName.getText().toString();
-//                    mDatabaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                            if (snapshot.hasChild(newChaterName)) {
-//                                User current_user = snapshot.child(curUserName).getValue(User.class);
-//                                if (current_user.getChaters() != null && current_user.getChaters().contains(newChaterName)) {
-//                                    User newChat = snapshot.child(newChaterName).getValue(User.class);
-//                                    String pairKey = curUserName.compareTo(newChaterName) < 0 ?
-//                                            curUserName + "_" + newChaterName : newChaterName + "_" + curUserName;
-//
-//                                    Log.d("toUser Token from chatlist:", newChat.getToken());
-//                                    Log.d("toUser Token from chatlist:", newChat.getToken());
-//
-//                                    Intent intent = new Intent(getApplicationContext(), ChatDetailActivity.class);
-//                                    intent.putExtra("fromUser", curUserName);
-//                                    intent.putExtra("toUser", newChaterName);
-//                                    intent.putExtra("pairKey", pairKey);
-//                                    intent.putExtra("chat_token", newChat.getToken());
-//                                    v.getContext().startActivity(intent);
-//                                } else {
-//                                    List<String> newChats = new ArrayList<>();
-//                                    if (current_user.getChaters() != null) {
-//                                        newChats = current_user.getChaters();
-//                                    }
-//                                    newChats.add(newChaterName);
-//                                    current_user.setChaters(newChats);
-//                                    // set chat's chat
-//                                    User newChat = snapshot.child(newChaterName).getValue(User.class);
-//
-//                                    List<String> chater_chaters = newChat.getChaters() == null ? new ArrayList<>() : newChat.getChaters();
-//                                    chater_chaters.add(curUserName);
-//                                    newChat.setChaters(chater_chaters);
-//                                    DatabaseReference newChatRef = mDatabaseReference.child("users").child(newChaterName);
-//                                    newChatRef.setValue(newChat);
-//                                    mDatabaseReference.child("users").child(curUserName).setValue(current_user).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//                                            String pairKey = current_user.getDisplayName().compareTo(newChaterName) < 0 ?
-//                                                    current_user.getDisplayName() + "_" + newChaterName : newChaterName + "_" + current_user.getDisplayName();
-//                                            Intent intent = new Intent(getApplicationContext(), ChatDetailActivity.class);
-//                                            intent.putExtra("fromUser", curUserName);
-//                                            intent.putExtra("toUser", newChaterName);
-//                                            intent.putExtra("pairKey", pairKey);
-//                                            intent.putExtra("chat_token", newChat.getToken());
-//                                            Log.d("Wtf", "why");
-//                                            v.getContext().startActivity(intent);
-//                                        }
-//                                    });
-//
-//                                }
-//
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Username doesn't exist", Toast.LENGTH_LONG).show();
-//                                searchName.setText("");
-//
-//                            }
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//    }
     
 }
