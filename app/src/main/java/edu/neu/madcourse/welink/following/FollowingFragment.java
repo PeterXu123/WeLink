@@ -92,6 +92,7 @@ public class FollowingFragment extends Fragment {
                 && !searchName.getText().toString().contains("[") && !searchName.getText().toString().contains("]")) {
                     Intent intent = new Intent(getActivity(), SearchResultActivity.class);
                     intent.putExtra("search_name", searchName.getText().toString());
+                    searchName.setText("");
                     startActivity(intent);
                 }
                 else {

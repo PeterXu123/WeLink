@@ -85,7 +85,7 @@ public class FragmentActivity extends AppCompatActivity {
                 case R.id.nav_posts:
                     fragment = new PostFragment("friends");
                     break;
-                case R.id.nav_self:
+                case R.id.nav_chat:
                     List<String> list = new LinkedList<>();
                     if(list.isEmpty()) {
                         list.add("MxOJGG6VRuZPVaQKVJ9Dzth2omd2_"+System.currentTimeMillis());
