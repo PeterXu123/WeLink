@@ -1,6 +1,8 @@
 package edu.neu.madcourse.welink.chat;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +10,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.User;
@@ -27,25 +27,18 @@ import edu.neu.madcourse.welink.utility.User;
 //  position and add it to list's first position.
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
     private LinkedList<ChatListRow> listOfChat;  // we need a lot of inserts and deletes
-//    private DatabaseReference ref;
-//    private User currentUser;
-//    private Context context;
-    public ChatListAdapter(DatabaseReference ref, User currentUser,
-                           List<User> curChatersOfCurrentUser) {
-//        this.ref = ref;
-//        String curUserId = currentUser.getUid();
-//        ref.child("message_record").addChildEventListener(someListener);
-//        ref.child("chater_relation").addChildEventListener(mListener);
+    Context context;
+    Intent intent;
+    public ChatListAdapter(Context context, Intent intent) {
         listOfChat = new LinkedList<>();
-//        this.currentUser = currentUser;
-//        this.context = context;
+        this.context = context;
+        this.intent = intent;
     }
 
 
 
-    public void addNewChaterToAdapter(String imgUrl, String username) {
-        listOfChat.add(0, new ChatListRow(imgUrl, username));
-//        notifyItemInserted(listOfChat.size()-1);
+    public void addNewChaterToAdapter(User curChater, User curUser) {
+        listOfChat.add(0, new ChatListRow(curChater, curUser));
         notifyItemInserted(0);
     }
 
@@ -53,24 +46,27 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
     @Override
     public ChatListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_row, parent, false);
-//        return new ChatListHolder(view, context);
-        ChatListHolder viewHolder = new ChatListHolder(view);
+        ChatListHolder viewHolder = new ChatListHolder(view, context, new Intent(intent));
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ChatListHolder holder, int position) {
         ChatListRow chatListRow = listOfChat.get(position);
-        String imgUrl = chatListRow.getImgUrl();
+        User curChater = chatListRow.getCurChater();
+        User curUser = chatListRow.getCurUser();
+        String chaterImgUrl = curChater.getIconUrl();
         try {
-            if(imgUrl != null && imgUrl.length() > 0) {
-                Picasso.get().load(imgUrl).into(holder.profileIcon);
+            if(chaterImgUrl != null && chaterImgUrl.length() > 0) {
+                Picasso.get().load(chaterImgUrl).into(holder.profileIcon);
             }
         } catch (Exception exception) {
-            System.out.println(Arrays.toString(exception.getStackTrace())
-            );
+            System.out.println(Arrays.toString(exception.getStackTrace()));
         }
-        holder.displayName.setText(chatListRow.getUsername());
+        holder.curChater = curChater;
+        holder.curUser = curUser;
+        holder.displayName.setText(curChater.getDisplayName());
     }
 
 

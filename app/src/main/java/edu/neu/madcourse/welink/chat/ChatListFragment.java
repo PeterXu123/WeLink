@@ -47,8 +47,8 @@ public class ChatListFragment extends Fragment {
 
         @Override
         public void run() {
-            chatListAdapter = new ChatListAdapter(mDatabaseReference, curUser,
-                    curChatersOfCurrentUser);
+            Intent intent = new Intent(getActivity(), ChatDetailActivity.class);
+            chatListAdapter = new ChatListAdapter(getContext(), intent);
             resultHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -88,16 +88,13 @@ public class ChatListFragment extends Fragment {
                                     if( curChaterMap != null) {
                                         User curChater = new User();
                                         curChater.setDisplayName(curChaterMap.getOrDefault("displayName", "No name"));
-                                        curChater.setIconUrl(curChaterMap.getOrDefault("iconUrl", "no image"
-//                                        curChater.setIconUrl("https://www.flaticon.com/svg/vstatic/svg/1837/1837645.svg?token=exp=1617747084~hmac=85023a9164cd445cfc5981f3b4ae8a8a");
-                                    ));
+                                        curChater.setIconUrl(curChaterMap.getOrDefault("iconUrl", "no image"));
                                         curChater.setLocation(curChaterMap.getOrDefault("location", "no location"));
                                         curChater.setEmail(curChaterMap.getOrDefault("email", "no email"));
                                         curChater.setToken(curChaterMap.getOrDefault("token", "no token"));
                                         curChater.setUid(chaterId);
                                         curChatersOfCurrentUser.add(curChater);
-                                        chatListAdapter.addNewChaterToAdapter(curChater.getIconUrl(),
-                                                curChater.getDisplayName());
+                                        chatListAdapter.addNewChaterToAdapter(curChater, curUser);
                                     }
                                 }
                             }

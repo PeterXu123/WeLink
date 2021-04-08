@@ -1,31 +1,33 @@
 package edu.neu.madcourse.welink.chat;
 
+import edu.neu.madcourse.welink.utility.User;
+
 public class ChatListRow {
-    private String imgUrl;
-    private String username;
+    private User curChater;
+    private User curUser;
 
     public ChatListRow() {
 
     }
 
-    public ChatListRow(String imgUrl, String username) {
-        this.imgUrl = imgUrl;
-        this.username = username;
+    public ChatListRow(User curChater, User curUser) {
+        this.curChater = curChater;
+        this.curUser = curUser;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public User getCurChater() {
+        return curChater;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setCurChater(User curChater) {
+        this.curChater = curChater;
     }
 
-    public String getUsername() {
-        return username;
+    public User getCurUser() {
+        return curUser;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCurUser(User curUser) {
+        this.curUser = curUser;
     }
 }

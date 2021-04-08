@@ -31,7 +31,7 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
     private String fromUser;
     //    private String toUser;
     private String keypair;
-    private String friendToken;
+    private String chaterToken;
 
     private RecyclerView.LayoutManager layoutManger;
     private RecyclerView recyclerView;
@@ -41,7 +41,7 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
     private static final String TAG = ChatDetailActivity.class.getSimpleName();
 
     // Please add the server key from your firebase console in the following format "key=<serverKey>"
-    private static final String SERVER_KEY = "key=AAAAI6WaV_U:APA91bHjfKaFw8qeNCVPpe57qxEj3FAgDJBGlOGbHIqzE2DIJ785kXD1IYtJa2eD_Cm9F2LMWLcoWa90OMNXxatmdr_AYz7enmKq42Q6bjI-UjVJdlwpNxZvaIbrw1bOe_GxuMjqe57S";
+    private static final String SERVER_KEY = "key=AAAAt8f0ibQ:APA91bGIh8uWpUbSls39AqTV6oCLctbxlSwEZUA9mvbJlqEDmD67bzzwaWTgn8NavnMmQPLebI_--aBUF5yGZFNh3dUAaIdOmtdZqWp-R2ms8PYjiIf6INktP0JuHFxwRjNpXAgzr2H9";
 
     // This is the client registration token
     private String CLIENT_REGISTRATION_TOKEN = "";
@@ -83,9 +83,9 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
         if (intent.getExtras() != null) {
             fromUser = intent.getExtras().getString("fromUser");
             keypair = intent.getExtras().getString("pairKey");
-            friendToken = intent.getExtras().getString("friend_token");
+            chaterToken = intent.getExtras().getString("chater_token");
 
-            CLIENT_REGISTRATION_TOKEN = friendToken;
+            CLIENT_REGISTRATION_TOKEN = chaterToken;
         }
         dbRef = FirebaseDatabase.getInstance().getReference();
         createRecyclerView();
@@ -185,7 +185,6 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
                 @Override
                 public void run() {
                     Log.e(TAG, "run: " + resp);
-//                    Toast.makeText(ChatDetailActivity.this,resp,Toast.LENGTH_LONG).show();
                 }
             });
         } catch (JSONException | IOException e) {
