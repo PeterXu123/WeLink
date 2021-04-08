@@ -49,8 +49,6 @@ public class ChatListHolder extends RecyclerView.ViewHolder {
                             String pairKey = username.compareTo(chaterName) < 0 ?
                                     username + "_" + chaterName : chaterName + "_" + username;
                             intent.putExtra("pairKey", pairKey);
-//                            intent.putExtra("chater_token", curChater.getToken());
-
                             context.startActivity(intent);
                         }
                     }

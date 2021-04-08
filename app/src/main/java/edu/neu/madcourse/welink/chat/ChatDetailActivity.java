@@ -33,6 +33,7 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
     private String keypair;
     private String chaterToken;
     private String senderUserID;
+//    private String senderUserName;
 
     private RecyclerView.LayoutManager layoutManger;
     private RecyclerView recyclerView;
@@ -86,6 +87,7 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
             keypair = intent.getExtras().getString("pairKey");
             chaterToken = intent.getExtras().getString("curChaterToken");
             senderUserID = intent.getExtras().getString("curUserID");
+//            senderUserName = intent.getExtras().getString("curUserName");
             CLIENT_REGISTRATION_TOKEN = chaterToken;
         }
         dbRef = FirebaseDatabase.getInstance().getReference();
@@ -105,7 +107,7 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
     public void launchAction(String selected) {
 //        singleChatStickerCount++;
         dbRef.child("message_record").child(keypair).push().setValue(new ChatMessage(selected, senderUserID,
-                System.currentTimeMillis(), keypair));
+                fromUser, System.currentTimeMillis(), keypair));
         sendMessageToDevice(fromUser, selected);
     }
 

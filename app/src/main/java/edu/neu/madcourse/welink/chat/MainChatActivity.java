@@ -2,7 +2,6 @@ package edu.neu.madcourse.welink.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -106,7 +105,7 @@ public class MainChatActivity extends AppCompatActivity {
         if (message == "") return;
 
         mDatabaseReference.child("message_record").child(keypair).push()
-                .setValue(new ChatMessage(message, senderUserID,
+                .setValue(new ChatMessage(message, senderUserID, fromUser,
                 System.currentTimeMillis(), keypair));
 //        Log.d("wtf", mDisplayName);
         mInputText.setText("");

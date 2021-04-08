@@ -3,6 +3,7 @@ package edu.neu.madcourse.welink.utility;
 public class ChatMessage {
     private String message;
     private String senderUserId;
+    private String senderUserName;
     private Long time;
     private String chater1_chater2;
 
@@ -22,11 +23,21 @@ public class ChatMessage {
         this.chater1_chater2 = chater1_chater2;
     }
 
-    public ChatMessage(String message, String senderUserId, Long time, String chater1_chater2) {
+    public ChatMessage(String message, String senderUserId, String senderUserName,
+                       Long time, String chater1_chater2) {
         this.message = message;
         this.senderUserId = senderUserId;
+        this.senderUserName = senderUserName;
         this.time = time;
         this.chater1_chater2 = chater1_chater2;
+    }
+
+    public String getSenderUserName() {
+        return senderUserName;
+    }
+
+    public void setSenderUserName(String senderUserName) {
+        this.senderUserName = senderUserName;
     }
 
     public ChatMessage(){};
