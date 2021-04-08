@@ -24,14 +24,15 @@ import java.net.URL;
 import java.util.Scanner;
 
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.utility.ChatMessage;
 
 //import androidx.fragment.app.FragmentContainerView;
 
 public class ChatDetailActivity extends AppCompatActivity implements EmojiSelectionsFragment.ButtonCallback{
     private String fromUser;
-    //    private String toUser;
     private String keypair;
     private String chaterToken;
+    private String senderUserID;
 
     private RecyclerView.LayoutManager layoutManger;
     private RecyclerView recyclerView;
@@ -83,8 +84,8 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
         if (intent.getExtras() != null) {
             fromUser = intent.getExtras().getString("fromUser");
             keypair = intent.getExtras().getString("pairKey");
-            chaterToken = intent.getExtras().getString("chater_token");
-
+            chaterToken = intent.getExtras().getString("curChaterToken");
+            senderUserID = intent.getExtras().getString("curUserID");
             CLIENT_REGISTRATION_TOKEN = chaterToken;
         }
         dbRef = FirebaseDatabase.getInstance().getReference();
@@ -103,8 +104,9 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
     @Override
     public void launchAction(String selected) {
 //        singleChatStickerCount++;
-//        dbRef.child("messages").child(keypair).push().setValue(new ChatMessage(selected, fromUser));
-//        sendMessageToDevice(fromUser, selected);
+        dbRef.child("message_record").child(keypair).push().setValue(new ChatMessage(selected, senderUserID,
+                System.currentTimeMillis(), keypair));
+        sendMessageToDevice(fromUser, selected);
     }
 
     public void sendMessageToDevice(String fromWhom, String selected) {

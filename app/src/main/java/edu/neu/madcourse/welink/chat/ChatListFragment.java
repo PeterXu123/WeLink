@@ -47,7 +47,7 @@ public class ChatListFragment extends Fragment {
 
         @Override
         public void run() {
-            Intent intent = new Intent(getActivity(), ChatDetailActivity.class);
+            Intent intent = new Intent(getActivity(), MainChatActivity.class);
             chatListAdapter = new ChatListAdapter(getContext(), intent);
             resultHandler.post(new Runnable() {
                 @Override
@@ -135,6 +135,7 @@ public class ChatListFragment extends Fragment {
 //                                getChatersOfCurrentUser();
 //                            }
                             curChatersIDTimeOfCurrentUser = (List<String>) snapshot.child(uid).getValue();
+                            chatListRecyclerView.setAdapter((RecyclerView.Adapter) chatListAdapter);
                             getChatersOfCurrentUser();
                         }
                     }

@@ -26,7 +26,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
 
     ChatDetailViewAdapter(DatabaseReference ref, String keypair, String currUser) {
         this.currUser = currUser;
-        ref.child("messages").child(keypair).addChildEventListener(listener);
+        ref.child("message_record").child(keypair).addChildEventListener(listener);
         msgSnapshots = new ArrayList<>();
     }
 
