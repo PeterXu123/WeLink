@@ -1,7 +1,11 @@
 package edu.neu.madcourse.welink.chat;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
@@ -19,6 +23,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -30,11 +36,14 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     RecyclerView rv;
     String currUser;
     Context context;
-    ChatDetailViewAdapter(DatabaseReference ref, String keypair, String currUser, Context context) {
+    Activity activity;
+    ChatDetailViewAdapter(DatabaseReference ref, String keypair, String currUser, Context context
+    , Activity activity) {
         this.currUser = currUser;
         this.context = context;
         ref.child("message_record").child(keypair).addChildEventListener(listener);
         msgSnapshots = new ArrayList<>();
+        this.activity = activity;
     }
 
     @Override
@@ -86,15 +95,45 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
         String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
         String message = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
 
+
+
         // todo: Curently we will add 1 camera image after each msg. (replace the last word of the msg)
-        //  So, if we can get msg from
-        SpannableStringBuilder ssb = new SpannableStringBuilder(message);
-        int msgLenBuf =  message.trim().length()-1;
-        int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
-        // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
-        ssb.setSpan(new ImageSpan(context, R.drawable.icon_camera_foreground),
-                imgStartIndex, message.trim().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+        //  So, if we can get msg from  -- zzx
+        SpannableStringBuilder ssb;
+        boolean isImage;
+        isImage = message.startsWith("https://firebasestorage.googleapis.com");
+        if(isImage) {
+            ssb = new SpannableStringBuilder();
+            int msgLenBuf =  message.trim().length()-1;
+            int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
+            // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
+            Picasso.get()
+                    .load(message)   // todo: replace youUrl by message when it has an image format.
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
+//                            holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+                            ssb.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE),
+                                    imgStartIndex, message.trim().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+        } else {
+            ssb = new SpannableStringBuilder(message);
+            holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+        }
+
 //        holder.message.setText(message);
         if(name == null) {
             name = "Anonymous";

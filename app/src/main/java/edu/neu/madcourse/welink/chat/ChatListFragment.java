@@ -41,6 +41,7 @@ public class ChatListFragment extends Fragment {
     ChaterRelation curChaterRelation;
     List<String> curChatersIDTimeOfCurrentUser;
     List<User> curChatersOfCurrentUser;
+    Intent curIntent;
     class backThread extends Thread {
         backThread() {
 
@@ -48,8 +49,8 @@ public class ChatListFragment extends Fragment {
 
         @Override
         public void run() {
-            Intent intent = new Intent(getActivity(), MainChatActivity.class);
-            chatListAdapter = new ChatListAdapter(getContext(), new Intent(intent));
+            curIntent = new Intent(getActivity(), MainChatActivity.class);
+            chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
             resultHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -96,8 +97,8 @@ public class ChatListFragment extends Fragment {
                                         curChater.setUid(chaterId);
                                         curChatersOfCurrentUser.add(curChater);
                                         if(chatListAdapter == null) {
-                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
-                                            chatListAdapter = new ChatListAdapter(context, new Intent(intent));
+//                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
+                                            chatListAdapter = new ChatListAdapter(context, new Intent(curIntent));
                                         }
                                         chatListAdapter.addNewChaterToAdapter(curChater, curUser);
                                     }

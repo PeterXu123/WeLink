@@ -86,12 +86,16 @@ public class FragmentActivity extends AppCompatActivity {
                     fragment = new PostFragment("friends");
                     break;
                 case R.id.nav_chat:
+                    // todo: because we don't have the profile page and the chat button,
+                    //  we need to add one sample user here.
+                    //  After we have the profile page and can chat with people, those lines
+                    //  except the "fragment = new ChatListFragment();" need to be deleted  -- zzx
                     List<String> list = new LinkedList<>();
                     if(list.isEmpty()) {
-                        list.add("MxOJGG6VRuZPVaQKVJ9Dzth2omd2_"+System.currentTimeMillis());
+                        list.add("5gWtXF86ZofKPoX89yL3QMcZGFD2_"+System.currentTimeMillis());
                     }
 
-                    ref.child("chater_relation").child("pb45lhhtwVMlpt2kF1w5DUbMQi13")
+                    ref.child("chater_relation").child("1NjvX2d1k3eQqQpPGUVyt0JZLBC2")
                             .setValue(list).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
