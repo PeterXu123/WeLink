@@ -34,6 +34,7 @@ public class MainChatActivity extends AppCompatActivity {
     private String chaterToken;
     private String senderUserID;
     private String CLIENT_REGISTRATION_TOKEN;
+//    private static final String SERVER_KEY = "key=AAAAt8f0ibQ:APA91bGIh8uWpUbSls39AqTV6oCLctbxlSwEZUA9mvbJlqEDmD67bzzwaWTgn8NavnMmQPLebI_--aBUF5yGZFNh3dUAaIdOmtdZqWp-R2ms8PYjiIf6INktP0JuHFxwRjNpXAgzr2H9";
 
     @Override
     protected void onStart() {
@@ -89,12 +90,8 @@ public class MainChatActivity extends AppCompatActivity {
 
     // TODO: Retrieve the display name from the Shared Preferences
     private void setupDisplayName() {
-//        SharedPreferences prefs = getSharedPreferences(RegisterActivity.CHAT_PREFS, MODE_PRIVATE);
-//        mDisplayName = prefs.getString(RegisterActivity.DISPLAY_NAME_KEY, null);
         mDisplayName = getIntent().getExtras().getString("curChaterName");
         if (mDisplayName == null) mDisplayName = "Anonymous";
-
-
     }
 
 
@@ -107,8 +104,10 @@ public class MainChatActivity extends AppCompatActivity {
         mDatabaseReference.child("message_record").child(keypair).push()
                 .setValue(new ChatMessage(message, senderUserID, fromUser,
                 System.currentTimeMillis(), keypair));
-//        Log.d("wtf", mDisplayName);
         mInputText.setText("");
+
+        // todo: need to check if current chater and user 's key_pair is in the ChatListAdapter's list.
+        //  If so, remove it and add it to the index 0. Otherwise, add it to index 0. --zzx
         
 
     }
@@ -119,8 +118,6 @@ public class MainChatActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-//        mChatDetailViewAdapter.cleanup();
-
     }
 
 }

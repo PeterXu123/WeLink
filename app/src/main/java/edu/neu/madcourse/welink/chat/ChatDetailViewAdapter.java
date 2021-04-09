@@ -81,7 +81,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
         String message = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
         holder.message.setText(message);
         if(name == null) {
-            name = "no name";
+            name = "Anonymous";
         }
         if(name.equals(currUser)) {
             changeDisplayForSelfMessage(holder,name);

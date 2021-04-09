@@ -50,26 +50,6 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
 
     private int singleChatStickerCount = 0;
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        dbRef.child("sentCount").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Long newCount = 0L;
-//                if(snapshot.hasChild(fromUser)) {
-//                    newCount = (Long)snapshot.child(fromUser).getValue();
-//                }
-//                newCount += singleChatStickerCount;
-//                dbRef.child("sentCount").child(fromUser).setValue(newCount);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
 
     @Override
     protected void onStart() {
@@ -105,7 +85,6 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
 
     @Override
     public void launchAction(String selected) {
-//        singleChatStickerCount++;
         dbRef.child("message_record").child(keypair).push().setValue(new ChatMessage(selected, senderUserID,
                 fromUser, System.currentTimeMillis(), keypair));
         sendMessageToDevice(fromUser, selected);

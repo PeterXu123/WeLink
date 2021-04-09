@@ -87,7 +87,7 @@ public class ChatListFragment extends Fragment {
                                     Map<String, String> curChaterMap = curUserBuf.get(chaterId);
                                     if( curChaterMap != null) {
                                         User curChater = new User();
-                                        curChater.setDisplayName(curChaterMap.getOrDefault("displayName", "No name"));
+                                        curChater.setDisplayName(curChaterMap.getOrDefault("displayName", "Anonymous"));
                                         curChater.setIconUrl(curChaterMap.getOrDefault("iconUrl", "no image"));
                                         curChater.setLocation(curChaterMap.getOrDefault("location", "no location"));
                                         curChater.setEmail(curChaterMap.getOrDefault("email", "no email"));
