@@ -1,10 +1,15 @@
 package edu.neu.madcourse.welink.chat;
 
 
+import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,9 +29,10 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     private ArrayList<DataSnapshot> msgSnapshots;
     RecyclerView rv;
     String currUser;
-
-    ChatDetailViewAdapter(DatabaseReference ref, String keypair, String currUser) {
+    Context context;
+    ChatDetailViewAdapter(DatabaseReference ref, String keypair, String currUser, Context context) {
         this.currUser = currUser;
+        this.context = context;
         ref.child("message_record").child(keypair).addChildEventListener(listener);
         msgSnapshots = new ArrayList<>();
     }
@@ -79,7 +85,17 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
         DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
         String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
         String message = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
-        holder.message.setText(message);
+
+        // todo: Curently we will add 1 camera image after each msg. (replace the last word of the msg)
+        //  So, if we can get msg from
+        SpannableStringBuilder ssb = new SpannableStringBuilder(message);
+        int msgLenBuf =  message.trim().length()-1;
+        int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
+        // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
+        ssb.setSpan(new ImageSpan(context, R.drawable.icon_camera_foreground),
+                imgStartIndex, message.trim().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+//        holder.message.setText(message);
         if(name == null) {
             name = "Anonymous";
         }

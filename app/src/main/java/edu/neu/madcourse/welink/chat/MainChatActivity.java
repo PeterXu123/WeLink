@@ -39,7 +39,8 @@ public class MainChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mChatDetailViewAdapter = new ChatDetailViewAdapter(mDatabaseReference, keypair,fromUser);
+        mChatDetailViewAdapter = new ChatDetailViewAdapter(mDatabaseReference, keypair,fromUser,
+                getApplicationContext());
         mChatListView.setAdapter((RecyclerView.Adapter) mChatDetailViewAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
@@ -52,8 +53,6 @@ public class MainChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_chat);
-
-
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             fromUser = intent.getExtras().getString("fromUser");

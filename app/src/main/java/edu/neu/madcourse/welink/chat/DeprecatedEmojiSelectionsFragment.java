@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import edu.neu.madcourse.welink.R;
 
-public class EmojiSelectionsFragment extends Fragment {
+public class DeprecatedEmojiSelectionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState

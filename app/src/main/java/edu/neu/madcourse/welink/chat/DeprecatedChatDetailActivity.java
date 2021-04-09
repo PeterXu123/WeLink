@@ -28,7 +28,7 @@ import edu.neu.madcourse.welink.utility.ChatMessage;
 
 //import androidx.fragment.app.FragmentContainerView;
 
-public class ChatDetailActivity extends AppCompatActivity implements EmojiSelectionsFragment.ButtonCallback{
+public class DeprecatedChatDetailActivity extends AppCompatActivity implements DeprecatedEmojiSelectionsFragment.ButtonCallback{
     private String fromUser;
     private String keypair;
     private String chaterToken;
@@ -40,7 +40,7 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
     private ChatDetailViewAdapter chatDetailViewAdapter;
     private DatabaseReference dbRef;
 
-    private static final String TAG = ChatDetailActivity.class.getSimpleName();
+    private static final String TAG = DeprecatedChatDetailActivity.class.getSimpleName();
 
     // Please add the server key from your firebase console in the following format "key=<serverKey>"
     private static final String SERVER_KEY = "key=AAAAt8f0ibQ:APA91bGIh8uWpUbSls39AqTV6oCLctbxlSwEZUA9mvbJlqEDmD67bzzwaWTgn8NavnMmQPLebI_--aBUF5yGZFNh3dUAaIdOmtdZqWp-R2ms8PYjiIf6INktP0JuHFxwRjNpXAgzr2H9";
@@ -78,7 +78,7 @@ public class ChatDetailActivity extends AppCompatActivity implements EmojiSelect
         layoutManger = new LinearLayoutManager(this);
         recyclerView = findViewById(R.id.chat_detail_rv);
         recyclerView.setHasFixedSize(true);
-        chatDetailViewAdapter = new ChatDetailViewAdapter(dbRef, keypair,fromUser);
+        chatDetailViewAdapter = new ChatDetailViewAdapter(dbRef, keypair,fromUser, getApplicationContext());
         recyclerView.setAdapter(chatDetailViewAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }

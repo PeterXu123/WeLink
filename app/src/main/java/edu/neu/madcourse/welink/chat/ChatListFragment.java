@@ -1,6 +1,7 @@
 package edu.neu.madcourse.welink.chat;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,7 +49,7 @@ public class ChatListFragment extends Fragment {
         @Override
         public void run() {
             Intent intent = new Intent(getActivity(), MainChatActivity.class);
-            chatListAdapter = new ChatListAdapter(getContext(), intent);
+            chatListAdapter = new ChatListAdapter(getContext(), new Intent(intent));
             resultHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -68,7 +69,7 @@ public class ChatListFragment extends Fragment {
         new backThread().start();
     }
 
-    private void getChatersOfCurrentUser() {
+    private void getChatersOfCurrentUser(Context context) {
         DatabaseReference ref = mDatabaseReference.child("users");
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -94,6 +95,10 @@ public class ChatListFragment extends Fragment {
                                         curChater.setToken(curChaterMap.getOrDefault("token", "no token"));
                                         curChater.setUid(chaterId);
                                         curChatersOfCurrentUser.add(curChater);
+                                        if(chatListAdapter == null) {
+                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
+                                            chatListAdapter = new ChatListAdapter(context, new Intent(intent));
+                                        }
                                         chatListAdapter.addNewChaterToAdapter(curChater, curUser);
                                     }
                                 }
@@ -113,7 +118,7 @@ public class ChatListFragment extends Fragment {
      * To get id of current chaters.
      * Inner function will do next step.
      */
-    private void getChatersIDOfCurrentUser() {
+    private void getChatersIDOfCurrentUser(Context context) {
         String curUserName = curUser.getDisplayName();
 //        https://cdn.pixabay.com/photo/2016/06/15/16/16/man-1459246_1280.png
         mDatabaseReference.child("chater_relation").addListenerForSingleValueEvent(
@@ -136,7 +141,7 @@ public class ChatListFragment extends Fragment {
 //                            }
                             curChatersIDTimeOfCurrentUser = (List<String>) snapshot.child(uid).getValue();
                             chatListRecyclerView.setAdapter((RecyclerView.Adapter) chatListAdapter);
-                            getChatersOfCurrentUser();
+                            getChatersOfCurrentUser(context);
                         }
                     }
 
@@ -174,7 +179,7 @@ public class ChatListFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.hasChild(uid)) {
                                 curUser = snapshot.child(uid).getValue(User.class);
-                                getChatersIDOfCurrentUser();
+                                getChatersIDOfCurrentUser(getContext());
                             }
                         }
                         @Override
