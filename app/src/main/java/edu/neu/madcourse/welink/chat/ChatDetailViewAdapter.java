@@ -7,22 +7,17 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -112,54 +107,84 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
 
             if (isImage) {
-                ssb = new SpannableStringBuilder();
+                ssb = new SpannableStringBuilder("1");
                 int msgLenBuf = msg.trim().length() - 1;
                 int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
                 // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
                 StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
-                StorageReference ref = mImageStorage.child("messageImage"+msg);
+                String curStoragePath = Uri.parse(msg).getLastPathSegment();
+                StorageReference ref = mImageStorage.child("messageImage").child(curStoragePath);
 //                        .child(msg);
 
-                ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            Uri downUri = task.getResult();
-                            String imageUrl = downUri.toString();
-                            Toast.makeText(activity, imageUrl, Toast.LENGTH_SHORT).show();
-                            System.out.println("here we get message from StorageReference! " + msg);
-                            Picasso.get()
-                                    .load(imageUrl)   // todo: replace youUrl by message when it has an image format.
-                                    .into(new Target() {
-                                        @Override
-                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                            System.out.println("here we get message from firebase! " + msg);
-                                            System.out.println("here we get bitmap from firebase! " + bitmap);
-                                            Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
+
+                Picasso.get()
+                        .load(msg)   // todo: replace youUrl by message when it has an image format.
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                System.out.println("here we get message from firebase! " + msg);
+                                System.out.println("here we get bitmap from firebase! " + bitmap);
+                                Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
 //                                        ssb.append(" ", new ImageSpan(drawable), 0);
 //                                        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                                            /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
-                                            ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                                            holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                                        }
+                                /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
+//                                ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//                                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+                                holder.message.setCompoundDrawablesWithIntrinsicBounds(drawable, null,null,null);
+                            }
 
-                                        @Override
-                                        public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
-                                            System.out.println("failexception " + exception.getStackTrace());
-                                            System.out.println("failexception " + exception.getMessage());
-                                            System.out.println("here we get bitmap from firebase! " + errorDrawable);
-                                        }
+                            @Override
+                            public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
+                                System.out.println("failexception " + exception.getStackTrace());
+                                System.out.println("failexception " + exception.getMessage());
+                                System.out.println("here we get bitmap from firebase! " + errorDrawable);
+                            }
 
-                                        @Override
-                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(activity, "" + task.getException(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                            }
+                        });
+//                ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Uri> task) {
+//                        if (task.isSuccessful()) {
+//                            Uri downUri = task.getResult();
+//                            String imageUrl = downUri.toString();
+//                            Toast.makeText(activity, imageUrl, Toast.LENGTH_SHORT).show();
+//                            System.out.println("here we get message from StorageReference! " + msg);
+//                            Picasso.get()
+//                                    .load(imageUrl)   // todo: replace youUrl by message when it has an image format.
+//                                    .into(new Target() {
+//                                        @Override
+//                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                            System.out.println("here we get message from firebase! " + msg);
+//                                            System.out.println("here we get bitmap from firebase! " + bitmap);
+//                                            Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
+////                                        ssb.append(" ", new ImageSpan(drawable), 0);
+////                                        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+//                                            /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
+//                                            ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//                                            holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+//                                        }
+//
+//                                        @Override
+//                                        public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
+//                                            System.out.println("failexception " + exception.getStackTrace());
+//                                            System.out.println("failexception " + exception.getMessage());
+//                                            System.out.println("here we get bitmap from firebase! " + errorDrawable);
+//                                        }
+//
+//                                        @Override
+//                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+//
+//                                        }
+//                                    });
+//                        } else {
+//                            Toast.makeText(activity, "" + task.getException(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
 
             } else {
                 ssb = new SpannableStringBuilder(msg);

@@ -194,7 +194,7 @@ public class MainChatActivity extends AppCompatActivity {
         if (photoURI != null) {
 
             StorageReference ref = storage.getReference().
-                    child("messageImage/" + photoURI);
+                    child("messageImage/" + photoURI.getLastPathSegment().toString());
             try {
                 Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
 //                Bitmap bmp = imageBitMap;
@@ -215,6 +215,10 @@ public class MainChatActivity extends AppCompatActivity {
                                         mDatabaseReference.child("message_record").child(keypair).push().setValue(
                                                 new ChatMessage(uri.toString(), senderUserID, fromUser,
                                                         System.currentTimeMillis(), keypair));
+
+//                                        mDatabaseReference.child("message_record").child(keypair).push().setValue(
+//                                                new ChatMessage(uri.toString(), senderUserID, fromUser,
+//                                                        System.currentTimeMillis(), keypair));
                                         System.out.println("uri after camera:"+uri);
                                         finish();
                                     }
