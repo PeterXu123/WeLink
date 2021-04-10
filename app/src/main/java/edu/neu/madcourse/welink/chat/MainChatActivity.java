@@ -64,7 +64,6 @@ public class MainChatActivity extends AppCompatActivity {
     private String senderUserID;
     private String CLIENT_REGISTRATION_TOKEN;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_TAKE_PHOTO = 2;
     static final int REQUEST_SAVE_IMAGE = 3;
     String mCurrentPhotoPath;
 //    private static final String SERVER_KEY = "key=AAAAt8f0ibQ:APA91bGIh8uWpUbSls39AqTV6oCLctbxlSwEZUA9mvbJlqEDmD67bzzwaWTgn8NavnMmQPLebI_--aBUF5yGZFNh3dUAaIdOmtdZqWp-R2ms8PYjiIf6INktP0JuHFxwRjNpXAgzr2H9";
@@ -212,9 +211,9 @@ public class MainChatActivity extends AppCompatActivity {
                                 Task<Uri> messgae_img_url = taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        mDatabaseReference.child("message_record").child(keypair).setValue(
+                                        mDatabaseReference.child("message_record").child(keypair).push().setValue(
                                                 new ChatMessage(uri.toString(), senderUserID, fromUser,
-                                                    System.currentTimeMillis(), keypair));
+                                                        System.currentTimeMillis(), keypair));
                                         finish();
                                     }
                                 });
@@ -311,9 +310,8 @@ public class MainChatActivity extends AppCompatActivity {
                     System.out.println("photoURI!!!!!"+photoURI);
 
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile());
                     takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -347,12 +345,12 @@ public class MainChatActivity extends AppCompatActivity {
 
         mDatabaseReference.child("message_record").child(keypair).push()
                 .setValue(new ChatMessage(message, senderUserID, fromUser,
-                System.currentTimeMillis(), keypair));
+                        System.currentTimeMillis(), keypair));
         mInputText.setText("");
 
         // todo: need to check if current chater and user 's key_pair is in the ChatListAdapter's list.
         //  If so, remove it and add it to the index 0. Otherwise, add it to index 0. --zzx
-        
+
 
     }
 

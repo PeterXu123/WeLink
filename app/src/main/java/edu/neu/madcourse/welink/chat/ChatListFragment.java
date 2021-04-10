@@ -79,7 +79,7 @@ public class ChatListFragment extends Fragment {
                         //Get map of users in datasnapshot
                         Map<String, Map<String, String>> curUserBuf 
                                 = (Map<String, Map<String, String>>) dataSnapshot.getValue();
-                        if(curUserBuf != null) {
+                        if(curUserBuf != null && curIntent != null) {  // && curIntent != null means don't trigger after take photo
                             curChatersOfCurrentUser = new LinkedList<>();
                             for (String charterIDTime: curChatersIDTimeOfCurrentUser) {
                                 String[] charterIDTimeArr = charterIDTime.split("_");
@@ -87,7 +87,7 @@ public class ChatListFragment extends Fragment {
                                 String chaterTime = charterIDTimeArr[1];
                                 if (curUserBuf.containsKey(chaterId)) {
                                     Map<String, String> curChaterMap = curUserBuf.get(chaterId);
-                                    if( curChaterMap != null) {
+                                    if( curChaterMap != null ) {
                                         User curChater = new User();
                                         curChater.setDisplayName(curChaterMap.getOrDefault("displayName", "Anonymous"));
                                         curChater.setIconUrl(curChaterMap.getOrDefault("iconUrl", "no image"));
@@ -96,7 +96,7 @@ public class ChatListFragment extends Fragment {
                                         curChater.setToken(curChaterMap.getOrDefault("token", "no token"));
                                         curChater.setUid(chaterId);
                                         curChatersOfCurrentUser.add(curChater);
-                                        if(chatListAdapter == null) {
+                                        if(chatListAdapter == null ) {
 //                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
                                             chatListAdapter = new ChatListAdapter(context, new Intent(curIntent));
                                         }

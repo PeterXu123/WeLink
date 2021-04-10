@@ -97,84 +97,89 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ChatDetailViewHolder holder, int position) {
-        DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
-        String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
-        String msg = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
+        try {
+            DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
+            String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
+            String msg = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
 //        String[] msgBuf = msg.split("\\?alt");
 //        final String message = msgBuf[0];
 
 
-        // todo: Curently we will add 1 camera image after each msg. (replace the last word of the msg)
-        //  So, if we can get msg from  -- zzx
-        SpannableStringBuilder ssb;
-        boolean isImage;
-        isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
+            // todo: Curently we will add 1 camera image after each msg. (replace the last word of the msg)
+            //  So, if we can get msg from  -- zzx
+            SpannableStringBuilder ssb;
+            boolean isImage;
+            isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
 
-        if(isImage) {
-            ssb = new SpannableStringBuilder();
-            int msgLenBuf =  msg.trim().length()-1;
-            int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
-            // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
-            StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
-            StorageReference ref = mImageStorage.child("android/media")
-                    .child(msg);
+            if (isImage) {
+                ssb = new SpannableStringBuilder();
+                int msgLenBuf = msg.trim().length() - 1;
+                int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
+                // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
+                StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
+                StorageReference ref = mImageStorage.child("android/media")
+                        .child(msg);
 
-            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downUri = task.getResult();
-                        String imageUrl = downUri.toString();
-                        Toast.makeText(activity, imageUrl , Toast.LENGTH_SHORT).show();
-//                        System.out.println("here we get message from StorageReference! "+msg);
-                        Picasso.get()
-                                .load(imageUrl)   // todo: replace youUrl by message when it has an image format.
-                                .into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                                        System.out.println("here we get message from firebase! "+msg);
-//                                        System.out.println("here we get bitmap from firebase! "+bitmap);
-                                        Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
+                ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downUri = task.getResult();
+                            String imageUrl = downUri.toString();
+                            Toast.makeText(activity, imageUrl, Toast.LENGTH_SHORT).show();
+                            System.out.println("here we get message from StorageReference! " + msg);
+                            Picasso.get()
+                                    .load(imageUrl)   // todo: replace youUrl by message when it has an image format.
+                                    .into(new Target() {
+                                        @Override
+                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                            System.out.println("here we get message from firebase! " + msg);
+                                            System.out.println("here we get bitmap from firebase! " + bitmap);
+                                            Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
 //                                        ssb.append(" ", new ImageSpan(drawable), 0);
 //                                        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                                        /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
-                                        ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                                        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                                    }
+                                            /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
+                                            ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                                            holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+                                        }
 
-                                    @Override
-                                    public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
-//                                        System.out.println("failexception "+exception.getStackTrace());
-//                                        System.out.println("failexception "+exception.getMessage());
-//                                        System.out.println("here we get bitmap from firebase! "+errorDrawable);
-                                    }
+                                        @Override
+                                        public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
+                                            System.out.println("failexception " + exception.getStackTrace());
+                                            System.out.println("failexception " + exception.getMessage());
+                                            System.out.println("here we get bitmap from firebase! " + errorDrawable);
+                                        }
 
-                                    @Override
-                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                        @Override
+                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                                    }
-                                });
-                    }else{
-                        Toast.makeText(activity, ""+task.getException(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(activity, "" + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
 
-        } else {
-            ssb = new SpannableStringBuilder(msg);
-            holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-        }
+            } else {
+                ssb = new SpannableStringBuilder(msg);
+                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+            }
 
 //        holder.message.setText(message);
-        if(name == null) {
-            name = "Anonymous";
+            if (name == null) {
+                name = "Anonymous";
+            }
+            if (name.equals(currUser)) {
+                changeDisplayForSelfMessage(holder, name);
+            } else {
+                changeDisplayForFriendMessage(holder, name);
+            }
+            holder.sender.setText(formatName(name));
+        } catch (Exception exception) {
+            System.err.println("error when get msg from firebase:" + exception.getMessage() +"   "
+                    + exception.getStackTrace());
         }
-        if(name.equals(currUser)) {
-            changeDisplayForSelfMessage(holder,name);
-        } else {
-            changeDisplayForFriendMessage(holder,name);
-        }
-        holder.sender.setText(formatName(name));
     }
 
     @Override
