@@ -117,8 +117,8 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
                 int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
                 // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
                 StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
-                StorageReference ref = mImageStorage.child("android/media")
-                        .child(msg);
+                StorageReference ref = mImageStorage.child("messageImage"+msg);
+//                        .child(msg);
 
                 ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override

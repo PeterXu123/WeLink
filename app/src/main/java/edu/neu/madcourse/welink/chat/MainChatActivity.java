@@ -62,6 +62,7 @@ public class MainChatActivity extends AppCompatActivity {
     private String keypair;
     private String chaterToken;
     private String senderUserID;
+    private Bitmap imageBitMap;
     private String CLIENT_REGISTRATION_TOKEN;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_SAVE_IMAGE = 3;
@@ -149,16 +150,17 @@ public class MainChatActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            imageBitMap = (Bitmap) extras.get("data");
             File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
             imagesFolder.mkdirs();
 //            File image = new File(imagesFolder, photoURI);
 //            Uri uriSavedImage = Uri.fromFile(image);
-            Intent imageIntent = new Intent();
+//            Intent imageIntent = new Intent();
 
 //            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
-            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            startActivityForResult(imageIntent, REQUEST_SAVE_IMAGE);
+//            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//            startActivityForResult(imageIntent, REQUEST_SAVE_IMAGE);
+            uploadFile();
         }
 //        else if (requestCode == REQUEST_SAVE_IMAGE) {
 //            uploadFile(photoURI);
@@ -192,10 +194,10 @@ public class MainChatActivity extends AppCompatActivity {
         if (photoURI != null) {
 
             StorageReference ref = storage.getReference().
-                    child("messageImage/" + mAuth.getCurrentUser().getUid());
+                    child("messageImage/" + photoURI);
             try {
                 Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
-//                Bitmap bmp =
+//                Bitmap bmp = imageBitMap;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 baos.flush();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
@@ -213,9 +215,11 @@ public class MainChatActivity extends AppCompatActivity {
                                         mDatabaseReference.child("message_record").child(keypair).push().setValue(
                                                 new ChatMessage(uri.toString(), senderUserID, fromUser,
                                                         System.currentTimeMillis(), keypair));
+                                        System.out.println("uri after camera:"+uri);
                                         finish();
                                     }
                                 });
+                                System.out.println("msg_img_url  after camera:" + messgae_img_url );
 //                            mDatabaseReference.child("message_record").child(keypair).push()
 //                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUser,
 //                                    System.currentTimeMillis(), keypair));
@@ -315,7 +319,7 @@ public class MainChatActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(photoURI != null) {uploadFile();}
+//            if(photoURI != null) {uploadFile();}
         }
     }
 
