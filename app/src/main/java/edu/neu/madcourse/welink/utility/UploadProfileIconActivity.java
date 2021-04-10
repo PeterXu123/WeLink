@@ -1,19 +1,16 @@
 package edu.neu.madcourse.welink.utility;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +26,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.UUID;
 
 import edu.neu.madcourse.welink.R;
 
@@ -57,8 +53,6 @@ public class UploadProfileIconActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(uploadListener);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mAuth =  FirebaseAuth.getInstance();
-
-
     }
 
     @Override
@@ -117,7 +111,6 @@ public class UploadProfileIconActivity extends AppCompatActivity {
                                     Task<Uri> user_iconUrl = taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-                                            System.out.println("herrrrrrrrrrrrrrrrrrrrr " + uri.toString());
                                             user.setIconUrl(uri.toString());
                                             mDatabaseReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
                                             finish();

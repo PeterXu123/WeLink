@@ -1,6 +1,8 @@
 package edu.neu.madcourse.welink.chat;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,16 +20,20 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -46,6 +52,10 @@ public class MainChatActivity extends AppCompatActivity {
     private ImageButton mSendButton;
     private DatabaseReference mDatabaseReference;
     private StorageReference sref;
+    private FirebaseStorage storage;
+    private FirebaseAuth mAuth;
+    private Uri uri;
+    private Uri photoURI;
     private ChatDetailViewAdapter mChatDetailViewAdapter;
     private String roomNumber;
     private String fromUser;
@@ -55,6 +65,7 @@ public class MainChatActivity extends AppCompatActivity {
     private String CLIENT_REGISTRATION_TOKEN;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 2;
+    static final int REQUEST_SAVE_IMAGE = 3;
     String mCurrentPhotoPath;
 //    private static final String SERVER_KEY = "key=AAAAt8f0ibQ:APA91bGIh8uWpUbSls39AqTV6oCLctbxlSwEZUA9mvbJlqEDmD67bzzwaWTgn8NavnMmQPLebI_--aBUF5yGZFNh3dUAaIdOmtdZqWp-R2ms8PYjiIf6INktP0JuHFxwRjNpXAgzr2H9";
 
@@ -76,6 +87,7 @@ public class MainChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_chat);
         Intent intent = getIntent();
+
         if (intent.getExtras() != null) {
             fromUser = intent.getExtras().getString("fromUser");
             keypair = intent.getExtras().getString("pairKey");
@@ -85,6 +97,9 @@ public class MainChatActivity extends AppCompatActivity {
         }
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        storage = FirebaseStorage.getInstance();
+        mAuth =  FirebaseAuth.getInstance();
+
         // Link the Views in the layout to the Java code
         mInputText = (EditText) findViewById(R.id.messageInput);
         mSendButton = (ImageButton) findViewById(R.id.sendButton);
@@ -118,38 +133,145 @@ public class MainChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
+//                galleryAddPic();
             }
         });
     }
+//    private void galleryAddPic() {
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//        File f = new File(mCurrentPhotoPath);
+//        Uri contentUri = Uri.fromFile(f);
+//        mediaScanIntent.setData(contentUri);
+//        this.sendBroadcast(mediaScanIntent);
+//    }
 
-    public void uploadFile(Uri imagUri) {
-        if (imagUri != null) {
-            sref = FirebaseStorage.getInstance().getReference();
-            final StorageReference imageRef = sref.child("android/media") // folder path in firebase storage
-                    .child(imagUri.getLastPathSegment());
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
+            imagesFolder.mkdirs();
+//            File image = new File(imagesFolder, photoURI);
+//            Uri uriSavedImage = Uri.fromFile(image);
+            Intent imageIntent = new Intent();
 
-            imageRef.putFile(imagUri)
-                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> snapshotTask) {
-                            UploadTask.TaskSnapshot snapshot = snapshotTask.getResult();
-                            // Get the download URL
-                            Task<Uri> downloadUriTask = snapshot.getMetadata().getReference().getDownloadUrl();
-                            while ((!downloadUriTask.isComplete()));
-                            Uri downloadUri= downloadUriTask.getResult();
-                            // use this download url with imageview for viewing & store this linke to firebase message data
-                            mDatabaseReference.child("message_record").child(keypair).push()
-                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUser,
-                                    System.currentTimeMillis(), keypair));
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // show message on failure may be network/disk ?
-                        }
-                    });
+//            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+//            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//            startActivityForResult(imageIntent, REQUEST_SAVE_IMAGE);
         }
+//        else if (requestCode == REQUEST_SAVE_IMAGE) {
+//            uploadFile(photoURI);
+//        }
+    }
+
+
+    private Bitmap setPic() {
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        return bitmap;
+    }
+
+    /**
+     * To get image url and upload it to firebase. After uploaded, we will send it to firebase's
+     * message_record to show another user the information.
+     * Referece from:
+     * https://stackoverflow.com/questions/40885860/how-to-save-bitmap-to-firebase
+     * @param imagUri input image url
+     */
+    public void uploadFile(Uri imagUri) {
+        if (photoURI != null) {
+
+            StorageReference ref = storage.getReference().
+                    child("messageImage/" + mAuth.getCurrentUser().getUid());
+            try {
+                Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
+//                Bitmap bmp =
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                baos.flush();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+                byte[] data = baos.toByteArray();
+                ref.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        mDatabaseReference.child("message_record").child(keypair).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                User user = snapshot.getValue(User.class);
+                                Task<Uri> messgae_img_url = taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        mDatabaseReference.child("message_record").child(keypair).setValue(
+                                                new ChatMessage(uri.toString(), senderUserID, fromUser,
+                                                    System.currentTimeMillis(), keypair));
+                                        finish();
+                                    }
+                                });
+//                            mDatabaseReference.child("message_record").child(keypair).push()
+//                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUser,
+//                                    System.currentTimeMillis(), keypair));
+////                            .setValue(new ChatMessage(imagUri.getLastPathSegment(), senderUserID, fromUser,
+////                                    System.currentTimeMillis(), keypair));
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                System.err.println("error here, upload canceled." + uri);
+                            }
+                        });
+
+                    }
+                });
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+//        if (imagUri != null) {
+//            sref = FirebaseStorage.getInstance().getReference();
+//            final StorageReference imageRef = sref.child("android/media") // folder path in firebase storage
+//                    .child(imagUri.getLastPathSegment());
+//
+//            imageRef.putFile(imagUri)
+//                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> snapshotTask) {
+//                            UploadTask.TaskSnapshot snapshot = snapshotTask.getResult();
+//                            // Get the download URL
+//                            Task<Uri> downloadUriTask = snapshot.getMetadata().getReference().getDownloadUrl();
+//                            while ((!downloadUriTask.isComplete()));
+//                            // loop until downloadUriTask gets value back.
+//                            // otherwise it will be null.
+//                            Uri downloadUri= downloadUriTask.getResult();
+//                            // use this download url with imageview for viewing & store this linke to firebase message data
+//                            mDatabaseReference.child("message_record").child(keypair).push()
+//                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUser,
+//                                    System.currentTimeMillis(), keypair));
+////                            .setValue(new ChatMessage(imagUri.getLastPathSegment(), senderUserID, fromUser,
+////                                    System.currentTimeMillis(), keypair));
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                            // show message on failure may be network/disk ?
+//                        }
+//                    });
+//        }
     }
 
 
@@ -171,10 +293,10 @@ public class MainChatActivity extends AppCompatActivity {
     }
 
     protected void dispatchTakePictureIntent() {
-        Uri photoURI = null;
+        photoURI = null;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             try {
                 File photoFile = createImageFile();
 
@@ -189,7 +311,9 @@ public class MainChatActivity extends AppCompatActivity {
                     System.out.println("photoURI!!!!!"+photoURI);
 
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile());
+                    takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
