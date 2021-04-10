@@ -79,7 +79,7 @@ public class ChatListFragment extends Fragment {
                         //Get map of users in datasnapshot
                         Map<String, Map<String, String>> curUserBuf 
                                 = (Map<String, Map<String, String>>) dataSnapshot.getValue();
-                        if(curUserBuf != null && curIntent != null) {  // && curIntent != null means don't trigger after take photo
+                        if(curUserBuf != null) {  // && curIntent != null means don't trigger after take photo
                             curChatersOfCurrentUser = new LinkedList<>();
                             for (String charterIDTime: curChatersIDTimeOfCurrentUser) {
                                 String[] charterIDTimeArr = charterIDTime.split("_");

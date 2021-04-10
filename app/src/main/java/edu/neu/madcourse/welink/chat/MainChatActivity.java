@@ -157,8 +157,8 @@ public class MainChatActivity extends AppCompatActivity {
             Intent imageIntent = new Intent();
 
 //            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
-//            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//            startActivityForResult(imageIntent, REQUEST_SAVE_IMAGE);
+            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(imageIntent, REQUEST_SAVE_IMAGE);
         }
 //        else if (requestCode == REQUEST_SAVE_IMAGE) {
 //            uploadFile(photoURI);
@@ -187,9 +187,8 @@ public class MainChatActivity extends AppCompatActivity {
      * message_record to show another user the information.
      * Referece from:
      * https://stackoverflow.com/questions/40885860/how-to-save-bitmap-to-firebase
-     * @param imagUri input image url
      */
-    public void uploadFile(Uri imagUri) {
+    public void uploadFile() {
         if (photoURI != null) {
 
             StorageReference ref = storage.getReference().
@@ -316,7 +315,7 @@ public class MainChatActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(photoURI != null) {uploadFile(photoURI);}
+            if(photoURI != null) {uploadFile();}
         }
     }
 
