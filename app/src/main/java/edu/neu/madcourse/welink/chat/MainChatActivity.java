@@ -220,7 +220,7 @@ public class MainChatActivity extends AppCompatActivity {
 //                                                new ChatMessage(uri.toString(), senderUserID, fromUser,
 //                                                        System.currentTimeMillis(), keypair));
                                         System.out.println("uri after camera:"+uri);
-                                        finish();
+//                                        finish();
                                     }
                                 });
                                 System.out.println("msg_img_url  after camera:" + messgae_img_url );

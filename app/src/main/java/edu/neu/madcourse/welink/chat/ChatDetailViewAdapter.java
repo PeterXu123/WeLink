@@ -38,8 +38,9 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     String currUser;
     Context context;
     Activity activity;
+    Target curTarget;
     ChatDetailViewAdapter(DatabaseReference ref, String keypair, String currUser, Context context
-    , Activity activity) {
+            , Activity activity) {
         this.currUser = currUser;
         this.context = context;
         ref.child("message_record").child(keypair).addChildEventListener(listener);
@@ -107,7 +108,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
 
             if (isImage) {
-                ssb = new SpannableStringBuilder("1");
+//                ssb = new SpannableStringBuilder("1");
                 int msgLenBuf = msg.trim().length() - 1;
                 int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
                 // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
@@ -116,35 +117,35 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
                 StorageReference ref = mImageStorage.child("messageImage").child(curStoragePath);
 //                        .child(msg);
 
-
-                Picasso.get()
-                        .load(msg)   // todo: replace youUrl by message when it has an image format.
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                System.out.println("here we get message from firebase! " + msg);
-                                System.out.println("here we get bitmap from firebase! " + bitmap);
-                                Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
+                curTarget = new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                        System.out.println("here we get message from firebase! " + msg);
+//                        System.out.println("here we get bitmap from firebase! " + bitmap);
+                        Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
 //                                        ssb.append(" ", new ImageSpan(drawable), 0);
 //                                        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                                /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
+                        /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
 //                                ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 //                                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                                holder.message.setCompoundDrawablesWithIntrinsicBounds(drawable, null,null,null);
-                            }
+                        holder.message.setCompoundDrawablesWithIntrinsicBounds(drawable, null,null,null);
+                    }
 
-                            @Override
-                            public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
-                                System.out.println("failexception " + exception.getStackTrace());
-                                System.out.println("failexception " + exception.getMessage());
-                                System.out.println("here we get bitmap from firebase! " + errorDrawable);
-                            }
+                    @Override
+                    public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
+                        System.out.println("failexception " + exception.getStackTrace());
+                        System.out.println("failexception " + exception.getMessage());
+                        System.out.println("here we get bitmap from firebase! " + errorDrawable);
+                    }
 
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                            }
-                        });
+                    }
+                };
+                Picasso.get()
+                        .load(msg)   // todo: replace youUrl by message when it has an image format.
+                        .into(curTarget);
 //                ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<Uri> task) {
