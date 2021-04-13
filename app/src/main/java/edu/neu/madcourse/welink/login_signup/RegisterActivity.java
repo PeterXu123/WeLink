@@ -1,16 +1,15 @@
 package edu.neu.madcourse.welink.login_signup;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -67,9 +66,10 @@ public class RegisterActivity extends AppCompatActivity {
         return pass.length() >= 6
                 && confirm.equals(pass);
     }
-
+    //                Firebase Database paths must not contain '.', '#', '$', '[', or ']'
     private boolean checkUsername(String username) {
-        return !TextUtils.isEmpty(username);
+        return
+                !TextUtils.isEmpty(username) && !username.contains(".") && !username.contains("#") && !username.contains("$") && !username.contains("[") && !username.contains("]");
     }
 
     private void register() {
@@ -100,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (!checkUsername(username)) {
-            displayName.setError("This field is required");
+            displayName.setError("This field is required and it shouldn't contain '.', '#', '$', '[', or ']'");
             errorView = displayName;
             success = false;
         }
