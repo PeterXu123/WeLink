@@ -23,23 +23,18 @@ import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.PostDAO;
 import edu.neu.madcourse.welink.utility.PostDTO;
 import edu.neu.madcourse.welink.utility.User;
-import edu.neu.madcourse.welink.utility.UserDTO;
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     private ArrayList<PostDTO> postDTOs;
     private RecyclerView rv;
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-    private String currUID;
 
-    //TODO: dummy current user uid and location
-    String currLocation = "37_25_38_45";
-
-    PostAdapter(String currUID, String type) {
-        this.currUID = currUID;
+    PostAdapter(String currUID, String type,String location) {
+        postDTOs = new ArrayList<>();
         switch (type) {
             case "nearby":
-                ref.child("posts_location").child(currLocation).addListenerForSingleValueEvent(getChildrenOnceListener);
+                ref.child("posts_location").child(location).addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             case "self":
                 ref.child("posts_self").child(currUID).addChildEventListener(childAddListener);
@@ -49,7 +44,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                 break;
             default:
         }
-        postDTOs = new ArrayList<>();
+    }
+
+    public void clear() {
+        int size = postDTOs.size();
+        postDTOs.clear();
+        notifyItemRangeRemoved(0,size);
     }
 
     @Override

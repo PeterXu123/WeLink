@@ -1,16 +1,11 @@
 package edu.neu.madcourse.welink.posts;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
@@ -18,8 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import edu.neu.madcourse.welink.R;
 
@@ -30,7 +23,6 @@ public class PostFragment extends Fragment {
     private String type;
 
     private String currUID;
-    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
     public PostFragment(String type) {
         this.type = type;
@@ -44,7 +36,6 @@ public class PostFragment extends Fragment {
         if(bundle != null) {
             currUID = bundle.getString("currUID");
         }
-
     }
 
     @Override
@@ -66,7 +57,7 @@ public class PostFragment extends Fragment {
         layoutManger = new LinearLayoutManager(getActivity().getApplication());
         recyclerView = view.findViewById(R.id.post_rv);
         recyclerView.setHasFixedSize(true);
-        postAdapter = new PostAdapter(currUID, type);
+        postAdapter = new PostAdapter(currUID, type,null);
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }

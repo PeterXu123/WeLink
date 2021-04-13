@@ -32,6 +32,7 @@ import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.follower.FollowerFragment;
 import edu.neu.madcourse.welink.following.FollowingFragment;
 import edu.neu.madcourse.welink.posts.AddPostActivity;
+import edu.neu.madcourse.welink.posts.NearbyFragment;
 import edu.neu.madcourse.welink.posts.PostFragment;
 import edu.neu.madcourse.welink.utility.User;
 import edu.neu.madcourse.welink.utility.UserDTO;
@@ -68,6 +69,19 @@ public class FragmentActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
+    }
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -81,7 +95,7 @@ public class FragmentActivity extends AppCompatActivity {
                     fragment = new FollowerFragment();
                     break;
                 case R.id.nav_nearby:
-                    fragment = new PostFragment("nearby");
+                    fragment = new NearbyFragment("nearby");
                     break;
                 case R.id.nav_posts:
                     fragment = new PostFragment("friends");
@@ -93,7 +107,7 @@ public class FragmentActivity extends AppCompatActivity {
             bundle.putString("currUID", currUID);
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    fragment).commit();
+                    fragment).addToBackStack(null).commit();
             return true;
         }
     };

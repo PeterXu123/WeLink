@@ -39,11 +39,8 @@ import edu.neu.madcourse.welink.utility.PostDAO;
 
 public class AddPostActivity extends AppCompatActivity implements LocationListener {
 
-    private Button submitBtn;
-    private Button cancelBtn;
     private Switch locationSwitch;
     private EditText content;
-    private boolean locationIsChecked;
     private String locationString;
     private String currUID;
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -65,7 +62,7 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
         }
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         content = findViewById(R.id.new_post_content);
-        cancelBtn = findViewById(R.id.new_post_cancel);
+        Button cancelBtn = findViewById(R.id.new_post_cancel);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +70,7 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
             }
         });
 
-        submitBtn = findViewById(R.id.new_post_submit);
+        Button submitBtn = findViewById(R.id.new_post_submit);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
