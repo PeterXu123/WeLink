@@ -57,6 +57,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".posts.AddPostActivity" />
+        <activity android:name=".profile.DisplayPostsActivity"></activity>
+        <activity android:name=".profile.ProfileActivity" />
+        <activity android:name=".chat.ChatDetailActivity" />
+        <activity android:name=".utility.UploadProfileIconActivity" />
+        <activity
+            android:name=".fragmentActivity.FragmentActivity"
+            android:configChanges="keyboard|orientation|screenSize" />
     </application>
 
 </manifest>

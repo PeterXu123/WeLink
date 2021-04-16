@@ -1,6 +1,5 @@
 package edu.neu.madcourse.welink.chat;
 
-
 import android.view.View;
 import android.widget.TextView;
 
