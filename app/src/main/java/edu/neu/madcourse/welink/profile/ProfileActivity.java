@@ -36,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity  {
     DatabaseReference mDatabaseReference;
     String token;
     Button followHim;
+    String currentUserId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity  {
         uploadImage = findViewById(R.id.uploadImageInProfile);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+        currentUserId = auth.getCurrentUser().getUid();
         chat = findViewById(R.id.ChatInProfile);
         followHim = findViewById(R.id.FollowHim);
         // if it's current user's profile, token will be null
@@ -84,6 +86,23 @@ public class ProfileActivity extends AppCompatActivity  {
         }
         else {
             uploadImage.setVisibility(View.GONE);
+            if (getIntent().getExtras().getString("uid") != null){
+            mDatabaseReference.child("following_relation").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.hasChild(getIntent().getExtras().getString("uid"))) {
+                        followHim.setVisibility(View.GONE);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            }
+
         }
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
@@ -109,6 +128,23 @@ public class ProfileActivity extends AppCompatActivity  {
     }
 
     private void followHim() {
+        String targetUid = uid;
+        String currentUid = currentUserId;
+        mDatabaseReference.child("following_relation").child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.hasChild(targetUid)) {
+                    mDatabaseReference.child("following_relation").child(currentUid).child(targetUid).setValue(targetUid);
+                    mDatabaseReference.child("follower_relation").child(targetUid).child(currentUid).setValue(currentUid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
     }
 
