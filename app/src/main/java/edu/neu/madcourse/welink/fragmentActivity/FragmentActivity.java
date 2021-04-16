@@ -1,5 +1,6 @@
 package edu.neu.madcourse.welink.fragmentActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -26,6 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.chat.ChatListFragment;
@@ -36,7 +39,7 @@ import edu.neu.madcourse.welink.posts.NearbyFragment;
 import edu.neu.madcourse.welink.posts.PostFragment;
 import edu.neu.madcourse.welink.utility.User;
 
-public class FragmentActivity extends AppCompatActivity {
+public class FragmentActivity extends AppCompatActivity implements NearbyFragment.DeleteFragmentCallBack{
 
     private FirebaseAuth mAuth;
     DatabaseReference ref;
@@ -45,14 +48,17 @@ public class FragmentActivity extends AppCompatActivity {
     private FloatingActionButton addPost;
     private androidx.appcompat.widget.Toolbar iconToolBar;
     private ImageView icon;
+    private Stack<Integer> backStackForID = new Stack<>();
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FollowingFragment()).commit();
+        backStackForID.push(R.id.nav_following);
         getCurrentUserUID();
         addPost = findViewById(R.id.add_post_button);
         iconToolBar = findViewById(R.id.iconToolbar);
@@ -68,24 +74,12 @@ public class FragmentActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-        if (count == 0) {
-            super.onBackPressed();
-        } else {
-            getSupportFragmentManager().popBackStack();
-        }
-
-    }
-
-
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            int id = item.getItemId();
             Fragment fragment = null;
-            switch (item.getItemId()) {
+            switch (id) {
                 case R.id.nav_following:
                     fragment = new FollowingFragment();
                     break;
@@ -116,16 +110,40 @@ public class FragmentActivity extends AppCompatActivity {
                         }
                     });
                     fragment = new ChatListFragment();
-
             }
             Bundle bundle = new Bundle();
             bundle.putString("currUID", currUID);
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    fragment).addToBackStack(null).commit();
+                    fragment).commit();
+            backStackForID.push(id);
             return true;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        if(backStackForID.size() == 1) {
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to exit?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        } else {
+            if(backStackForID.size() > 1) {
+                backStackForID.pop();
+                int id = backStackForID.pop();
+                bottomNavigationView.setSelectedItemId(id);
+            } else {
+                super.onBackPressed();
+            }
+        }
+    }
 
     private void getCurrentUserUID() {
         mAuth =  FirebaseAuth.getInstance();
@@ -172,5 +190,10 @@ public class FragmentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddPostActivity.class);
         intent.putExtra("currUID", currUID);
         startActivity(intent);
+    }
+
+    @Override
+    public void backToPreviousFragment() {
+        onBackPressed();
     }
 }

@@ -91,7 +91,7 @@ public class NearbyFragment extends Fragment implements LocationListener {
     public void onProviderDisabled(@NonNull String provider) {
         if(getActivity() != null) {
             Toast.makeText(getActivity(), "Require GPS service to see nearby posts.", Toast.LENGTH_SHORT).show();
-            getActivity().getSupportFragmentManager().popBackStack();
+            ((DeleteFragmentCallBack) getActivity()).backToPreviousFragment();
         }
     }
 
@@ -114,7 +114,7 @@ public class NearbyFragment extends Fragment implements LocationListener {
                     setLocationString();
                 } else {
                     Toast.makeText(getActivity(), "Require Location service to see nearby posts.", Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    ((DeleteFragmentCallBack) getActivity()).backToPreviousFragment();
                 }
             });
 
@@ -135,7 +135,7 @@ public class NearbyFragment extends Fragment implements LocationListener {
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getActivity(), "Require GPS service to see nearby posts.", Toast.LENGTH_SHORT).show();
                             dialog.cancel();
-                            getActivity().getSupportFragmentManager().popBackStack();
+                            ((DeleteFragmentCallBack) getActivity()).backToPreviousFragment();
                         }
                     });
             builder.create();
@@ -184,5 +184,9 @@ public class NearbyFragment extends Fragment implements LocationListener {
             getLocationPermission();
             setLocationString();
         }
+    }
+
+    public interface DeleteFragmentCallBack {
+        void backToPreviousFragment();
     }
 }
