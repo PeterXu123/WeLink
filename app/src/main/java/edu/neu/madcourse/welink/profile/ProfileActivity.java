@@ -132,9 +132,12 @@ public class ProfileActivity extends AppCompatActivity  {
                 break;
             case R.id.ChatInProfile:
                 intent = new Intent(ProfileActivity.this, MainChatActivity.class);
+                intent.putExtra("fromUser", auth.getCurrentUser().getDisplayName());
+//                intent.putExtra("pairKey", );
+                intent.putExtra("curChaterToken", token);
+                intent.putExtra("curUserID", uid);
                 startActivity(intent);
                 break;
-
             case R.id.FollowHim:
                 followHim();
                 break;
