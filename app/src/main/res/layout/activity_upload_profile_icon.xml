@@ -10,6 +10,17 @@
 
     <!--Linear Layout with horizontal orientation
         and other properties-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_above="@id/layout_button"
+
+
+
+    />
+
     <LinearLayout
         android:id="@+id/layout_button"
         android:layout_width="match_parent"
@@ -38,6 +49,10 @@
     <ImageView
         android:id="@+id/imageViewForIcon"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/progressBar"
+
+
+        />
 
 </RelativeLayout>

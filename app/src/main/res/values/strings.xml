@@ -8,6 +8,12 @@
     <string name="prompt_displayName">Username</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--  Profile activity  -->
+    <string name="profile_img_button">\@string</string>
+    <string name="username_textView">Username</string>
+    <string name="profile_posts_entry">Posts</string>
+    <string name="profile_followers_entry">Followers</string>
+    <string name="profile_following_entry">Following</string>
 
     <string name="grinning_face">😀</string>
     <string name="grinning_face_with_smiling_eyes">😄</string>
