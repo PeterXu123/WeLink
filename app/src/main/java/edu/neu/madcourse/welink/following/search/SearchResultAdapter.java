@@ -129,6 +129,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultHolder
         else {
             holder.profileIcon.setImageResource(R.drawable.profile_icon);
         }
+        holder.setUri(u.getIconUrl());
+        holder.setUid(u.getUid());
 
     }
 

@@ -15,16 +15,16 @@ import edu.neu.madcourse.welink.profile.ProfileActivity;
 public class SearchResultHolder extends RecyclerView.ViewHolder {
     ImageView profileIcon;
     TextView displayName;
-    Button detailButton;
 
+    String uri;
+    String uid;
     public SearchResultHolder(@NonNull View itemView) {
         super(itemView);
         this.profileIcon = itemView.findViewById(R.id.profileImage);
         this.displayName = itemView.findViewById(R.id.displayName);
-        this.detailButton = itemView.findViewById(R.id.detailButton);
 //        Picasso.with(getContext()).load(imgUrl).fit().into(contentImageView);
 
-        detailButton.setOnClickListener(new View.OnClickListener() {
+        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = getLayoutPosition();
@@ -33,9 +33,27 @@ public class SearchResultHolder extends RecyclerView.ViewHolder {
                     Intent intent = new Intent(itemView.getContext(), ProfileActivity.class);
 //                    intent.putExtra("profile_icon", profileIcon)
                     intent.putExtra("username", displayName.getText());
+                    intent.putExtra("iconUrl", uri);
+                    intent.putExtra("uid", uid);
                     itemView.getContext().startActivity(intent);
                 }
             }
         });
     }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
 }

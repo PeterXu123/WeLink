@@ -33,6 +33,7 @@ import edu.neu.madcourse.welink.follower.FollowerFragment;
 import edu.neu.madcourse.welink.following.FollowingFragment;
 import edu.neu.madcourse.welink.posts.AddPostActivity;
 import edu.neu.madcourse.welink.posts.PostFragment;
+import edu.neu.madcourse.welink.profile.ProfileActivity;
 import edu.neu.madcourse.welink.utility.User;
 
 public class FragmentActivity extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class FragmentActivity extends AppCompatActivity {
     private FloatingActionButton addPost;
     private androidx.appcompat.widget.Toolbar iconToolBar;
     private ImageView icon;
-
+    private String iconUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,17 @@ public class FragmentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 luanchAddPostActivity();
+            }
+        });
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = mAuth.getCurrentUser().getDisplayName();
+                Intent intent = new Intent(FragmentActivity.this, ProfileActivity.class);
+                intent.putExtra("username", username);
+                intent.putExtra("iconUrl", iconUrl);
+                intent.putExtra("uid", currUID);
+                startActivity(intent);
             }
         });
     }
@@ -126,9 +138,10 @@ public class FragmentActivity extends AppCompatActivity {
         ref.child("users").child(currUID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                iconUrl = snapshot.getValue(User.class).getIconUrl();
                 if (snapshot.getValue(User.class).getIconUrl() != null) {
                     Picasso.get().load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+
 //                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
                 }
                 else {
