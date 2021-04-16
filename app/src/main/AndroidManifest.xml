@@ -7,7 +7,7 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-<!--    Reference from https://stackoverflow.com/questions/62535856/intent-resolveactivity-returns-null-in-api-30-->
+    <!--    Reference from https://stackoverflow.com/questions/62535856/intent-resolveactivity-returns-null-in-api-30-->
     <queries>
         <!-- Browser -->
         <intent>
@@ -32,7 +32,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WeLink">
-<!--        <activity android:name=".chat.ChatDetailActivity" />-->
+        <!--        <activity android:name=".chat.ChatDetailActivity" />-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.camerademo.fileprovider"

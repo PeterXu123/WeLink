@@ -72,7 +72,6 @@ public class FragmentActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
-
         if (count == 0) {
             super.onBackPressed();
         } else {
