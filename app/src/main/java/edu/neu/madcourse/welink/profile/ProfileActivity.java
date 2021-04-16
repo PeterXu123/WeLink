@@ -31,9 +31,11 @@ public class ProfileActivity extends AppCompatActivity  {
     String uid;
     ImageView iv;
     Button uploadImage;
+    Button chat;
     FirebaseAuth auth;
     DatabaseReference mDatabaseReference;
     String token;
+    Button followHim;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +45,15 @@ public class ProfileActivity extends AppCompatActivity  {
         uploadImage = findViewById(R.id.uploadImageInProfile);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+        chat = findViewById(R.id.ChatInProfile);
+        followHim = findViewById(R.id.FollowHim);
+        // if it's current user's profile, token will be null
         if (getIntent().getExtras().getString("token") != null) {
             token = getIntent().getExtras().getString("token");
         }
         if (getIntent().getExtras().getString("uid") != null && getIntent().getExtras().getString("uid").equals(auth.getCurrentUser().getUid())) {
+            chat.setVisibility(View.GONE);
+            followHim.setVisibility(View.GONE);
             mDatabaseReference.child("users").child( getIntent().getExtras().getString("uid")).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -125,9 +132,12 @@ public class ProfileActivity extends AppCompatActivity  {
                 break;
             case R.id.ChatInProfile:
                 intent = new Intent(ProfileActivity.this, MainChatActivity.class);
+                intent.putExtra("fromUser", auth.getCurrentUser().getDisplayName());
+//                intent.putExtra("pairKey", );
+                intent.putExtra("curChaterToken", token);
+                intent.putExtra("curUserID", uid);
                 startActivity(intent);
                 break;
-
             case R.id.FollowHim:
                 followHim();
                 break;
