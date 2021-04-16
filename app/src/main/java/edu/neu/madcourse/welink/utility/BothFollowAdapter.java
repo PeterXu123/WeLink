@@ -1,6 +1,7 @@
 package edu.neu.madcourse.welink.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.following.search.SearchResultHolder;
+import edu.neu.madcourse.welink.profile.ProfileActivity;
 
 public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
     private List<User> listOfUsers;
@@ -143,6 +145,18 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
         else {
             holder.profileIcon.setImageResource(R.drawable.profile_icon);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra("username", listOfUsers.get(position).getDisplayName());
+                intent.putExtra("iconUrl", listOfUsers.get(position).getIconUrl());
+                intent.putExtra("uid", listOfUsers.get(position).getUid());
+                intent.putExtra("token", listOfUsers.get(position).getToken());
+                context.startActivity(intent);
+
+            }
+        });
 
 
     }

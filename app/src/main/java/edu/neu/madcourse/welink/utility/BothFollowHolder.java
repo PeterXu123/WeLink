@@ -13,11 +13,10 @@ import edu.neu.madcourse.welink.R;
 public class BothFollowHolder extends RecyclerView.ViewHolder{
     ImageView profileIcon;
     TextView displayName;
-    Button detailButton;
+
     public BothFollowHolder(@NonNull View itemView) {
         super(itemView);
         this.profileIcon = itemView.findViewById(R.id.profileImage);
         this.displayName = itemView.findViewById(R.id.displayName);
-        this.detailButton = itemView.findViewById(R.id.detailButton);
     }
 }
