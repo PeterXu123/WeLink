@@ -18,6 +18,16 @@ public class SearchResultHolder extends RecyclerView.ViewHolder {
 
     String uri;
     String uid;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    String token;
     public SearchResultHolder(@NonNull View itemView) {
         super(itemView);
         this.profileIcon = itemView.findViewById(R.id.profileImage);
@@ -35,6 +45,7 @@ public class SearchResultHolder extends RecyclerView.ViewHolder {
                     intent.putExtra("username", displayName.getText());
                     intent.putExtra("iconUrl", uri);
                     intent.putExtra("uid", uid);
+                    intent.putExtra("token", token);
                     itemView.getContext().startActivity(intent);
                 }
             }

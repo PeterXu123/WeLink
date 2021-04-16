@@ -152,6 +152,7 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
                 intent.putExtra("username", listOfUsers.get(position).getDisplayName());
                 intent.putExtra("iconUrl", listOfUsers.get(position).getIconUrl());
                 intent.putExtra("uid", listOfUsers.get(position).getUid());
+                intent.putExtra("token", listOfUsers.get(position).getToken());
                 context.startActivity(intent);
 
             }

@@ -131,6 +131,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultHolder
         }
         holder.setUri(u.getIconUrl());
         holder.setUid(u.getUid());
+        holder.setToken(u.getToken());
 
     }
 

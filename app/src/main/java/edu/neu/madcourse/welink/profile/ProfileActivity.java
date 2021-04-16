@@ -33,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity  {
     Button uploadImage;
     FirebaseAuth auth;
     DatabaseReference mDatabaseReference;
+    String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,9 @@ public class ProfileActivity extends AppCompatActivity  {
         uploadImage = findViewById(R.id.uploadImageInProfile);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+        if (getIntent().getExtras().getString("token") != null) {
+            token = getIntent().getExtras().getString("token");
+        }
         if (getIntent().getExtras().getString("uid") != null && getIntent().getExtras().getString("uid").equals(auth.getCurrentUser().getUid())) {
             mDatabaseReference.child("users").child( getIntent().getExtras().getString("uid")).addValueEventListener(new ValueEventListener() {
                 @Override
