@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -39,7 +42,8 @@ public class UploadProfileIconActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Uri uri;
     private ImageView iv;
-
+    private ProgressBar pb;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,10 @@ public class UploadProfileIconActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(uploadListener);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mAuth =  FirebaseAuth.getInstance();
+        pb = findViewById(R.id.progressBar);
+        pb.setVisibility(View.GONE);
+
+
     }
 
     @Override
@@ -101,6 +109,7 @@ public class UploadProfileIconActivity extends AppCompatActivity {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bmp.compress(Bitmap.CompressFormat.PNG, 25, baos);
                     byte[] data = baos.toByteArray();
+                    pb.setVisibility(View.VISIBLE);
                     ref.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -125,6 +134,23 @@ public class UploadProfileIconActivity extends AppCompatActivity {
 
                                 }
                             });
+
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            double progress = (100 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+                            System.out.println(progress);
+
+                            pb.setProgress((int) progress);
+//                            handler = new Handler(getMainLooper());
+//                            handler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//
+//                                }
+//                            });
+
 
                         }
                     });
