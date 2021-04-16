@@ -36,6 +36,7 @@ public class NearbyFragment extends Fragment implements LocationListener {
     RecyclerView.LayoutManager layoutManger;
     RecyclerView recyclerView;
     PostAdapter postAdapter;
+    androidx.appcompat.app.AlertDialog.Builder gpsAlertBuilder;
 
     public NearbyFragment(String type) {
         this.type = type;
@@ -111,6 +112,7 @@ public class NearbyFragment extends Fragment implements LocationListener {
             new ActivityResultContracts.RequestPermission(),
             isGranted -> {
                 if(isGranted) {
+                    getGPSPermission();
                     setLocationString();
                 } else {
                     Toast.makeText(getActivity(), "Require Location service to see nearby posts.", Toast.LENGTH_SHORT).show();
@@ -120,31 +122,39 @@ public class NearbyFragment extends Fragment implements LocationListener {
 
 
     private void getLocationPermission() {
-        boolean isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(!isGPSEnable) {
-            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
-            builder.setMessage("GPS not enabled.")
-                    .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getActivity(), "Require GPS service to see nearby posts.", Toast.LENGTH_SHORT).show();
-                            dialog.cancel();
-                            ((DeleteFragmentCallBack) getActivity()).backToPreviousFragment();
-                        }
-                    });
-            builder.create();
-            builder.show();
-        }
         boolean canGetLocation = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         if (!canGetLocation) {
             mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            getGPSPermission();
+        }
+    }
+
+    private void getGPSPermission() {
+        boolean isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if(!isGPSEnable) {
+            if(gpsAlertBuilder == null) {
+                gpsAlertBuilder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+                gpsAlertBuilder.setMessage("GPS not enabled.")
+                        .setCancelable(false)
+                        .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                Toast.makeText(getActivity(), "Require GPS service to see nearby posts.", Toast.LENGTH_SHORT).show();
+                                ((DeleteFragmentCallBack) getActivity()).backToPreviousFragment();
+                            }
+                        });
+                gpsAlertBuilder.create();
+                gpsAlertBuilder.show();
+            }
         }
     }
 
