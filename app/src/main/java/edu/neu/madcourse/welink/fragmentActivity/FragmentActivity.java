@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -68,6 +69,21 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FollowingFragment()).commit();
             currSelectedMenuID = R.id.nav_following;
         }
+        else {
+            backStackForID.push(R.id.nav_following);
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if(f instanceof NearbyFragment){
+                backStackForID.push(R.id.nav_nearby);
+            } else if(f instanceof  FollowingFragment) {
+                backStackForID.push(R.id.nav_following);
+            } else if(f instanceof  FollowerFragment) {
+                backStackForID.push(R.id.nav_follower);
+            } else if(f instanceof FollowingPostFragment) {
+                backStackForID.push(R.id.nav_posts);
+            } else if(f instanceof ChatListFragment) {
+                backStackForID.push(R.id.nav_chat);
+            }
+        }
         getCurrentUserUID();
         addPost = findViewById(R.id.add_post_button);
         iconToolBar = findViewById(R.id.iconToolbar);
@@ -97,22 +113,23 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
     @Override
     protected void onStart() {
         super.onStart();
+        System.out.println("onStart-------------------------");
         //when user jump to setting and denied some permission, this is required for retrieving
         //previous selected tab. both savedInstanceState and bottomNavigationView.getSelectedItemId()
         //don't work in this situation.
-        backStackForID.push(R.id.nav_following);
-        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if(f instanceof NearbyFragment){
-            backStackForID.push(R.id.nav_nearby);
-        } else if(f instanceof  FollowingFragment) {
-            backStackForID.push(R.id.nav_following);
-        } else if(f instanceof  FollowerFragment) {
-            backStackForID.push(R.id.nav_follower);
-        } else if(f instanceof FollowingPostFragment) {
-            backStackForID.push(R.id.nav_posts);
-        } else if(f instanceof ChatListFragment) {
-            backStackForID.push(R.id.nav_chat);
-        }
+//        backStackForID.push(R.id.nav_following);
+//        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+//        if(f instanceof NearbyFragment){
+//            backStackForID.push(R.id.nav_nearby);
+//        } else if(f instanceof  FollowingFragment) {
+//            backStackForID.push(R.id.nav_following);
+//        } else if(f instanceof  FollowerFragment) {
+//            backStackForID.push(R.id.nav_follower);
+//        } else if(f instanceof FollowingPostFragment) {
+//            backStackForID.push(R.id.nav_posts);
+//        } else if(f instanceof ChatListFragment) {
+//            backStackForID.push(R.id.nav_chat);
+//        }
     }
 
 
