@@ -38,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity  {
     String token;
     Button followHim;
     String currentUserId;
+    Button unfollow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,8 @@ public class ProfileActivity extends AppCompatActivity  {
         currentUserId = auth.getCurrentUser().getUid();
         chat = findViewById(R.id.ChatInProfile);
         followHim = findViewById(R.id.FollowHim);
+        unfollow = findViewById(R.id.unfollowInProfile);
+        unfollow.setVisibility(View.GONE);
         // if it's current user's profile, token will be null
         if (getIntent().getExtras().getString("token") != null) {
             token = getIntent().getExtras().getString("token");
@@ -93,7 +96,13 @@ public class ProfileActivity extends AppCompatActivity  {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.hasChild(getIntent().getExtras().getString("uid"))) {
                         followHim.setVisibility(View.GONE);
+                        unfollow.setVisibility(View.VISIBLE);
                     }
+                    else {
+                        followHim.setVisibility(View.VISIBLE);
+                        unfollow.setVisibility(View.GONE);
+                    }
+
 
                 }
 
@@ -149,6 +158,26 @@ public class ProfileActivity extends AppCompatActivity  {
 
     }
 
+    private void unFollowHim() {
+        String targetUid = uid;
+        String currentUid = currentUserId;
+        mDatabaseReference.child("following_relation").child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(targetUid)) {
+                    mDatabaseReference.child("following_relation").child(currentUid).child(targetUid).removeValue();
+                    mDatabaseReference.child("follower_relation").child(targetUid).child(currentUid).removeValue();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
     public void onClick(View view) {
         Intent intent;
@@ -179,6 +208,9 @@ public class ProfileActivity extends AppCompatActivity  {
                 break;
             case R.id.FollowHim:
                 followHim();
+                break;
+            case R.id.unfollowInProfile:
+                unFollowHim();
                 break;
         }
     }

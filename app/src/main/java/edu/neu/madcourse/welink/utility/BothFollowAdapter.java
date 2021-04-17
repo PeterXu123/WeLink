@@ -40,21 +40,34 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
         this.curUid = curUid;
         if (isFollowing) {
             ref.child("following_relation").child(curUid).addChildEventListener(new ChildEventListener() {
+
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         String followingUid = snapshot.getKey();
-                        ref.child("users").child(followingUid).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                listOfUsers.add(snapshot.getValue(User.class));
-                                notifyDataSetChanged();
-                            }
+//                        ref.child("users").child(followingUid).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                listOfUsers.add(snapshot.getValue(User.class));
+//                                notifyDataSetChanged();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
+                    ref.child("users").child(followingUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            listOfUsers.add(snapshot.getValue(User.class));
+                            notifyDataSetChanged();
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                        }
+                    });
 
                 }
 
@@ -65,6 +78,26 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                    String followingUid = snapshot.getKey();
+                    ref.child("users").child(followingUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            System.out.println("-----------------------");
+                            System.out.println(snapshot.getValue(User.class).getUid());
+                            for (int i = 0; i < listOfUsers.size(); i++) {
+                                if (listOfUsers.get(i).getUid().equals(snapshot.getValue(User.class).getUid())) {
+                                    listOfUsers.remove(i);
+                                    break;
+                                }
+                            }
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
 
                 }
 
@@ -107,7 +140,25 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                    String followerUid = snapshot.getKey();
+                    ref.child("users").child(followerUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            System.out.println(snapshot.getValue(User.class).getUid());
+                            for (int i = 0; i < listOfUsers.size(); i++) {
+                                if (listOfUsers.get(i).getUid().equals(snapshot.getValue(User.class).getUid())) {
+                                    listOfUsers.remove(i);
+                                    break;
+                                }
+                            }
+                            notifyDataSetChanged();
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
 
                 @Override
