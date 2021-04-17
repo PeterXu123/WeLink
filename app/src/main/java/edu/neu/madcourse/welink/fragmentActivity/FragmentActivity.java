@@ -51,16 +51,23 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
     private ImageView icon;
     private Stack<Integer> backStackForID = new Stack<>();
     private BottomNavigationView bottomNavigationView;
+    static final String STATE_MENU_ID = "menuId";
+    private int currSelectedMenuID;
 
     private String iconUrl;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FollowingFragment()).commit();
-        backStackForID.push(R.id.nav_following);
+        if(savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FollowingFragment()).commit();
+            currSelectedMenuID = R.id.nav_following;
+        }
         getCurrentUserUID();
         addPost = findViewById(R.id.add_post_button);
         iconToolBar = findViewById(R.id.iconToolbar);
@@ -87,12 +94,35 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //when user jump to setting and denied some permission, this is required for retrieving
+        //previous selected tab. both savedInstanceState and bottomNavigationView.getSelectedItemId()
+        //don't work in this situation.
+        backStackForID.push(R.id.nav_following);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(f instanceof NearbyFragment){
+            backStackForID.push(R.id.nav_nearby);
+        } else if(f instanceof  FollowingFragment) {
+            backStackForID.push(R.id.nav_following);
+        } else if(f instanceof  FollowerFragment) {
+            backStackForID.push(R.id.nav_follower);
+        } else if(f instanceof FollowingPostFragment) {
+            backStackForID.push(R.id.nav_posts);
+        } else if(f instanceof ChatListFragment) {
+            backStackForID.push(R.id.nav_chat);
+        }
+    }
+
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            int id = item.getItemId();
+            currSelectedMenuID = item.getItemId();
             Fragment fragment = null;
-            switch (id) {
+            switch (currSelectedMenuID) {
                 case R.id.nav_following:
                     fragment = new FollowingFragment();
                     break;
@@ -129,7 +159,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     fragment).commit();
-            backStackForID.push(id);
+            backStackForID.push(currSelectedMenuID);
             return true;
         }
     };
@@ -150,8 +180,8 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
         } else {
             if(backStackForID.size() > 1) {
                 backStackForID.pop();
-                int id = backStackForID.pop();
-                bottomNavigationView.setSelectedItemId(id);
+                int currSelectedMenuID = backStackForID.pop();
+                bottomNavigationView.setSelectedItemId(currSelectedMenuID);
             } else {
                 super.onBackPressed();
             }
