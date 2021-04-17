@@ -28,7 +28,6 @@ import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.Formatter;
 
 public class NearbyFragment extends Fragment implements LocationListener {
-    private String type;
     private String currUID;
     private LocationManager locationManager;
     private Location location;
@@ -37,10 +36,6 @@ public class NearbyFragment extends Fragment implements LocationListener {
     RecyclerView recyclerView;
     PostAdapter postAdapter;
     androidx.appcompat.app.AlertDialog.Builder gpsAlertBuilder;
-
-    public NearbyFragment(String type) {
-        this.type = type;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +62,7 @@ public class NearbyFragment extends Fragment implements LocationListener {
     }
 
     private void bindAdapterToRecycleView() {
-        postAdapter = new PostAdapter(currUID, type, locationString);
+        postAdapter = new PostAdapter(currUID, "nearby", locationString);
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -170,7 +165,6 @@ public class NearbyFragment extends Fragment implements LocationListener {
                 if (location != null) {
                     locationString = Formatter.formateLocationString(location.getLatitude(), location.getLongitude());
                     bindAdapterToRecycleView();
-                    Toast.makeText(getActivity(), locationString, Toast.LENGTH_SHORT).show();
                 }
             }
         }

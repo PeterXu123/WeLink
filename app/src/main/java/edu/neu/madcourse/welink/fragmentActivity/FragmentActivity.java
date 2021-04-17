@@ -36,7 +36,7 @@ import edu.neu.madcourse.welink.follower.FollowerFragment;
 import edu.neu.madcourse.welink.following.FollowingFragment;
 import edu.neu.madcourse.welink.posts.AddPostActivity;
 import edu.neu.madcourse.welink.posts.NearbyFragment;
-import edu.neu.madcourse.welink.posts.PostFragment;
+import edu.neu.madcourse.welink.posts.FollowingPostFragment;
 import edu.neu.madcourse.welink.profile.ProfileActivity;
 import edu.neu.madcourse.welink.utility.User;
 
@@ -100,10 +100,10 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
                     fragment = new FollowerFragment();
                     break;
                 case R.id.nav_nearby:
-                    fragment = new NearbyFragment("nearby");
+                    fragment = new NearbyFragment();
                     break;
                 case R.id.nav_posts:
-                    fragment = new PostFragment("friends");
+                    fragment = new FollowingPostFragment();
                     break;
                 case R.id.nav_chat:
                     // todo: because we don't have the profile page and the chat button,

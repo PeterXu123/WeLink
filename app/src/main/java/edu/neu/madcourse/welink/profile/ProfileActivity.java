@@ -23,6 +23,7 @@ import edu.neu.madcourse.welink.chat.MainChatActivity;
 import edu.neu.madcourse.welink.follower.FollowerActivity;
 import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.login_signup.MainActivity;
+import edu.neu.madcourse.welink.posts.SelfPostActivity;
 import edu.neu.madcourse.welink.utility.UploadProfileIconActivity;
 import edu.neu.madcourse.welink.utility.User;
 
@@ -153,7 +154,9 @@ public class ProfileActivity extends AppCompatActivity  {
         Intent intent;
         switch (view.getId()) {
             case R.id.PostInProfile:
-                intent = new Intent(ProfileActivity.this, DisplayPostsActivity.class);
+                intent = new Intent(ProfileActivity.this, SelfPostActivity.class);
+                intent.putExtra("uid", uid);
+                intent.putExtra("currentUID", currentUserId);
                 startActivity(intent);
                 break;
             case R.id.FollowerInProfile:

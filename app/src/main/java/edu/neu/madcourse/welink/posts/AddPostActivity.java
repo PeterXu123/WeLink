@@ -142,7 +142,6 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if(location != null) {
                         locationString = Formatter.formateLocationString(location.getLatitude(), location.getLongitude());
-                        Toast.makeText(AddPostActivity.this, locationString, Toast.LENGTH_SHORT).show();
                     }
                 }
         } else {

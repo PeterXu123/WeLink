@@ -30,27 +30,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private RecyclerView rv;
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
-    PostAdapter(String currUID, String type,String location) {
+    PostAdapter(String uid, String type,String location) {
         postDTOs = new ArrayList<>();
         switch (type) {
             case "nearby":
                 ref.child("posts_location").child(location).addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             case "self":
-                ref.child("posts_self").child(currUID).addChildEventListener(childAddListener);
+                ref.child("posts_self").child(uid).addChildEventListener(childAddListener);
                 break;
-            case "friends":
-                ref.child("posts_followings").child(currUID).addListenerForSingleValueEvent(getChildrenOnceListener);
+            case "user":
+                ref.child("posts_self").child(uid).addListenerForSingleValueEvent(getChildrenOnceListener);
+            case "followings":
+                ref.child("posts_followings").child(uid).addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             default:
         }
     }
 
-    public void clear() {
-        int size = postDTOs.size();
-        postDTOs.clear();
-        notifyItemRangeRemoved(0,size);
-    }
+//    public void clear() {
+//        int size = postDTOs.size();
+//        postDTOs.clear();
+//        notifyItemRangeRemoved(0,size);
+//    }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -83,9 +85,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 PostDAO post = snapshot.getValue(PostDAO.class);
-                PostDTO postDTO = new PostDTO();
-                postDTO.setByPostDAO(post);
-                ref.child("users").child(post.getAuthorUID()).addListenerForSingleValueEvent(findUserById(postDTO));
+                if(post != null) {
+                    PostDTO postDTO = new PostDTO();
+                    postDTO.setByPostDAO(post);
+                    ref.child("users").child(post.getAuthorUID()).addListenerForSingleValueEvent(findUserById(postDTO));
+                }
             }
 
             @Override
