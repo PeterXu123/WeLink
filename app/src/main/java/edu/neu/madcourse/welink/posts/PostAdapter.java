@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -73,6 +74,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         holder.username.setText(post.getAuthor().getDisplayName());
         holder.time.setText(post.getTime());
         holder.content.setText(post.getText());
+        String iconUrl = post.getAuthor().getIconUrl();
+        if (iconUrl != null) {
+            Picasso.get().load(iconUrl).into(holder.image);
+//                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+        }
     }
 
     @Override

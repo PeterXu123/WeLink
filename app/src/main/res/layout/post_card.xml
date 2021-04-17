@@ -14,6 +14,7 @@
             android:id="@+id/post_card_user_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView

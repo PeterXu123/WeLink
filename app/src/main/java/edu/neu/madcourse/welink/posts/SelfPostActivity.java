@@ -25,7 +25,7 @@ public class SelfPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.posts_list);
+        setContentView(R.layout.activity_post_list);
         if (getIntent().getExtras() != null) {
             uid = getIntent().getExtras().getString("uid");
             currentUID = getIntent().getExtras().getString("currentUID");
