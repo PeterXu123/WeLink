@@ -1,8 +1,10 @@
 package edu.neu.madcourse.welink.posts;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -87,6 +89,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         if(imageUrls != null) {
             for(int i = 0; i < imageUrls.size(); i++) {
                 Picasso.get().load(imageUrls.get(i)).into(holder.postImages.get(i));
+            }
+        }
+        else {
+            for (ImageView iv: holder.postImages) {
+                iv.setVisibility(View.GONE);
             }
         }
     }

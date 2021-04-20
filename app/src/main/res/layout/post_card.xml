@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/post_card_user_image"
             android:layout_margin="5dp"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="center_vertical"
             android:text="TextView" />
 
         <LinearLayout
