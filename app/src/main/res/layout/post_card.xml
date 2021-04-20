@@ -58,25 +58,26 @@
 
             <ImageView
                 android:id="@+id/post_card_post_image1"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_weight="1"
+                android:scaleType="fitXY"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
                 android:id="@+id/post_card_post_image2"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-
+                android:scaleType="fitXY"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
                 android:id="@+id/post_card_post_image3"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_weight="1"
-
+                android:scaleType="fitXY"
                 tools:srcCompat="@tools:sample/avatars" />
 
         </LinearLayout>
