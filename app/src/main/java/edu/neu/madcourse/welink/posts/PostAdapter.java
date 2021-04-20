@@ -79,9 +79,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
             Picasso.get().load(iconUrl).into(holder.userImage);
 //                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
         }
-        String imageUrl = post.getImageUrl();
-        if(imageUrl != null) {
-            Picasso.get().load(imageUrl).into(holder.postImage);
+        List<String> imageUrls = post.getImageUrls();
+        if(imageUrls != null) {
+            for(int i = 0; i < imageUrls.size(); i++) {
+                Picasso.get().load(imageUrls.get(i)).into(holder.postImages.get(i));
+            }
         }
     }
 

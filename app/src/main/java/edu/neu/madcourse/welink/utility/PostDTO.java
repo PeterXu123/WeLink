@@ -1,12 +1,14 @@
 package edu.neu.madcourse.welink.utility;
 
+import java.util.List;
+
 public class PostDTO {
     private String postID;
     private String text;
     private String location;
     private String displayTime;
     private User author;
-    private String imageUrl;
+    private List<String> imageUrls;
 
     public PostDTO(){};
 
@@ -26,19 +28,19 @@ public class PostDTO {
         this.displayTime = displayTime;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public void setByPostDAO(PostDAO post) {
         this.text = post.getText();
         this.location = post.getLocation();
         this.displayTime = Formatter.STORAGE_TIME_FORMATTER.format(post.getTime());
-        this.imageUrl = post.getImageUrl();
+        this.imageUrls = post.getImageUrls();
     }
 
     public String getText() {

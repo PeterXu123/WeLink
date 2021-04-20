@@ -1,11 +1,13 @@
 package edu.neu.madcourse.welink.utility;
 
+import java.util.List;
+
 public class PostDAO {
     private String text;
     private String location;
     private long time;
     private String authorUID;
-    private String imageUrl;
+    private List<String> imageUrls;
 
     public PostDAO(){};
 
@@ -24,12 +26,12 @@ public class PostDAO {
         this.text = text;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public String getLocation() {
