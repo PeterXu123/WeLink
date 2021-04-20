@@ -9,6 +9,7 @@
 
 <!--    <com-->
 
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/iconToolbar"
         android:layout_width="match_parent"
@@ -31,38 +32,44 @@
                     android:id="@+id/profileIcon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-
                     android:scaleType="centerCrop" />
 
 
             </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/displayNameInToolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_alignParentLeft="true"
+                android:text="default"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/displayNameInToolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="default"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="30dp"
+                android:text="Log out"
+                android:textColor="#E80B0B"
+                android:textSize="18sp" />
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:textSize="18sp"
-            android:text="Log out" />
+
 
         <!--        <ImageView-->
-<!--            android:id="@+id/profileIcon"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:src="@drawable/profile_icon" />-->
+        <!--            android:id="@+id/profileIcon"-->
+        <!--            android:layout_width="40dp"-->
+        <!--            android:layout_height="40dp"-->
+        <!--            android:src="@drawable/profile_icon" />-->
 
     </androidx.appcompat.widget.Toolbar>
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_post_button"
