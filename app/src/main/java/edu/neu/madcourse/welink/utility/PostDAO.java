@@ -5,6 +5,7 @@ public class PostDAO {
     private String location;
     private long time;
     private String authorUID;
+    private String imageUrl;
 
     public PostDAO(){};
 
@@ -21,6 +22,14 @@ public class PostDAO {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getLocation() {

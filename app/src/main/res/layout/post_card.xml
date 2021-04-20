@@ -47,6 +47,13 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="TextView" />
 
+        <ImageView
+            android:id="@+id/post_card_post_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/post_card_text"
+            tools:srcCompat="@tools:sample/avatars" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

@@ -6,6 +6,7 @@ public class PostDTO {
     private String location;
     private String displayTime;
     private User author;
+    private String imageUrl;
 
     public PostDTO(){};
 
@@ -17,10 +18,27 @@ public class PostDTO {
         this.author = author;
     }
 
+    public String getDisplayTime() {
+        return displayTime;
+    }
+
+    public void setDisplayTime(String displayTime) {
+        this.displayTime = displayTime;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public void setByPostDAO(PostDAO post) {
         this.text = post.getText();
         this.location = post.getLocation();
         this.displayTime = Formatter.STORAGE_TIME_FORMATTER.format(post.getTime());
+        this.imageUrl = post.getImageUrl();
     }
 
     public String getText() {

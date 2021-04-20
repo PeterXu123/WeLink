@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -36,12 +35,12 @@ import edu.neu.madcourse.welink.chat.ChatListFragment;
 import edu.neu.madcourse.welink.follower.FollowerFragment;
 import edu.neu.madcourse.welink.following.FollowingFragment;
 import edu.neu.madcourse.welink.posts.AddPostActivity;
-import edu.neu.madcourse.welink.posts.NearbyFragment;
+import edu.neu.madcourse.welink.posts.NearbyPostFragment;
 import edu.neu.madcourse.welink.posts.FollowingPostFragment;
 import edu.neu.madcourse.welink.profile.ProfileActivity;
 import edu.neu.madcourse.welink.utility.User;
 
-public class FragmentActivity extends AppCompatActivity implements NearbyFragment.DeleteFragmentCallBack{
+public class FragmentActivity extends AppCompatActivity implements NearbyPostFragment.DeleteFragmentCallBack{
 
     private FirebaseAuth mAuth;
     DatabaseReference ref;
@@ -56,6 +55,8 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
     private int currSelectedMenuID;
 
     private String iconUrl;
+    private TextView logout;
+    private AlertDialog exitAlert;
 
 
 
@@ -72,7 +73,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
         else {
             backStackForID.push(R.id.nav_following);
             Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-            if(f instanceof NearbyFragment){
+            if(f instanceof NearbyPostFragment){
                 backStackForID.push(R.id.nav_nearby);
             } else if(f instanceof  FollowingFragment) {
                 backStackForID.push(R.id.nav_following);
@@ -108,29 +109,22 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
                 startActivity(intent);
             }
         });
+
+        logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buildExitAlert().show();
+            }
+        });
+
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        System.out.println("onStart-------------------------");
-        //when user jump to setting and denied some permission, this is required for retrieving
-        //previous selected tab. both savedInstanceState and bottomNavigationView.getSelectedItemId()
-        //don't work in this situation.
-//        backStackForID.push(R.id.nav_following);
-//        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-//        if(f instanceof NearbyFragment){
-//            backStackForID.push(R.id.nav_nearby);
-//        } else if(f instanceof  FollowingFragment) {
-//            backStackForID.push(R.id.nav_following);
-//        } else if(f instanceof  FollowerFragment) {
-//            backStackForID.push(R.id.nav_follower);
-//        } else if(f instanceof FollowingPostFragment) {
-//            backStackForID.push(R.id.nav_posts);
-//        } else if(f instanceof ChatListFragment) {
-//            backStackForID.push(R.id.nav_chat);
-//        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        //System.out.println("onStart-------------------------");
+//    }
 
 
 
@@ -147,7 +141,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
                     fragment = new FollowerFragment();
                     break;
                 case R.id.nav_nearby:
-                    fragment = new NearbyFragment();
+                    fragment = new NearbyPostFragment();
                     break;
                 case R.id.nav_posts:
                     fragment = new FollowingPostFragment();
@@ -181,10 +175,9 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
         }
     };
 
-    @Override
-    public void onBackPressed() {
-        if(backStackForID.size() == 1) {
-            new AlertDialog.Builder(this)
+    private AlertDialog buildExitAlert() {
+        if(exitAlert == null) {
+            exitAlert = new AlertDialog.Builder(this)
                     .setMessage("Are you sure you want to exit?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -194,6 +187,14 @@ public class FragmentActivity extends AppCompatActivity implements NearbyFragmen
                     })
                     .setNegativeButton("No", null)
                     .show();
+        }
+        return exitAlert;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(backStackForID.size() == 1) {
+            buildExitAlert().show();
         } else {
             if(backStackForID.size() > 1) {
                 backStackForID.pop();

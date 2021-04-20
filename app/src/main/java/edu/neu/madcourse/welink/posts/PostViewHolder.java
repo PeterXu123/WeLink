@@ -13,13 +13,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     TextView username;
     TextView time;
     TextView content;
-    ImageView image;
+    ImageView userImage;
+    ImageView postImage;
 
     public PostViewHolder(@NonNull View itemView) {
         super(itemView);
         this.username = itemView.findViewById(R.id.post_card_user_name);
         this.time = itemView.findViewById(R.id.post_card_time);
         this.content = itemView.findViewById(R.id.post_card_text);
-        this.image = itemView.findViewById(R.id.post_card_user_image);
+        this.userImage = itemView.findViewById(R.id.post_card_user_image);
+        this.postImage = itemView.findViewById(R.id.post_card_post_image);
     }
 }
