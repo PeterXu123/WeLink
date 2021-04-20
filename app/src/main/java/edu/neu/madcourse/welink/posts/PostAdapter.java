@@ -30,6 +30,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ArrayList<PostDTO> postDTOs;
     private RecyclerView rv;
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private OpenProfileListener listener;
 
     PostAdapter(String uid, String type,String location) {
         postDTOs = new ArrayList<>();
@@ -49,11 +50,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         }
     }
 
-//    public void clear() {
-//        int size = postDTOs.size();
-//        postDTOs.clear();
-//        notifyItemRangeRemoved(0,size);
-//    }
+    public void setOpenProfileListener(OpenProfileListener listener) {
+        this.listener = listener;
+    }
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -65,12 +65,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_card, parent,false);
-        return new PostViewHolder(v);
+        return new PostViewHolder(v, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostDTO post = postDTOs.get(position);
+        holder.user = post.getAuthor();
         holder.username.setText(post.getAuthor().getDisplayName());
         holder.time.setText(post.getTime());
         holder.content.setText(post.getText());

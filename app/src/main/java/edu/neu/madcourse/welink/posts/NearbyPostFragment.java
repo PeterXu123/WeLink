@@ -63,6 +63,7 @@ public class NearbyPostFragment extends Fragment implements LocationListener {
 
     private void bindAdapterToRecycleView() {
         postAdapter = new PostAdapter(currUID, "nearby", locationString);
+        postAdapter.setOpenProfileListener(new OpenProfileListener(getActivity()));
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

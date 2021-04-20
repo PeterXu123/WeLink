@@ -61,7 +61,7 @@ public class SelfPostActivity extends AppCompatActivity {
         } else {
             postAdapter = new PostAdapter(uid,"user",null);
         }
-
+        postAdapter.setOpenProfileListener(new OpenProfileListener(this));
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }
