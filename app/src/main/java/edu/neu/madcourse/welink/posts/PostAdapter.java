@@ -80,7 +80,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         holder.content.setText(post.getText());
         String iconUrl = post.getAuthor().getIconUrl();
         if (iconUrl != null) {
-            Picasso.get().load(iconUrl).into(holder.userImage);
+            Picasso.get().load(iconUrl).placeholder(R.drawable.loading_place_holder).into(holder.userImage);
         }
         else {
             holder.userImage.setImageResource(R.drawable.profile_icon);
@@ -91,8 +91,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                 iv.setVisibility(View.VISIBLE);
             }
             for(int i = 0; i < imageUrls.size(); i++) {
-
-                Picasso.get().load(imageUrls.get(i)).into(holder.postImages.get(i));
+                Picasso.get().load(imageUrls.get(i)).placeholder(R.drawable.loading_place_holder).into(holder.postImages.get(i));
             }
         }
         else {
