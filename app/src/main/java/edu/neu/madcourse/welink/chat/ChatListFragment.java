@@ -44,6 +44,7 @@ public class ChatListFragment extends Fragment {
     List<User> curChatersOfCurrentUser;
     Intent curIntent;
     List<String> keyPairsInFirebase;
+
     class backThread extends Thread {
         backThread() {
 
@@ -51,16 +52,16 @@ public class ChatListFragment extends Fragment {
 
         @Override
         public void run() {
-            curIntent = new Intent(getActivity(), MainChatActivity.class);
-            chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
-            resultHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    chatListRecyclerView.setAdapter((RecyclerView.Adapter) chatListAdapter);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                    chatListRecyclerView.setLayoutManager(layoutManager);
-                }
-            });
+//            curIntent = new Intent(getActivity(), MainChatActivity.class);
+//            chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
+//            resultHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    chatListRecyclerView.setAdapter((RecyclerView.Adapter) chatListAdapter);
+//                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//                    chatListRecyclerView.setLayoutManager(layoutManager);
+//                }
+//            });
 
         }
     }
@@ -137,7 +138,7 @@ public class ChatListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        new backThread().start();
+//        new backThread().start();
     }
 
     private void getChatersOfCurrentUser(Context context) {
@@ -147,14 +148,14 @@ public class ChatListFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         //Get map of users in datasnapshot
-                        Map<String, Map<String, String>> curUserBuf 
+                        Map<String, Map<String, String>> curUserBuf
                                 = (Map<String, Map<String, String>>) dataSnapshot.getValue();
-                        if(curUserBuf != null && curIntent != null && curChatersIDOfCurrentUser != null) {  // && curIntent != null means don't trigger after take photo
+                        if (curUserBuf != null && curIntent != null && curChatersIDOfCurrentUser != null) {  // && curIntent != null means don't trigger after take photo
                             curChatersOfCurrentUser = new LinkedList<>();
-                            for (String chaterId: curChatersIDOfCurrentUser.keySet()) {
+                            for (String chaterId : curChatersIDOfCurrentUser.keySet()) {
                                 if (curUserBuf.containsKey(chaterId)) {
                                     Map<String, String> curChaterMap = curUserBuf.get(chaterId);
-                                    if( curChaterMap != null ) {
+                                    if (curChaterMap != null) {
                                         User curChater = new User();
                                         curChater.setDisplayName(curChaterMap.getOrDefault("displayName", "Anonymous"));
                                         curChater.setIconUrl(curChaterMap.getOrDefault("iconUrl", "no image"));
@@ -163,7 +164,7 @@ public class ChatListFragment extends Fragment {
                                         curChater.setToken(curChaterMap.getOrDefault("token", "no token"));
                                         curChater.setUid(chaterId);
                                         curChatersOfCurrentUser.add(curChater);
-                                        if(chatListAdapter == null ) {
+                                        if (chatListAdapter == null) {
 //                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
                                             chatListAdapter = new ChatListAdapter(context, new Intent(curIntent));
                                         }
@@ -263,11 +264,17 @@ public class ChatListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+            curIntent = new Intent(getActivity(), MainChatActivity.class);
+            chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
         chatListRecyclerView = getView().findViewById(R.id.chat_list_recycler_view);
+        curIntent = new Intent(getActivity(), MainChatActivity.class);
+
+        chatListRecyclerView.setAdapter((RecyclerView.Adapter) chatListAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        chatListRecyclerView.setLayoutManager(layoutManager);
 
 
     }
 
-    
+
 }
