@@ -268,8 +268,6 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
 
             backStackForID.push(currSelectedMenuID);
         }
-
-
     }
 
     @Override
