@@ -48,8 +48,6 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     private ImageView icon;
     private Stack<Integer> backStackForID = new Stack<>();
     private BottomNavigationView bottomNavigationView;
-    static final String STATE_MENU_ID = "menuId";
-    private int currSelectedMenuID;
     Fragment fragment = null;
     private String iconUrl;
     private TextView logout;
