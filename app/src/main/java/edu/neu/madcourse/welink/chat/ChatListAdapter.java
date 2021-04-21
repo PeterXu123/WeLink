@@ -33,6 +33,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
         listOfChat = new LinkedList<>();
         this.context = context;
         this.intent = intent;
+
+
     }
 
 
