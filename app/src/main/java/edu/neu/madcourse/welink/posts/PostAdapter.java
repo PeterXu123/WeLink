@@ -90,6 +90,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         if(imageUrls != null) {
             for (ImageView iv: holder.postImages) {
                 iv.setVisibility(View.VISIBLE);
+                iv.setImageResource(0);
             }
             for(int i = 0; i < imageUrls.size(); i++) {
                 Picasso.get().load(imageUrls.get(i)).placeholder(R.drawable.loading_place_holder).into(holder.postImages.get(i));
