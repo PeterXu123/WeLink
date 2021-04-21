@@ -256,6 +256,19 @@ public class ChatListFragment extends Fragment {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User u  =snapshot.getValue(User.class);
+                        chatListAdapter.removeChaterFromAdapter(u, curUser);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
 
             }
 

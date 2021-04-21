@@ -84,6 +84,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
             if(chaterImgUrl != null && chaterImgUrl.length() > 0) {
                 Picasso.get().load(chaterImgUrl).into(holder.profileIcon);
             }
+            else {
+                holder.profileIcon.setImageResource(R.drawable.profile_icon);
+            }
         } catch (Exception exception) {
             System.out.println(Arrays.toString(exception.getStackTrace()));
         }
