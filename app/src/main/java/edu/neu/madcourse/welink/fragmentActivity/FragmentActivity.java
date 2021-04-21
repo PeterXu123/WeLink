@@ -257,17 +257,17 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     @Override
     protected void onResume() {
         super.onResume();
-        if (fragment != null) {
-            System.out.println("this hsoudld output");
-            fragment = new ChatListFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("currUID", currUID);
-            fragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    fragment).commit();
-
-            backStackForID.push(currSelectedMenuID);
-        }
+//        if (fragment != null) {
+//            System.out.println("this hsoudld output");
+//            fragment = new ChatListFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putString("currUID", currUID);
+//            fragment.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    fragment).commit();
+//
+//            backStackForID.push(currSelectedMenuID);
+//        }
 
 
     }
