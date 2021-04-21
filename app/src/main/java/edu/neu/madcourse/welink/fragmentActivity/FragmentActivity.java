@@ -52,7 +52,6 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     private Stack<Integer> backStackForID = new Stack<>();
     private BottomNavigationView bottomNavigationView;
     static final String STATE_MENU_ID = "menuId";
-    private int currSelectedMenuID;
 
     private String iconUrl;
     private TextView logout;
@@ -68,7 +67,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         if(savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FollowingFragment()).commit();
-            currSelectedMenuID = R.id.nav_following;
+            backStackForID.push(R.id.nav_following);
         }
         else {
             backStackForID.push(R.id.nav_following);
@@ -114,10 +113,9 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildExitAlert().show();
+                buildExitAlert(null).show();
             }
         });
-
     }
 
 //    @Override
@@ -131,7 +129,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            currSelectedMenuID = item.getItemId();
+            int currSelectedMenuID = item.getItemId();
             Fragment fragment = null;
             switch (currSelectedMenuID) {
                 case R.id.nav_following:
@@ -175,7 +173,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         }
     };
 
-    private AlertDialog buildExitAlert() {
+    private AlertDialog buildExitAlert(Integer currId) {
         if(exitAlert == null) {
             exitAlert = new AlertDialog.Builder(this)
                     .setMessage("Are you sure you want to exit?")
@@ -185,7 +183,14 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
                             finish();
                         }
                     })
-                    .setNegativeButton("No", null)
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(currId != null) {
+                                backStackForID.push(currId);
+                            }
+                        }
+                    })
                     .show();
         }
         return exitAlert;
@@ -193,15 +198,18 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
 
     @Override
     public void onBackPressed() {
-        if(backStackForID.size() == 1) {
-            buildExitAlert().show();
+        int currId = backStackForID.pop();
+        if(backStackForID.isEmpty()) {
+            buildExitAlert(currId).show();
         } else {
-            if(backStackForID.size() > 1) {
+            while(!backStackForID.isEmpty() && backStackForID.peek().equals(currId)) {
                 backStackForID.pop();
+            }
+            if(backStackForID.isEmpty()) {
+                buildExitAlert(currId).show();
+            } else {
                 int currSelectedMenuID = backStackForID.pop();
                 bottomNavigationView.setSelectedItemId(currSelectedMenuID);
-            } else {
-                super.onBackPressed();
             }
         }
     }
