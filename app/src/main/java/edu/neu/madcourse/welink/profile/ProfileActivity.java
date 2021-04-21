@@ -22,7 +22,6 @@ import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.chat.MainChatActivity;
 import edu.neu.madcourse.welink.follower.FollowerActivity;
 import edu.neu.madcourse.welink.following.FollowingActivity;
-import edu.neu.madcourse.welink.login_signup.MainActivity;
 import edu.neu.madcourse.welink.posts.SelfPostActivity;
 import edu.neu.madcourse.welink.utility.UploadProfileIconActivity;
 import edu.neu.madcourse.welink.utility.User;
@@ -201,9 +200,14 @@ public class ProfileActivity extends AppCompatActivity  {
             case R.id.ChatInProfile:
                 intent = new Intent(ProfileActivity.this, MainChatActivity.class);
                 intent.putExtra("fromUser", auth.getCurrentUser().getDisplayName());
-//                intent.putExtra("pairKey", );
                 intent.putExtra("curChaterToken", token);
-                intent.putExtra("curUserID", uid);
+                intent.putExtra("curUserID", currentUserId);
+                intent.putExtra("curChaterID", uid);
+                String fromUser = auth.getCurrentUser().getProviderId();
+                String toUser = this.username.getText().toString();
+                String pairKey = currentUserId.compareTo(uid) < 0 ?
+                        currentUserId + "_" + uid : uid + "_" + currentUserId;
+                intent.putExtra("pairKey", pairKey);
                 startActivity(intent);
                 break;
             case R.id.FollowHim:

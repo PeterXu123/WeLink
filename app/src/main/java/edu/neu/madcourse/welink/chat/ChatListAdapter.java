@@ -42,6 +42,27 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
         notifyItemInserted(0);
     }
 
+    public boolean chatListRowEqual(ChatListRow curChatListRow1, ChatListRow curChatListRow2){
+        String id1Chater = curChatListRow1.getCurChater().getUid();
+        String id1User = curChatListRow1.getCurUser().getUid();
+        String id2Chater = curChatListRow2.getCurChater().getUid();;
+        String id2User = curChatListRow1.getCurUser().getUid();
+        return (id1Chater.equals(id2Chater) && id1User.equals(id2User))
+                || (id1Chater.equals(id2User) && id1User.equals(id2Chater));
+    }
+
+    public void removeChaterFromAdapter(User curChater, User curUser) {
+        ChatListRow curChatListRow = new ChatListRow(curChater, curUser);
+        for(int i=0; i<listOfChat.size(); i++) {
+            if(chatListRowEqual(listOfChat.get(i), curChatListRow)){
+                listOfChat.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+
+    }
+
     @NonNull
     @Override
     public ChatListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
