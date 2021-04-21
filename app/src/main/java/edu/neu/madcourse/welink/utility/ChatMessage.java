@@ -5,7 +5,15 @@ public class ChatMessage {
     private String senderUserId;
     private String senderUserName;
     private Long time;
-    private String chater1_chater2;
+    private String key1_key2;
+
+    public String getKey1_key2() {
+        return key1_key2;
+    }
+
+    public void setKey1_key2(String key1_key2) {
+        this.key1_key2 = key1_key2;
+    }
 
     public Long getTime() {
         return time;
@@ -15,22 +23,15 @@ public class ChatMessage {
         this.time = time;
     }
 
-    public String getChater1_chater2() {
-        return chater1_chater2;
-    }
 
-    public void setChater1_chater2(String chater1_chater2) {
-        this.chater1_chater2 = chater1_chater2;
-    }
-
-    public ChatMessage(String message, String senderUserId, String senderUserName,
-                       Long time, String chater1_chater2) {
+    public ChatMessage(String message, String senderUserId, String senderUserName, Long time, String key1_key2) {
         this.message = message;
         this.senderUserId = senderUserId;
         this.senderUserName = senderUserName;
         this.time = time;
-        this.chater1_chater2 = chater1_chater2;
+        this.key1_key2 = key1_key2;
     }
+
 
     public String getSenderUserName() {
         return senderUserName;

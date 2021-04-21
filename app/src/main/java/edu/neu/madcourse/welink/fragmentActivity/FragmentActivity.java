@@ -12,9 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,8 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
 import edu.neu.madcourse.welink.R;
@@ -35,8 +32,8 @@ import edu.neu.madcourse.welink.chat.ChatListFragment;
 import edu.neu.madcourse.welink.follower.FollowerFragment;
 import edu.neu.madcourse.welink.following.FollowingFragment;
 import edu.neu.madcourse.welink.posts.AddPostActivity;
-import edu.neu.madcourse.welink.posts.NearbyPostFragment;
 import edu.neu.madcourse.welink.posts.FollowingPostFragment;
+import edu.neu.madcourse.welink.posts.NearbyPostFragment;
 import edu.neu.madcourse.welink.profile.ProfileActivity;
 import edu.neu.madcourse.welink.utility.User;
 
@@ -52,7 +49,8 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     private Stack<Integer> backStackForID = new Stack<>();
     private BottomNavigationView bottomNavigationView;
     static final String STATE_MENU_ID = "menuId";
-
+    private int currSelectedMenuID;
+    Fragment fragment = null;
     private String iconUrl;
     private TextView logout;
     private AlertDialog exitAlert;
@@ -130,7 +128,8 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             int currSelectedMenuID = item.getItemId();
-            Fragment fragment = null;
+
+            FragmentTransaction ft = null;
             switch (currSelectedMenuID) {
                 case R.id.nav_following:
                     fragment = new FollowingFragment();
@@ -149,25 +148,27 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
                     //  we need to add one sample user here.
                     //  After we have the profile page and can chat with people, those lines
                     //  except the "fragment = new ChatListFragment();" need to be deleted  -- zzx
-                    List<String> list = new LinkedList<>();
-                    if(list.isEmpty()) {
-                        list.add("5gWtXF86ZofKPoX89yL3QMcZGFD2_"+System.currentTimeMillis());
-                    }
-
-                    ref.child("chater_relation").child("1NjvX2d1k3eQqQpPGUVyt0JZLBC2")
-                            .setValue(list).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
+//                    List<String> list = new LinkedList<>();
+//                    if(list.isEmpty()) {
+//                        list.add("5gWtXF86ZofKPoX89yL3QMcZGFD2_"+System.currentTimeMillis());
+//                    }
+//
+//                    ref.child("chater_relation").child("1NjvX2d1k3eQqQpPGUVyt0JZLBC2")
+//                            .setValue(list).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//
+//                        }
+//                    });
                     fragment = new ChatListFragment();
+
             }
             Bundle bundle = new Bundle();
             bundle.putString("currUID", currUID);
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     fragment).commit();
+
             backStackForID.push(currSelectedMenuID);
             return true;
         }
@@ -260,6 +261,24 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         Intent intent = new Intent(this, AddPostActivity.class);
         intent.putExtra("currUID", currUID);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (fragment != null) {
+            System.out.println("this hsoudld output");
+            fragment = new ChatListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("currUID", currUID);
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    fragment).commit();
+
+            backStackForID.push(currSelectedMenuID);
+        }
+
+
     }
 
     @Override

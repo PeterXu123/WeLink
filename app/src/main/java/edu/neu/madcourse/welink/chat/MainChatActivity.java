@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.ChatMessage;
@@ -64,6 +65,7 @@ public class MainChatActivity extends AppCompatActivity {
     private String senderUserID;
     private Bitmap imageBitMap;
     private String CLIENT_REGISTRATION_TOKEN;
+    private List<String> keyPairsInFirebase;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_SAVE_IMAGE = 3;
     String mCurrentPhotoPath;
@@ -349,6 +351,40 @@ public class MainChatActivity extends AppCompatActivity {
         // TODO: Grab the text the user typed in and push the message to Firebase
         String message = mInputText.getText().toString();
         if (message == "") return;
+        String[] idPairInLexiOrder = keypair.split("_");
+        String id1 = idPairInLexiOrder[0];
+        String id2 = idPairInLexiOrder[1];
+        mDatabaseReference.child("chater_relation").child(id1).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.hasChild(id2)) {
+                            mDatabaseReference.child("chater_relation").child(id1).child(id2)
+                                    .setValue(new Date());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+        mDatabaseReference.child("chater_relation").child(id2).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!snapshot.hasChild(id1)) {
+                            mDatabaseReference.child("chater_relation").child(id2).child(id1)
+                                    .setValue(new Date());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
         mDatabaseReference.child("message_record").child(keypair).push()
                 .setValue(new ChatMessage(message, senderUserID, fromUser,
@@ -357,7 +393,6 @@ public class MainChatActivity extends AppCompatActivity {
 
         // todo: need to check if current chater and user 's key_pair is in the ChatListAdapter's list.
         //  If so, remove it and add it to the index 0. Otherwise, add it to index 0. --zzx
-
 
     }
 

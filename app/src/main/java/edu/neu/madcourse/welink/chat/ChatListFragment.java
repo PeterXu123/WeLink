@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +40,10 @@ public class ChatListFragment extends Fragment {
     private String uid;
     private User curUser;
     ChaterRelation curChaterRelation;
-    List<String> curChatersIDTimeOfCurrentUser;
+    Map<String, Date> curChatersIDOfCurrentUser;
     List<User> curChatersOfCurrentUser;
     Intent curIntent;
+    List<String> keyPairsInFirebase;
     class backThread extends Thread {
         backThread() {
 
@@ -62,7 +64,75 @@ public class ChatListFragment extends Fragment {
 
         }
     }
-    
+
+
+//    private String getChaterIdFromKeyPair(String keyPair) {
+//        String curId = curUser.getUid();
+//        String chaterId = "";
+//        String[] idLexiPair = keyPair.split("_");
+//        if(idLexiPair[0].equals(curId)) {
+//            chaterId = idLexiPair[1];
+//        } else {
+//            chaterId = idLexiPair[0];
+//        }
+//        return chaterId;
+//    }
+//
+//    private void changeChaterInList(String keyPair, boolean shouldRemove) {
+//        String chaterId = getChaterIdFromKeyPair(keyPair);
+//        if(!chaterId.isEmpty()) {
+//            mDatabaseReference.child("users").addListenerForSingleValueEvent(
+//                    new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                            if (snapshot.hasChild(chaterId)) {
+//                                User curChater = snapshot.child(chaterId).getValue(User.class);
+//                                if(shouldRemove){
+//                                    chatListAdapter.removeChaterFromAdapter(curChater, curUser);
+//                                }
+//                                chatListAdapter.addNewChaterToAdapter(curChater, curUser);
+//                            }
+//                        }
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                        }
+//                    });
+//
+//        }
+//    }
+//
+//    private void chatListListenToMessageRecords() {
+//        mDatabaseReference.child("message_record").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//
+//                changeChaterInList(dataSnapshot.getKey(), false);
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                changeChaterInList(dataSnapshot.getKey(), true);
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//                changeChaterInList(dataSnapshot.getKey(), true);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//    }
 
     @Override
     public void onStart() {
@@ -79,12 +149,9 @@ public class ChatListFragment extends Fragment {
                         //Get map of users in datasnapshot
                         Map<String, Map<String, String>> curUserBuf 
                                 = (Map<String, Map<String, String>>) dataSnapshot.getValue();
-                        if(curUserBuf != null && curIntent != null) {  // && curIntent != null means don't trigger after take photo
+                        if(curUserBuf != null && curIntent != null && curChatersIDOfCurrentUser != null) {  // && curIntent != null means don't trigger after take photo
                             curChatersOfCurrentUser = new LinkedList<>();
-                            for (String charterIDTime: curChatersIDTimeOfCurrentUser) {
-                                String[] charterIDTimeArr = charterIDTime.split("_");
-                                String chaterId = charterIDTimeArr[0];
-                                String chaterTime = charterIDTimeArr[1];
+                            for (String chaterId: curChatersIDOfCurrentUser.keySet()) {
                                 if (curUserBuf.containsKey(chaterId)) {
                                     Map<String, String> curChaterMap = curUserBuf.get(chaterId);
                                     if( curChaterMap != null ) {
@@ -137,10 +204,10 @@ public class ChatListFragment extends Fragment {
 //                            curChaterRelation = snapshot.child(uid).getValue(ChaterRelation.class);
 //                            // todo: can we use .getValue(ChaterRelation.class); here??? Is it legal
 //                            if (curChaterRelation != null) {
-//                                curChatersIDTimeOfCurrentUser = curChaterRelation.getChatersId();
+//                                curChatersIDOfCurrentUser = curChaterRelation.getChatersId();
 //                                getChatersOfCurrentUser();
 //                            }
-                            curChatersIDTimeOfCurrentUser = (List<String>) snapshot.child(uid).getValue();
+                            curChatersIDOfCurrentUser = (Map<String, Date>) snapshot.child(uid).getValue();
                             chatListRecyclerView.setAdapter((RecyclerView.Adapter) chatListAdapter);
                             getChatersOfCurrentUser(context);
                         }
@@ -164,16 +231,16 @@ public class ChatListFragment extends Fragment {
         return inflater.inflate(R.layout.activity_chat_list, container, false);
     }
 
+
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
         Intent intent = getActivity().getIntent();
-        if(intent.getExtras() != null) {
+        if (intent.getExtras() != null) {
             uid = intent.getExtras().getString("uid");
         }
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        chatListRecyclerView = getView().findViewById(R.id.chat_list_recycler_view);
-        if(!uid.isEmpty()) {
+        if (!uid.isEmpty()) {
             mDatabaseReference.child("users").addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
@@ -181,15 +248,25 @@ public class ChatListFragment extends Fragment {
                             if (snapshot.hasChild(uid)) {
                                 curUser = snapshot.child(uid).getValue(User.class);
                                 getChatersIDOfCurrentUser(getContext());
+//                                chatListListenToMessageRecords();
                             }
                         }
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
-
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        chatListRecyclerView = getView().findViewById(R.id.chat_list_recycler_view);
+
+
     }
 
     
