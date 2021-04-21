@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -183,6 +184,7 @@ public class ChatListFragment extends Fragment {
                 });
     }
 
+
     /**
      * To get id of current chaters.
      * Inner function will do next step.
@@ -190,7 +192,7 @@ public class ChatListFragment extends Fragment {
     private void getChatersIDOfCurrentUser(Context context) {
         String curUserName = curUser.getDisplayName();
 //        https://cdn.pixabay.com/photo/2016/06/15/16/16/man-1459246_1280.png
-        mDatabaseReference.child("chater_relation").addListenerForSingleValueEvent(
+        mDatabaseReference.child("chater_relation").addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -222,6 +224,53 @@ public class ChatListFragment extends Fragment {
         );
     }
 
+    private void helper() {
+
+        if (chatListAdapter == null) {
+//                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
+            chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
+        }
+        mDatabaseReference.child("chater_relation").child(uid).addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+               mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                   @Override
+                   public void onDataChange(@NonNull DataSnapshot snapshot) {
+                       User u  =snapshot.getValue(User.class);
+                       chatListAdapter.addNewChaterToAdapter(u, curUser);
+                   }
+
+                   @Override
+                   public void onCancelled(@NonNull DatabaseError error) {
+
+                   }
+               });
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -248,7 +297,7 @@ public class ChatListFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.hasChild(uid)) {
                                 curUser = snapshot.child(uid).getValue(User.class);
-                                getChatersIDOfCurrentUser(getContext());
+                                helper();
 //                                chatListListenToMessageRecords();
                             }
                         }
