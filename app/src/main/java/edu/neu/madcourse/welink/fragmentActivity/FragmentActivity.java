@@ -54,7 +54,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     private String iconUrl;
     private TextView logout;
     private AlertDialog exitAlert;
-
+    private Bundle bundle;
 
 
     @Override
@@ -254,21 +254,6 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         startActivity(intent);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (fragment != null) {
-            System.out.println("this hsoudld output");
-            fragment = new ChatListFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("currUID", currUID);
-            fragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    fragment).commit();
-
-            backStackForID.push(currSelectedMenuID);
-        }
-    }
 
     @Override
     public void backToPreviousFragment() {
