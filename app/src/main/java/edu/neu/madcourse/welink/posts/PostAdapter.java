@@ -87,7 +87,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         }
         List<String> imageUrls = post.getImageUrls();
         if(imageUrls != null) {
+            for (ImageView iv: holder.postImages) {
+                iv.setVisibility(View.VISIBLE);
+            }
             for(int i = 0; i < imageUrls.size(); i++) {
+
                 Picasso.get().load(imageUrls.get(i)).into(holder.postImages.get(i));
             }
         }
