@@ -2,6 +2,7 @@ package edu.neu.madcourse.welink.posts;
 
 import androidx.annotation.Nullable;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,7 @@ public class FollowingPostFragment extends Fragment {
         recyclerView = view.findViewById(R.id.post_rv);
         recyclerView.setHasFixedSize(true);
         postAdapter = new PostAdapter(currUID, "followings",null);
+        postAdapter.setOpenProfileListener(new OpenProfileListener(getActivity()));
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }

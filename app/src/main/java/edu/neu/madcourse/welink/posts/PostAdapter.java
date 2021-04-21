@@ -1,8 +1,10 @@
 package edu.neu.madcourse.welink.posts;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,30 +32,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ArrayList<PostDTO> postDTOs;
     private RecyclerView rv;
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private OpenProfileListener listener;
 
     PostAdapter(String uid, String type,String location) {
         postDTOs = new ArrayList<>();
         switch (type) {
             case "nearby":
-                ref.child("posts_location").child(location).addListenerForSingleValueEvent(getChildrenOnceListener);
+                ref.child("posts_location").child(location).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             case "self":
-                ref.child("posts_self").child(uid).addChildEventListener(childAddListener);
+                ref.child("posts_self").child(uid).orderByKey().addChildEventListener(childAddListener);
                 break;
             case "user":
-                ref.child("posts_self").child(uid).addListenerForSingleValueEvent(getChildrenOnceListener);
+                ref.child("posts_self").child(uid).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
+                break;
             case "followings":
-                ref.child("posts_followings").child(uid).addListenerForSingleValueEvent(getChildrenOnceListener);
+                ref.child("posts_followings").child(uid).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             default:
         }
     }
 
-//    public void clear() {
-//        int size = postDTOs.size();
-//        postDTOs.clear();
-//        notifyItemRangeRemoved(0,size);
-//    }
+    public void setOpenProfileListener(OpenProfileListener listener) {
+        this.listener = listener;
+    }
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -65,23 +68,36 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_card, parent,false);
-        return new PostViewHolder(v);
+        return new PostViewHolder(v, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostDTO post = postDTOs.get(position);
+        holder.user = post.getAuthor();
         holder.username.setText(post.getAuthor().getDisplayName());
         holder.time.setText(post.getTime());
         holder.content.setText(post.getText());
         String iconUrl = post.getAuthor().getIconUrl();
         if (iconUrl != null) {
-            Picasso.get().load(iconUrl).into(holder.userImage);
-//                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
+            Picasso.get().load(iconUrl).placeholder(R.drawable.loading_place_holder).into(holder.userImage);
         }
-        String imageUrl = post.getImageUrl();
-        if(imageUrl != null) {
-            Picasso.get().load(imageUrl).into(holder.postImage);
+        else {
+            holder.userImage.setImageResource(R.drawable.profile_icon);
+        }
+        List<String> imageUrls = post.getImageUrls();
+        if(imageUrls != null) {
+            for (ImageView iv: holder.postImages) {
+                iv.setVisibility(View.VISIBLE);
+            }
+            for(int i = 0; i < imageUrls.size(); i++) {
+                Picasso.get().load(imageUrls.get(i)).placeholder(R.drawable.loading_place_holder).into(holder.postImages.get(i));
+            }
+        }
+        else {
+            for (ImageView iv: holder.postImages) {
+                iv.setVisibility(View.GONE);
+            }
         }
     }
 

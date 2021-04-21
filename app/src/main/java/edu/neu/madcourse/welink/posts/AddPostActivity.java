@@ -1,6 +1,7 @@
 package edu.neu.madcourse.welink.posts;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -26,15 +29,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -63,10 +69,11 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
     Location location;
     public static final int REQUEST_LOCATION_CODE = 1;
     private int PICK_CODE = 19;
-    private Uri uri;
-    private ImageView image;
+    private List<AddImageItem> images;
     private FirebaseStorage  storage = FirebaseStorage.getInstance();
-    private ProgressBar pb;
+    private Button addImagesBtn;
+    private RecyclerView rv;
+    private AddPostAdapter rvAdapter;
 
 
     @Override
@@ -108,10 +115,33 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
             }
         });
 
-        Button addImages = findViewById(R.id.new_post_select_image);
-        image = findViewById(R.id.new_post_image);
-        addImages.setOnClickListener(chooseImageListener);
-        pb = findViewById(R.id.progressBar);
+        addImagesBtn = findViewById(R.id.new_post_select_image);
+        addImagesBtn.setOnClickListener(chooseImageListener);
+        //recycle view for upload images preview
+        rv = findViewById(R.id.new_post_rv);
+        images = new ArrayList<>();
+        createRecyclerView();
+    }
+
+    private void createRecyclerView() {
+        GridLayoutManager layoutManger = new GridLayoutManager(this, 3);
+        rv = findViewById(R.id.new_post_rv);
+        rv.setHasFixedSize(true);
+        DeleteImageListener deleteImageListener= new DeleteImageListener() {
+            @Override
+            public void onItemClick(int position) {
+                images.remove(position);
+                if(images.size() < 3) {
+                    addImagesBtn.setVisibility(View.VISIBLE);
+                }
+                rvAdapter.notifyItemRemoved(position);
+            }
+        };
+
+        rvAdapter = new AddPostAdapter(images);
+        rvAdapter.setOnItemClickListener(deleteImageListener);
+        rv.setAdapter(rvAdapter);
+        rv.setLayoutManager(layoutManger);
     }
 
 
@@ -223,10 +253,9 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_CODE && data != null && data.getData() != null) {
-            uri = data.getData();
+            Uri uri = data.getData();
             try {
                 Bitmap bitmap = MediaStore
                         .Images
@@ -234,8 +263,12 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
                         .getBitmap(
                                 getContentResolver(),
                                 uri);
-                image.setImageBitmap(bitmap);
-            } catch (Exception e) {
+                images.add(0,new AddImageItem(uri,bitmap));
+                rvAdapter.notifyItemInserted(0);
+                if(images.size() >= 3) {
+                    addImagesBtn.setVisibility(View.GONE);
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -255,7 +288,7 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
         newPostRef.setValue(newPost);
         String postId = newPostRef.getKey();
         //uploadImage
-        uploadImage(newPostRef, now.toString());
+        saveAllImages(newPostRef);
 
         if(postId != null) {
             //add to self posts
@@ -269,41 +302,36 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
         finish();
     }
 
-    private void uploadImage(DatabaseReference newPost, String time) {
-        if (uri != null) {
-
-            StorageReference ref = storage.getReference().
-                    child("postImages/" +currUID + "/" + time);
-            try {
-                Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 25, baos);
-                byte[] data = baos.toByteArray();
-                pb.setVisibility(View.VISIBLE);
-                ref.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                newPost.child("imageUrl").setValue(uri.toString());
-                            }
-                        });
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progress = (100 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
-                        System.out.println(progress);
-
-                        pb.setProgress((int) progress);
-                    }
-                });
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void saveAllImages(DatabaseReference newPostRef) {
+        List<Task<Uri>> taskArrayList = new ArrayList<>();
+        for(AddImageItem image : images) {
+            taskArrayList.add(uploadImage(image.getBitmap()));
         }
+        Tasks.whenAllSuccess(taskArrayList).addOnCompleteListener(task -> {
+            List<Object> downloadUris = task.getResult();
+            List<String> uriStrings = new ArrayList<>();
+            if(downloadUris != null) {
+                for(Object o : downloadUris) {
+                    uriStrings.add(((Uri)o).toString());
+                }
+                newPostRef.child("imageUrls").setValue(uriStrings);
+            }
+        });
+    }
+
+    private Task<Uri> uploadImage(final Bitmap bmp) {
+        StorageReference fileStorage = storage.getReference().child("postImages/" +currUID + "/" + new Date().getTime());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 25, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = fileStorage.putBytes(data);
+        bmp.recycle();
+
+        return uploadTask.continueWithTask(task -> {
+            bmp.recycle();
+            return fileStorage.getDownloadUrl();
+        });
     }
 
 
@@ -333,10 +361,5 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
         for(String followersUID : followers) {
             ref.child("posts_followings").child(followersUID).child(postId).setValue(postId);
         }
-    }
-
-    private String generateImageFileName() {
-        Date currTime = new Date();
-        return currUID + "_" + currTime.getTime();
     }
 }
