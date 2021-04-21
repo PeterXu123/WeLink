@@ -1,6 +1,5 @@
 package edu.neu.madcourse.welink.posts;
 
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ArrayList<PostDTO> postDTOs;
     private RecyclerView rv;
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-    private OpenProfileListener listener;
+    private OpenProfileOnClickListener openProfileOnClickListener;
+    private OpenImageOnClickListener openImageOnClickListener;
 
     PostAdapter(String uid, String type,String location) {
         postDTOs = new ArrayList<>();
@@ -53,8 +53,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         }
     }
 
-    public void setOpenProfileListener(OpenProfileListener listener) {
-        this.listener = listener;
+    public void setOpenProfileListener(OpenProfileOnClickListener openProfileOnClickListener, OpenImageOnClickListener openImageOnClickListener) {
+        this.openProfileOnClickListener = openProfileOnClickListener;
+        this.openImageOnClickListener = openImageOnClickListener;
     }
 
 
@@ -68,7 +69,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_card, parent,false);
-        return new PostViewHolder(v, listener);
+        return new PostViewHolder(v, openProfileOnClickListener);
     }
 
     @Override
@@ -92,6 +93,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
             }
             for(int i = 0; i < imageUrls.size(); i++) {
                 Picasso.get().load(imageUrls.get(i)).placeholder(R.drawable.loading_place_holder).into(holder.postImages.get(i));
+                holder.postImages.get(i).setOnClickListener(getOpenImageOnClickListener(imageUrls.get(i)));
             }
         }
         else {
@@ -99,6 +101,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                 iv.setVisibility(View.GONE);
             }
         }
+    }
+
+    private View.OnClickListener getOpenImageOnClickListener(String uri) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(openImageOnClickListener != null) {
+                    openImageOnClickListener.onItemClick(uri);
+                }
+            }
+        };
     }
 
     @Override

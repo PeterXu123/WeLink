@@ -6,9 +6,9 @@ import android.content.Intent;
 import edu.neu.madcourse.welink.profile.ProfileActivity;
 import edu.neu.madcourse.welink.utility.User;
 
-public class OpenProfileListener {
+public class OpenProfileOnClickListener {
     private final Activity activity;
-    public OpenProfileListener(Activity activity) {
+    public OpenProfileOnClickListener(Activity activity) {
         this.activity = activity;
     }
     void onItemClick( User user) {

@@ -2,7 +2,6 @@ package edu.neu.madcourse.welink.utility;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 public class MyImageView extends androidx.appcompat.widget.AppCompatImageView {
     public MyImageView(Context context) {

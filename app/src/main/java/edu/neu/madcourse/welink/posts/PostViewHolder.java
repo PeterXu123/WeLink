@@ -20,11 +20,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     ImageView userImage;
     List<ImageView> postImages;
     User user;
-    OpenProfileListener listener;
+    OpenProfileOnClickListener openProfileListener;
 
-    public PostViewHolder(@NonNull View itemView, final OpenProfileListener listener) {
+    public PostViewHolder(@NonNull View itemView, final OpenProfileOnClickListener openProfileListener) {
         super(itemView);
-        this.listener = listener;
+        this.openProfileListener = openProfileListener;
         this.username = itemView.findViewById(R.id.post_card_user_name);
         this.time = itemView.findViewById(R.id.post_card_time);
         this.content = itemView.findViewById(R.id.post_card_text);
@@ -41,8 +41,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private View.OnClickListener openProfile = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (listener != null) {
-                listener.onItemClick(user);
+            if (openProfileListener != null) {
+                openProfileListener.onItemClick(user);
             }
         }
     };

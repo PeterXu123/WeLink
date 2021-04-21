@@ -1,5 +1,6 @@
 package edu.neu.madcourse.welink.posts;
 import android.content.Intent;
+import android.graphics.Region;
 import android.os.Bundle;
 import android.view.View;
 
@@ -61,7 +62,7 @@ public class SelfPostActivity extends AppCompatActivity {
         } else {
             postAdapter = new PostAdapter(uid,"user",null);
         }
-        postAdapter.setOpenProfileListener(new OpenProfileListener(this));
+        postAdapter.setOpenProfileListener(new OpenProfileOnClickListener(this), new OpenImageOnClickListener(this));
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }
