@@ -44,6 +44,7 @@ public class BothFollowAdapter  extends RecyclerView.Adapter<BothFollowHolder> {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         String followingUid = snapshot.getKey();
+                        notifyDataSetChanged();
 //                        ref.child("users").child(followingUid).addListenerForSingleValueEvent(new ValueEventListener() {
 //                            @Override
 //                            public void onDataChange(@NonNull DataSnapshot snapshot) {
