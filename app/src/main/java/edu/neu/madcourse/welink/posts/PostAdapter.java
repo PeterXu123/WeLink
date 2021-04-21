@@ -38,15 +38,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         postDTOs = new ArrayList<>();
         switch (type) {
             case "nearby":
-                ref.child("posts_location").child(location).addListenerForSingleValueEvent(getChildrenOnceListener);
+                ref.child("posts_location").child(location).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             case "self":
-                ref.child("posts_self").child(uid).addChildEventListener(childAddListener);
+                ref.child("posts_self").child(uid).orderByKey().addChildEventListener(childAddListener);
                 break;
             case "user":
-                ref.child("posts_self").child(uid).addListenerForSingleValueEvent(getChildrenOnceListener);
+                ref.child("posts_self").child(uid).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
+                break;
             case "followings":
-                ref.child("posts_followings").child(uid).addListenerForSingleValueEvent(getChildrenOnceListener);
+                ref.child("posts_followings").child(uid).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             default:
         }
@@ -80,7 +81,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         String iconUrl = post.getAuthor().getIconUrl();
         if (iconUrl != null) {
             Picasso.get().load(iconUrl).into(holder.userImage);
-//                    Picasso.with(getApplicationContext()).load(snapshot.getValue(User.class).getIconUrl()).into(icon);
         }
         else {
             holder.userImage.setImageResource(R.drawable.profile_icon);
