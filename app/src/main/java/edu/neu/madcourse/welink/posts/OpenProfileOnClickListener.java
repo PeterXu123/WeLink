@@ -17,6 +17,7 @@ public class OpenProfileOnClickListener {
             intent.putExtra("username", user.getDisplayName());
             intent.putExtra("iconUrl", user.getIconUrl());
             intent.putExtra("uid", user.getUid());
+            intent.putExtra("token", user.getToken());
             activity.startActivity(intent);
         }
     }
