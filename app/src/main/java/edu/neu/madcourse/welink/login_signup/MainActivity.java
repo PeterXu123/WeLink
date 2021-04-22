@@ -1,6 +1,7 @@
 package edu.neu.madcourse.welink.login_signup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginSharedPref", MODE_PRIVATE);
+
         mAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         email = findViewById(R.id.login_email);
@@ -88,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        if (sharedPreferences.contains("email") && sharedPreferences.contains("password")) {
+            toLogin1(sharedPreferences.getString("email", null), sharedPreferences.getString("password", null));
+        }
 
     }
 
@@ -112,6 +118,60 @@ public class MainActivity extends AppCompatActivity {
     private void toLogin() {
         String login_email = email.getText().toString();
         String login_password = password.getText().toString();
+
+        mAuth.signInWithEmailAndPassword(login_email, login_password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user =  mAuth.getCurrentUser();
+                    mDatabaseReference.child("users").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User myUser = snapshot.getValue(User.class);
+//                            Intent intent = new Intent(MainActivity.this, FollowingActivity.class);
+                            Intent intent = new Intent(MainActivity.this, FragmentActivity.class);
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (task.isSuccessful()) {
+                                        myUser.setToken(task.getResult());
+                                        mDatabaseReference.child("users").child(myUser.getUid()).child("token").setValue(task.getResult());
+                                        intent.putExtra("displayName", myUser.getDisplayName());
+                                        intent.putExtra("email", myUser.getEmail());
+                                        intent.putExtra("token", myUser.getToken());
+                                        intent.putExtra("uid", myUser.getUid());
+                                        SharedPreferences sharedPreferences = getSharedPreferences("LoginSharedPref", MODE_PRIVATE);
+                                        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                                        myEdit.putString("password", login_password);
+                                        myEdit.putString("email", myUser.getEmail());
+                                        myEdit.commit();
+                                        startActivity(intent);
+
+                                    }
+                                    else {
+                                        showError("can't get new token");
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+                else {
+                    showError("Login failed, check password and email");
+                }
+
+            }
+        });
+
+    }
+    private void toLogin1(String login_email, String login_password) {
+
 
         mAuth.signInWithEmailAndPassword(login_email, login_password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override

@@ -7,7 +7,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -33,12 +36,20 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.ChatMessage;
@@ -69,8 +80,8 @@ public class MainChatActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_SAVE_IMAGE = 3;
     String mCurrentPhotoPath;
-//    private static final String SERVER_KEY = "key=AAAAt8f0ibQ:APA91bGIh8uWpUbSls39AqTV6oCLctbxlSwEZUA9mvbJlqEDmD67bzzwaWTgn8NavnMmQPLebI_--aBUF5yGZFNh3dUAaIdOmtdZqWp-R2ms8PYjiIf6INktP0JuHFxwRjNpXAgzr2H9";
-
+    private static final String SERVER_KEY = "key=AAAAWGarHRg:APA91bG2Bp0u2lT4CebmziuJsWSveaL9OTAcKIi9HKxkUrN4bqlZobVPPA0focQXZ75eTNP2D17DkaBM3m5Nfs1BAIWNvbZcAcOchUDeTz2xUWPFsZqKeJGVufc-AghbD0x9OSFpP0ys";
+    private static final String TAG = MainChatActivity.class.getSimpleName();
     @Override
     protected void onStart() {
         super.onStart();
@@ -80,6 +91,101 @@ public class MainChatActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         mChatListView.setLayoutManager(layoutManager);
+    }
+
+    public void sendMessageToDevice(String fromWhom, String selected) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sendMessageToDevice(chaterToken, fromWhom,selected);
+            }
+        }).start();
+    }
+
+    /**
+     * Pushes a notification to a given device-- in particular, this device,
+     * because that's what the instanceID token is defined to be.
+     */
+    private void sendMessageToDevice(String targetToken, String fromWhom, String emo) {
+        JSONObject jPayload = new JSONObject();
+        JSONObject jNotification = new JSONObject();
+        JSONObject jdata = new JSONObject();
+        try {
+            jNotification.put("title", "From " + fromWhom);
+            jNotification.put("body", "Message: " + emo);
+            jNotification.put("sound", "default");
+            jNotification.put("badge", "1");
+            /*
+            // We can add more details into the notification if we want.
+            // We happen to be ignoring them for this demo.
+            jNotification.put("click_action", "OPEN_ACTIVITY_1");
+            */
+            jdata.put("title","From " + fromWhom);
+            jdata.put("content","Message: " + emo);
+
+            /***
+             * The Notification object is now populated.
+             * Next, build the Payload that we send to the server.
+             */
+
+            // If sending to a single client
+            jPayload.put("to", targetToken); // CLIENT_REGISTRATION_TOKEN);
+
+            /*
+            // If sending to multiple clients (must be more than 1 and less than 1000)
+            JSONArray ja = new JSONArray();
+            ja.put(CLIENT_REGISTRATION_TOKEN);
+            // Add Other client tokens
+            ja.put(FirebaseInstanceId.getInstance().getToken());
+            jPayload.put("registration_ids", ja);
+            */
+
+            jPayload.put("priority", "high");
+            jPayload.put("notification", jNotification);
+            jPayload.put("data",jdata);
+
+
+            /***
+             * The Payload object is now populated.
+             * Send it to Firebase to send the message to the appropriate recipient.
+             */
+            URL url = new URL("https://fcm.googleapis.com/fcm/send");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", SERVER_KEY);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            // Send FCM message content.
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(jPayload.toString().getBytes());
+            outputStream.close();
+
+            // Read FCM response.
+            InputStream inputStream = conn.getInputStream();
+            final String resp = convertStreamToString(inputStream);
+
+            Handler h = new Handler(Looper.getMainLooper());
+            h.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e(TAG, "run: " + resp);
+//                    Toast.makeText(ChatDetailActivity.this,resp,Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Helper function
+     * @param is
+     * @return
+     */
+    private String convertStreamToString(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next().replace(",", ",\n") : "";
     }
 
 
@@ -221,7 +327,9 @@ public class MainChatActivity extends AppCompatActivity {
 //                                        mDatabaseReference.child("message_record").child(keypair).push().setValue(
 //                                                new ChatMessage(uri.toString(), senderUserID, fromUser,
 //                                                        System.currentTimeMillis(), keypair));
+
                                         System.out.println("uri after camera:"+uri);
+                                        sendMessageToDevice(fromUser, "sent you a picture");
 //                                        finish();
                                     }
                                 });
@@ -350,7 +458,7 @@ public class MainChatActivity extends AppCompatActivity {
 
         // TODO: Grab the text the user typed in and push the message to Firebase
         String message = mInputText.getText().toString();
-        if (message == "") return;
+        if (message.equals("")) return;
         String[] idPairInLexiOrder = keypair.split("_");
         String id1 = idPairInLexiOrder[0];
         String id2 = idPairInLexiOrder[1];
@@ -389,6 +497,7 @@ public class MainChatActivity extends AppCompatActivity {
                         System.currentTimeMillis(), keypair));
 
         mInputText.setText("");
+        sendMessageToDevice(fromUser, message);
 
         // todo: need to check if current chater and user 's key_pair is in the ChatListAdapter's list.
         //  If so, remove it and add it to the index 0. Otherwise, add it to index 0. --zzx
