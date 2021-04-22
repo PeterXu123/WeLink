@@ -159,6 +159,8 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
 //        holder.message.setText(message);
             holder.message.setText(null);
             holder.iv.setImageResource(0);
+            holder.message.setVisibility(View.VISIBLE);
+            holder.iv.setVisibility(View.VISIBLE);
             if (imageUri != null) {
                 Picasso.get()
                         .load(imageUri)   // todo: replace youUrl by message when it has an image format.
@@ -169,6 +171,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             }
             else {
                 holder.message.setText(msg);
+                holder.iv.setVisibility(View.GONE);
             }
 
             if (name == null) {
