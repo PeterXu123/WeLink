@@ -3,9 +3,13 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_confirm_password">Confirm Password</string>
-    <string name="register_button_value">Register</string>
+    <string name="register_button_value">Create account</string>
     <string name="sign_in_button_value">Sign in</string>
     <string name="prompt_displayName">Username</string>
+    <string name="sign_up_title">Sign up for WeLink</string>
+    <string name="already_have_account">Already have an account? </string>
+    <string name="donot_have_account">Don\'t have an account? </string>
+    <string name="sign_up">Sign up</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!--  Profile activity  -->

@@ -5,20 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_login_signup"
-    android:gravity="bottom"
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
     android:paddingBottom="10dp"
+    android:weightSum="12"
     tools:context=".login_signup.MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        app:srcCompat="@drawable/logo_nobackground" />
 
     <EditText
         android:id="@+id/login_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
+        android:layout_weight="1"
         android:autofillHints=""
         android:hint="@string/prompt_email"
         android:imeOptions="actionNext"
@@ -31,7 +40,8 @@
     <EditText
         android:id="@+id/login_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:hint="@string/prompt_password"
         android:imeOptions="actionUnspecified"
         android:importantForAutofill="no"
@@ -43,21 +53,39 @@
     <Button
         android:id="@+id/sign_in_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="13dp"
-        android:backgroundTint="#07C679"
+        android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:minHeight="@dimen/button_height"
         android:text="@string/sign_in_button_value" />
 
-    <Button
-        android:id="@+id/register_button_in_login"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:backgroundTint="#FFFFFF"
-        android:minHeight="@dimen/button_height"
-        android:text="@string/register_button_value"
-        android:textColor="#1E57CA" />
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/donot_have_account"
+            android:textColor="@color/textOnSecondary"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/register_button_in_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:text="@string/sign_up"
+            android:textColor="@color/textOnPrimary"
+            android:textColorHighlight="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 
 </LinearLayout>

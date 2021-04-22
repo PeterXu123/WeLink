@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3E56DA</color>
-    <color name="colorPrimaryDark">#28759A</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="yellow">#f1c40f</color>
+    <color name="colorPrimary">#1976d2</color>
+    <color name="colorPrimaryLight">#63a4ff</color>
+    <color name="colorPrimaryDark">#004ba0</color>
+    <color name="colorSecondary">#fdd835</color>
+    <color name="colorSecondaryLight">#ffff6b</color>
+    <color name="colorSecondaryDark">#c6a700</color>
+    <color name="textOnPrimary">#FFFFFF</color>
+    <color name="textOnSecondary">#000000</color>
+
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="green">#27AE60</color>
-    <color name="light_purple">#E8E1E7</color>
-    <color name="light_green">#50d050</color>
-    <color name="dark_green">#008000</color>
-    <color name="blue">#1D98EA</color>
 </resources>

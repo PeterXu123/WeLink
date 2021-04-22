@@ -50,7 +50,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     private BottomNavigationView bottomNavigationView;
     Fragment fragment = null;
     private String iconUrl;
-    private TextView logout;
+    private ImageView logout;
     private AlertDialog exitAlert;
     private Bundle bundle;
 
@@ -83,7 +83,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         getCurrentUserUID();
         addPost = findViewById(R.id.add_post_button);
         iconToolBar = findViewById(R.id.iconToolbar);
-        icon = findViewById(R.id.profileIcon);
+        icon = findViewById(R.id.post_card_user_image);
         loadImageToIcon();
         TextView tv = findViewById(R.id.displayNameInToolbar);
         tv.setText(displayName);

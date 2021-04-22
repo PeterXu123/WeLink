@@ -52,6 +52,12 @@ public class RegisterActivity extends AppCompatActivity {
                 register();
             }
         });
+        findViewById(R.id.register_button_in_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private boolean checkEmail(String email) {
