@@ -1,6 +1,9 @@
 package edu.neu.madcourse.welink.chat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,9 +19,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,6 +85,7 @@ public class MainChatActivity extends AppCompatActivity {
     private List<String> keyPairsInFirebase;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_SAVE_IMAGE = 3;
+    static final int CAMERA_PERMISSION = 4;
     String mCurrentPhotoPath;
     private static final String SERVER_KEY = "key=AAAAWGarHRg:APA91bG2Bp0u2lT4CebmziuJsWSveaL9OTAcKIi9HKxkUrN4bqlZobVPPA0focQXZ75eTNP2D17DkaBM3m5Nfs1BAIWNvbZcAcOchUDeTz2xUWPFsZqKeJGVufc-AghbD0x9OSFpP0ys";
     private static final String TAG = MainChatActivity.class.getSimpleName();
@@ -237,10 +244,25 @@ public class MainChatActivity extends AppCompatActivity {
     }
 
     void clickCameraFab(FloatingActionButton fab) {
+        Activity activityInFab = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakePictureIntent();
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED){
+                    if (!shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
+                    {
+                        Toast.makeText(activityInFab, "You need to allow this app to access camera",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        ActivityCompat.requestPermissions(activityInFab, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+                    }
+
+                } else {
+                    dispatchTakePictureIntent();
+                }
+
+
 //                galleryAddPic();
             }
         });
@@ -252,6 +274,17 @@ public class MainChatActivity extends AppCompatActivity {
 //        mediaScanIntent.setData(contentUri);
 //        this.sendBroadcast(mediaScanIntent);
 //    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode ==  CAMERA_PERMISSION) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "You need to allow this app to access camera", Toast.LENGTH_LONG).show();
+            } else {
+                dispatchTakePictureIntent();
+            }
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
