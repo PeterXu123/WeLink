@@ -58,7 +58,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.profile.ProfileActivity;
 import edu.neu.madcourse.welink.utility.ChatMessage;
+import edu.neu.madcourse.welink.utility.User;
 
 
 public class MainChatActivity extends AppCompatActivity {
@@ -76,7 +78,9 @@ public class MainChatActivity extends AppCompatActivity {
     private Uri photoURI;
     private ChatDetailViewAdapter mChatDetailViewAdapter;
     private String roomNumber;
-    private String fromUser;
+    private String fromUserName;
+    private User fromUser;
+    private User curChater;
     private String keypair;
     private String chaterToken;
     private String senderUserID;
@@ -92,8 +96,9 @@ public class MainChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mChatDetailViewAdapter = new ChatDetailViewAdapter(mDatabaseReference, keypair,fromUser,
-                getApplicationContext(), this);
+        Intent intent = new Intent(this, ProfileActivity.class);
+        mChatDetailViewAdapter = new ChatDetailViewAdapter(mDatabaseReference, keypair,fromUser, curChater,
+                getApplicationContext(), this, intent );
         mChatListView.setAdapter((RecyclerView.Adapter) mChatDetailViewAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
@@ -204,7 +209,19 @@ public class MainChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent.getExtras() != null) {
-            fromUser = intent.getExtras().getString("fromUser");
+            fromUserName = intent.getExtras().getString("curUserName");  // fromUser is curuser, not chater
+            fromUser = new User();
+            curChater = new User();
+            fromUser.setUid(intent.getExtras().getString("curUserID"));
+            fromUser.setToken(intent.getExtras().getString("curUserToken"));
+            fromUser.setIconUrl(intent.getExtras().getString("curUserImg"));
+            fromUser.setDisplayName(intent.getExtras().getString("curUserName"));
+
+            curChater.setUid(intent.getExtras().getString("curChaterID"));
+            curChater.setToken(intent.getExtras().getString("curChaterToken"));
+            curChater.setDisplayName(intent.getExtras().getString("curChaterName"));
+            curChater.setIconUrl(intent.getExtras().getString("curChaterImg"));
+
             keypair = intent.getExtras().getString("pairKey");
             chaterToken = intent.getExtras().getString("curChaterToken");
             senderUserID = intent.getExtras().getString("curUserID");
@@ -267,13 +284,6 @@ public class MainChatActivity extends AppCompatActivity {
             }
         });
     }
-//    private void galleryAddPic() {
-//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//        File f = new File(mCurrentPhotoPath);
-//        Uri contentUri = Uri.fromFile(f);
-//        mediaScanIntent.setData(contentUri);
-//        this.sendBroadcast(mediaScanIntent);
-//    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -354,23 +364,23 @@ public class MainChatActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         mDatabaseReference.child("message_record").child(keypair).push().setValue(
-                                                new ChatMessage(uri.toString(), senderUserID, fromUser,
+                                                new ChatMessage(uri.toString(), senderUserID, fromUserName,
                                                         System.currentTimeMillis(), keypair));
 
 //                                        mDatabaseReference.child("message_record").child(keypair).push().setValue(
-//                                                new ChatMessage(uri.toString(), senderUserID, fromUser,
+//                                                new ChatMessage(uri.toString(), senderUserID, fromUserName,
 //                                                        System.currentTimeMillis(), keypair));
 
                                         System.out.println("uri after camera:"+uri);
-                                        sendMessageToDevice(fromUser, "sent you a picture");
+                                        sendMessageToDevice(fromUserName, "sent you a picture");
 //                                        finish();
                                     }
                                 });
                                 System.out.println("msg_img_url  after camera:" + messgae_img_url );
 //                            mDatabaseReference.child("message_record").child(keypair).push()
-//                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUser,
+//                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUserName,
 //                                    System.currentTimeMillis(), keypair));
-////                            .setValue(new ChatMessage(imagUri.getLastPathSegment(), senderUserID, fromUser,
+////                            .setValue(new ChatMessage(imagUri.getLastPathSegment(), senderUserID, fromUserName,
 ////                                    System.currentTimeMillis(), keypair));
 
                             }
@@ -408,9 +418,9 @@ public class MainChatActivity extends AppCompatActivity {
 //                            Uri downloadUri= downloadUriTask.getResult();
 //                            // use this download url with imageview for viewing & store this linke to firebase message data
 //                            mDatabaseReference.child("message_record").child(keypair).push()
-//                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUser,
+//                                    .setValue(new ChatMessage(downloadUri.toString(), senderUserID, fromUserName,
 //                                    System.currentTimeMillis(), keypair));
-////                            .setValue(new ChatMessage(imagUri.getLastPathSegment(), senderUserID, fromUser,
+////                            .setValue(new ChatMessage(imagUri.getLastPathSegment(), senderUserID, fromUserName,
 ////                                    System.currentTimeMillis(), keypair));
 //                        }
 //                    })
@@ -526,11 +536,11 @@ public class MainChatActivity extends AppCompatActivity {
                 });
 
         mDatabaseReference.child("message_record").child(keypair).push()
-                .setValue(new ChatMessage(message, senderUserID, fromUser,
+                .setValue(new ChatMessage(message, senderUserID, fromUserName,
                         System.currentTimeMillis(), keypair));
 
         mInputText.setText("");
-        sendMessageToDevice(fromUser, message);
+        sendMessageToDevice(fromUserName, message);
 
         // todo: need to check if current chater and user 's key_pair is in the ChatListAdapter's list.
         //  If so, remove it and add it to the index 0. Otherwise, add it to index 0. --zzx

@@ -11,9 +11,11 @@ import edu.neu.madcourse.welink.R;
 public class ChatDetailViewHolder extends RecyclerView.ViewHolder {
     TextView sender;
     TextView message;
+
     public ChatDetailViewHolder(@NonNull View itemView) {
         super(itemView);
         this.sender = itemView.findViewById(R.id.message_sender);
         this.message = itemView.findViewById(R.id.message_content);
+
     }
 }

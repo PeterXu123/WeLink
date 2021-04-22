@@ -25,6 +25,7 @@ import java.util.Scanner;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.ChatMessage;
+import edu.neu.madcourse.welink.utility.User;
 
 //import androidx.fragment.app.FragmentContainerView;
 
@@ -78,7 +79,7 @@ public class DeprecatedChatDetailActivity extends AppCompatActivity implements D
         layoutManger = new LinearLayoutManager(this);
         recyclerView = findViewById(R.id.chat_detail_rv);
         recyclerView.setHasFixedSize(true);
-        chatDetailViewAdapter = new ChatDetailViewAdapter(dbRef, keypair,fromUser, getApplicationContext(), this);
+        chatDetailViewAdapter = new ChatDetailViewAdapter(dbRef, keypair,new User(), new User(), getApplicationContext(), this, new Intent());
         recyclerView.setAdapter(chatDetailViewAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }
