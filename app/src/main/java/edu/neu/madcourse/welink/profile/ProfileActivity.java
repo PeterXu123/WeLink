@@ -25,7 +25,6 @@ import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.posts.SelfPostActivity;
 import edu.neu.madcourse.welink.utility.UploadProfileIconActivity;
 import edu.neu.madcourse.welink.utility.User;
-import okhttp3.internal.cache.DiskLruCache;
 
 public class ProfileActivity extends AppCompatActivity  {
     TextView username;
@@ -231,10 +230,14 @@ public class ProfileActivity extends AppCompatActivity  {
                 intent = new Intent(ProfileActivity.this, MainChatActivity.class);
                 intent.putExtra("fromUser", auth.getCurrentUser().getDisplayName());
                 intent.putExtra("curChaterToken", token);
+                intent.putExtra("curUserName", auth.getCurrentUser().getDisplayName());
+                intent.putExtra("curUserToken", auth.getCurrentUser().getIdToken());
                 intent.putExtra("curUserID", currentUserId);
                 intent.putExtra("curChaterID", uid);
+
                 String fromUser = auth.getCurrentUser().getProviderId();
                 String toUser = this.username.getText().toString();
+                intent.putExtra("curChaterName", this.username.getText().toString());
                 String pairKey = currentUserId.compareTo(uid) < 0 ?
                         currentUserId + "_" + uid : uid + "_" + currentUserId;
                 intent.putExtra("pairKey", pairKey);
