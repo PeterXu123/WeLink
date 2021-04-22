@@ -12,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import edu.neu.madcourse.welink.R;
+import edu.neu.madcourse.welink.fragmentActivity.FragmentActivity;
 import edu.neu.madcourse.welink.login_signup.MainActivity;
 
 public class WeLinkMessagingService extends FirebaseMessagingService {

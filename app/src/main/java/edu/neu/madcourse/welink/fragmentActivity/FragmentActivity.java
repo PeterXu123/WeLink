@@ -2,6 +2,7 @@ package edu.neu.madcourse.welink.fragmentActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -179,6 +180,11 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            SharedPreferences sharedPreferences = getSharedPreferences("LoginSharedPref", MODE_PRIVATE);
+                            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                            myEdit.clear();
+                            myEdit.commit();
+
                             finish();
                         }
                     })
