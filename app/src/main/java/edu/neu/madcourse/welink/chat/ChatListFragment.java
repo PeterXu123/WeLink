@@ -80,23 +80,45 @@ public class ChatListFragment extends Fragment {
 //        return chaterId;
 //    }
 //
+
+//    void changeChaterHelper(DataSnapshot snapshot, String chaterId, boolean shouldRemove) {
+//        if (snapshot.hasChild(chaterId)) {
+//            User curChater = snapshot.child(chaterId).getValue(User.class);
+//            if(shouldRemove){
+//                chatListAdapter.removeChaterFromAdapter(curChater, curUser);
+//            }
+//            chatListAdapter.addNewChaterToAdapter(curChater, curUser);
+//        }
+//    }
 //    private void changeChaterInList(String keyPair, boolean shouldRemove) {
 //        String chaterId = getChaterIdFromKeyPair(keyPair);
 //        if(!chaterId.isEmpty()) {
-//            mDatabaseReference.child("users").addListenerForSingleValueEvent(
-//                    new ValueEventListener() {
+//            mDatabaseReference.child("message_record").addChildEventListener(
+//                    new ChildEventListener() {
 //                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                            if (snapshot.hasChild(chaterId)) {
-//                                User curChater = snapshot.child(chaterId).getValue(User.class);
-//                                if(shouldRemove){
-//                                    chatListAdapter.removeChaterFromAdapter(curChater, curUser);
-//                                }
-//                                chatListAdapter.addNewChaterToAdapter(curChater, curUser);
-//                            }
+//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//
+//
 //                        }
+//
 //                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
+//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                            changeChaterInList(dataSnapshot.getKey(), true);
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//                            changeChaterInList(dataSnapshot.getKey(), true);
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
 //
 //                        }
 //                    });
@@ -105,17 +127,23 @@ public class ChatListFragment extends Fragment {
 //    }
 //
 //    private void chatListListenToMessageRecords() {
+//
 //        mDatabaseReference.child("message_record").addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 //
-//                changeChaterInList(dataSnapshot.getKey(), false);
+////                changeChaterInList(dataSnapshot.getKey(), false);
+//                String keyPair = dataSnapshot.getKey();
+//                String chaterId = getChaterIdFromKeyPair(keyPair);
+//                changeChaterHelper(dataSnapshot, chaterId, false);
 //            }
 //
 //            @Override
 //            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                changeChaterInList(dataSnapshot.getKey(), true);
-//
+////                changeChaterInList(dataSnapshot.getKey(), true);
+//                String keyPair = dataSnapshot.getKey();
+//                String chaterId = getChaterIdFromKeyPair(keyPair);
+//                changeChaterHelper(dataSnapshot, chaterId, true);
 //            }
 //
 //            @Override
@@ -125,7 +153,10 @@ public class ChatListFragment extends Fragment {
 //
 //            @Override
 //            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//                changeChaterInList(dataSnapshot.getKey(), true);
+////                changeChaterInList(dataSnapshot.getKey(), true);
+//                String keyPair = dataSnapshot.getKey();
+//                String chaterId = getChaterIdFromKeyPair(keyPair);
+//                changeChaterHelper(dataSnapshot, chaterId, true);
 //            }
 //
 //            @Override
@@ -230,6 +261,8 @@ public class ChatListFragment extends Fragment {
 //                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
             chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
         }
+
+//        chatListListenToMessageRecords();
         mDatabaseReference.child("chater_relation").child(uid).addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -237,7 +270,7 @@ public class ChatListFragment extends Fragment {
                mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                       User u  =snapshot.getValue(User.class);
+                       User u = snapshot.getValue(User.class);
                        chatListAdapter.addNewChaterToAdapter(u, curUser);
                    }
 
@@ -246,12 +279,54 @@ public class ChatListFragment extends Fragment {
 
                    }
                });
+                // snapshot.getKey() is chater id  .child(snapshot.getKey())
+                System.out.println("snapshot.getKey()   " + snapshot.getKey());
+                mDatabaseReference.child("chater_relation").child(uid).child(snapshot.getKey()).addChildEventListener(
+                        new ChildEventListener() {
 
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                System.out.println("added1  " + uid);
+                            }
+
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                System.out.println("changed1  " + uid);
+                            }
+
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                System.out.println("moved1  " + uid);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+                mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User u  =snapshot.getValue(User.class);
+                        chatListAdapter.removeChaterFromAdapter(u, curUser);
+                        chatListAdapter.addNewChaterToAdapter(u, curUser);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
 
             @Override

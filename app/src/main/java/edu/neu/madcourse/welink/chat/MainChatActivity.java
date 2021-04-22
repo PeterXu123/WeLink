@@ -358,10 +358,10 @@ public class MainChatActivity extends AppCompatActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (!snapshot.hasChild(id2)) {
+//                        if (!snapshot.hasChild(id2)) {
                             mDatabaseReference.child("chater_relation").child(id1).child(id2)
                                     .setValue(new Date());
-                        }
+//                        }
                     }
 
                     @Override
@@ -389,6 +389,7 @@ public class MainChatActivity extends AppCompatActivity {
         mDatabaseReference.child("message_record").child(keypair).push()
                 .setValue(new ChatMessage(message, senderUserID, fromUser,
                         System.currentTimeMillis(), keypair));
+
         mInputText.setText("");
 
         // todo: need to check if current chater and user 's key_pair is in the ChatListAdapter's list.
