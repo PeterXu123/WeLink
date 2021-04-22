@@ -303,7 +303,7 @@ public class ChatListFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot innerSnapshot) {
                         User u  =innerSnapshot.getValue(User.class);
-//                        chatListAdapter.removeChaterFromAdapter(u, curUser);
+                        chatListAdapter.removeChaterFromAdapter(u, curUser);
                         chatListAdapter.addNewChaterToAdapter(u, curUser, snapshot.getValue(Date.class));
                     }
 
@@ -320,7 +320,7 @@ public class ChatListFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         User u  =snapshot.getValue(User.class);
-//                        chatListAdapter.removeChaterFromAdapter(u, curUser);
+                        chatListAdapter.removeChaterFromAdapter(u, curUser);
                     }
 
                     @Override
