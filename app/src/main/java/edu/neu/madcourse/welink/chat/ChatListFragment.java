@@ -266,8 +266,8 @@ public class ChatListFragment extends Fragment {
         mDatabaseReference.child("chater_relation").child(uid).addChildEventListener(new ChildEventListener() {
 
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-               mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+            public void onChildAdded(@NonNull DataSnapshot snapshot1, @Nullable String previousChildName) {
+               mDatabaseReference.child("users").child(snapshot1.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
                    public void onDataChange(@NonNull DataSnapshot snapshot) {
                        User u = snapshot.getValue(User.class);

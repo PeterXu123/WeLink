@@ -14,7 +14,7 @@
         android:id="@+id/iconToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue">
+        android:background="#52AAF6">
 
         <androidx.cardview.widget.CardView
             android:layout_width="40dp"

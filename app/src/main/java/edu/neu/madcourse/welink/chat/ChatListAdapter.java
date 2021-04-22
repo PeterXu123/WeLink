@@ -41,6 +41,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
 
     public void addNewChaterToAdapter(User curChater, User curUser) {
         listOfChat.add(0, new ChatListRow(curChater, curUser));
+
         notifyItemInserted(0);
 
     }
