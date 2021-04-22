@@ -37,11 +37,16 @@ public class ChatListHolder extends RecyclerView.ViewHolder {
                             intent.putExtra("curChaterID", curChater.getUid());
                             intent.putExtra("curChaterToken", curChater.getToken());
                             intent.putExtra("curChaterName", curChater.getDisplayName());
+                            intent.putExtra("curChaterImg", curChater.getIconUrl());
+
                             intent.putExtra("curUserID", curUser.getUid());
                             intent.putExtra("curUserToken", curUser.getToken());
                             intent.putExtra("curUserName", curUser.getDisplayName());
+                            intent.putExtra("curUserImg", curUser.getIconUrl());
+
                             intent.putExtra("fromUser",  curUser.getDisplayName());
                             intent.putExtra("toUser", curChater.getDisplayName());
+
 
                             String userId = curUser.getUid();
                             String chaterId = curChater.getUid();

@@ -3,6 +3,7 @@ package edu.neu.madcourse.welink.chat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -31,21 +32,28 @@ import java.util.ArrayList;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.ChatMessage;
+import edu.neu.madcourse.welink.utility.User;
 
 public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHolder>{
     private ArrayList<DataSnapshot> msgSnapshots;
     RecyclerView rv;
-    String currUser;
+    String currUserName;
+    User currUser;
+    User curChater;
     Context context;
     Activity activity;
     Target curTarget;
-    ChatDetailViewAdapter(DatabaseReference ref, String keypair, String currUser, Context context
-            , Activity activity) {
+    Intent intent;
+    ChatDetailViewAdapter(DatabaseReference ref, String keypair, User currUser, User curChater, Context context
+            , Activity activity, Intent intent) {
+        this.currUserName = currUser.getDisplayName();
         this.currUser = currUser;
         this.context = context;
         ref.child("message_record").child(keypair).addChildEventListener(listener);
         msgSnapshots = new ArrayList<>();
         this.activity = activity;
+        this.intent = intent;
+        this.curChater = curChater;
     }
 
     @Override
@@ -100,9 +108,6 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
 //        String[] msgBuf = msg.split("\\?alt");
 //        final String message = msgBuf[0];
 
-
-            // todo: Curently we will add 1 camera image after each msg. (replace the last word of the msg)
-            //  So, if we can get msg from  -- zzx
             SpannableStringBuilder ssb;
             boolean isImage;
             isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
@@ -146,46 +151,6 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
                 Picasso.get()
                         .load(msg)   // todo: replace youUrl by message when it has an image format.
                         .into(curTarget);
-//                ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Uri> task) {
-//                        if (task.isSuccessful()) {
-//                            Uri downUri = task.getResult();
-//                            String imageUrl = downUri.toString();
-//                            Toast.makeText(activity, imageUrl, Toast.LENGTH_SHORT).show();
-//                            System.out.println("here we get message from StorageReference! " + msg);
-//                            Picasso.get()
-//                                    .load(imageUrl)   // todo: replace youUrl by message when it has an image format.
-//                                    .into(new Target() {
-//                                        @Override
-//                                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                                            System.out.println("here we get message from firebase! " + msg);
-//                                            System.out.println("here we get bitmap from firebase! " + bitmap);
-//                                            Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
-////                                        ssb.append(" ", new ImageSpan(drawable), 0);
-////                                        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-//                                            /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
-//                                            ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//                                            holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-//                                        }
-//
-//                                        @Override
-//                                        public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
-//                                            System.out.println("failexception " + exception.getStackTrace());
-//                                            System.out.println("failexception " + exception.getMessage());
-//                                            System.out.println("here we get bitmap from firebase! " + errorDrawable);
-//                                        }
-//
-//                                        @Override
-//                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                                        }
-//                                    });
-//                        } else {
-//                            Toast.makeText(activity, "" + task.getException(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
 
             } else {
                 ssb = new SpannableStringBuilder(msg);
@@ -196,17 +161,41 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             if (name == null) {
                 name = "Anonymous";
             }
-            if (name.equals(currUser)) {
+            if (name.equals(currUserName)) {
                 changeDisplayForSelfMessage(holder, name);
+                holder.sender.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        intent.putExtra("uid", currUser.getUid());
+                        intent.putExtra("token", currUser.getToken());
+                        intent.putExtra("username", currUser.getDisplayName());
+                        intent.putExtra("iconUrl", currUser.getIconUrl());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                });
             } else {
                 changeDisplayForFriendMessage(holder, name);
+                holder.sender.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        intent.putExtra("uid", curChater.getUid());
+                        intent.putExtra("token", curChater.getToken());
+                        intent.putExtra("username", curChater.getDisplayName());
+                        intent.putExtra("iconUrl", curChater.getIconUrl());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                });
             }
             holder.sender.setText(formatName(name));
+
         } catch (Exception exception) {
             System.err.println("error when get msg from firebase:" + exception.getMessage() +"   "
                     + exception.getStackTrace());
         }
     }
+
 
     @Override
     public int getItemCount() {
