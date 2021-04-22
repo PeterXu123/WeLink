@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,10 +106,6 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
             String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
             String msg = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
-//        String[] msgBuf = msg.split("\\?alt");
-//        final String message = msgBuf[0];
-
-            SpannableStringBuilder ssb;
             boolean isImage;
             isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
 
@@ -131,6 +126,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
                         drawable.setBounds(0, 0, 1, 1);
                         Bitmap bitmapbuf = ((BitmapDrawable) drawable).getBitmap();
                         Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmapbuf, 50, 50, true));
+                        holder.message.setText("");
                         holder.message.setCompoundDrawablesWithIntrinsicBounds(d, null,null,null);
                     }
 
@@ -150,6 +146,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             } else {
 //                ssb = new SpannableStringBuilder(msg);
 //                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+                holder.message.setText("");
                 holder.message.setText(msg);
             }
 
