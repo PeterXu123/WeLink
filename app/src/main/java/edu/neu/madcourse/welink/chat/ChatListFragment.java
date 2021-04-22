@@ -279,36 +279,7 @@ public class ChatListFragment extends Fragment {
 
                    }
                });
-                // snapshot.getKey() is chater id  .child(snapshot.getKey())
-                System.out.println("snapshot.getKey()   " + snapshot.getKey());
-                mDatabaseReference.child("chater_relation").child(uid).child(snapshot.getKey()).addChildEventListener(
-                        new ChildEventListener() {
 
-                            @Override
-                            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                                System.out.println("added1  " + uid);
-                            }
-
-                            @Override
-                            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                                System.out.println("changed1  " + uid);
-                            }
-
-                            @Override
-                            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                            }
-
-                            @Override
-                            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                                System.out.println("moved1  " + uid);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
             }
 
             @Override
