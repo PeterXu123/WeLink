@@ -327,7 +327,9 @@ public class MainChatActivity extends AppCompatActivity {
 //                                        mDatabaseReference.child("message_record").child(keypair).push().setValue(
 //                                                new ChatMessage(uri.toString(), senderUserID, fromUser,
 //                                                        System.currentTimeMillis(), keypair));
+
                                         System.out.println("uri after camera:"+uri);
+                                        sendMessageToDevice(fromUser, "sent you a picture");
 //                                        finish();
                                     }
                                 });
