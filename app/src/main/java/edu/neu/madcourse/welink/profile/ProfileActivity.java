@@ -231,7 +231,7 @@ public class ProfileActivity extends AppCompatActivity  {
                 intent.putExtra("fromUser", auth.getCurrentUser().getDisplayName());
                 intent.putExtra("curChaterToken", token);
                 intent.putExtra("curUserName", auth.getCurrentUser().getDisplayName());
-                intent.putExtra("curUserToken", auth.getCurrentUser().getIdToken());
+                String displayname = auth.getCurrentUser().getDisplayName();
                 intent.putExtra("curUserID", currentUserId);
                 intent.putExtra("curChaterID", uid);
 
