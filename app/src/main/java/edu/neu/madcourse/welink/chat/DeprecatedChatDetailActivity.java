@@ -79,7 +79,7 @@ public class DeprecatedChatDetailActivity extends AppCompatActivity implements D
         layoutManger = new LinearLayoutManager(this);
         recyclerView = findViewById(R.id.chat_detail_rv);
         recyclerView.setHasFixedSize(true);
-        chatDetailViewAdapter = new ChatDetailViewAdapter(dbRef, keypair,new User(), new User(), getApplicationContext(), this, new Intent());
+        chatDetailViewAdapter = new ChatDetailViewAdapter(dbRef, keypair,new User(), new User(), getApplicationContext(), this, new Intent(), getResources());
         recyclerView.setAdapter(chatDetailViewAdapter);
         recyclerView.setLayoutManager(layoutManger);
     }

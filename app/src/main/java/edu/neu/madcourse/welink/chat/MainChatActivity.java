@@ -98,7 +98,7 @@ public class MainChatActivity extends AppCompatActivity {
         super.onStart();
         Intent intent = new Intent(this, ProfileActivity.class);
         mChatDetailViewAdapter = new ChatDetailViewAdapter(mDatabaseReference, keypair,fromUser, curChater,
-                getApplicationContext(), this, intent );
+                getApplicationContext(), this, intent, getResources());
         mChatListView.setAdapter((RecyclerView.Adapter) mChatDetailViewAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);

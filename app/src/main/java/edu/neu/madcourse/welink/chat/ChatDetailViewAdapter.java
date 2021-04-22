@@ -4,16 +4,15 @@ package edu.neu.madcourse.welink.chat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,8 +22,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -44,8 +41,9 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     Activity activity;
     Target curTarget;
     Intent intent;
+    Resources resources;
     ChatDetailViewAdapter(DatabaseReference ref, String keypair, User currUser, User curChater, Context context
-            , Activity activity, Intent intent) {
+            , Activity activity, Intent intent, Resources resources) {
         this.currUserName = currUser.getDisplayName();
         this.currUser = currUser;
         this.context = context;
@@ -54,6 +52,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
         this.activity = activity;
         this.intent = intent;
         this.curChater = curChater;
+        this.resources = resources;
     }
 
     @Override
@@ -102,6 +101,9 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     @Override
     public void onBindViewHolder(@NonNull ChatDetailViewHolder holder, int position) {
         try {
+//            holder.sender.();
+            holder.sender.setText("");
+            holder.message.setText("");
             DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
             String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
             String msg = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
@@ -115,32 +117,25 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             if (isImage) {
 //                ssb = new SpannableStringBuilder("1");
                 int msgLenBuf = msg.trim().length() - 1;
-                int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
+//                int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
                 // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
-                StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
-                String curStoragePath = Uri.parse(msg).getLastPathSegment();
-                StorageReference ref = mImageStorage.child("messageImage").child(curStoragePath);
+//                StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
+//                String curStoragePath = Uri.parse(msg).getLastPathSegment();
+//                StorageReference ref = mImageStorage.child("messageImage").child(curStoragePath);
 //                        .child(msg);
 
                 curTarget = new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                        System.out.println("here we get message from firebase! " + msg);
-//                        System.out.println("here we get bitmap from firebase! " + bitmap);
                         Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
-//                                        ssb.append(" ", new ImageSpan(drawable), 0);
-//                                        holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                        /// ref from https://stackoverflow.com/questions/15352496/how-to-add-image-in-a-textview-text
-//                                ssb.setSpan(new ImageSpan(drawable), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//                                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
-                        holder.message.setCompoundDrawablesWithIntrinsicBounds(drawable, null,null,null);
+                        drawable.setBounds(0, 0, 1, 1);
+                        Bitmap bitmapbuf = ((BitmapDrawable) drawable).getBitmap();
+                        Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmapbuf, 50, 50, true));
+                        holder.message.setCompoundDrawablesWithIntrinsicBounds(d, null,null,null);
                     }
 
                     @Override
                     public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
-                        System.out.println("failexception " + exception.getStackTrace());
-                        System.out.println("failexception " + exception.getMessage());
-                        System.out.println("here we get bitmap from firebase! " + errorDrawable);
                     }
 
                     @Override
@@ -153,8 +148,9 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
                         .into(curTarget);
 
             } else {
-                ssb = new SpannableStringBuilder(msg);
-                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+//                ssb = new SpannableStringBuilder(msg);
+//                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+                holder.message.setText(msg);
             }
 
 //        holder.message.setText(message);
