@@ -8,6 +8,7 @@
     <color name="colorSecondaryDark">#c6a700</color>
     <color name="textOnPrimary">#FFFFFF</color>
     <color name="textOnSecondary">#000000</color>
+    <color name="colorBackground">#eeeeee</color>
 
 
     <color name="white">#FFFFFF</color>

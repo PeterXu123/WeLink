@@ -2,6 +2,10 @@ package edu.neu.madcourse.welink.utility;
 
 public class ChatMessage {
     private String message;
+
+
+
+    private String imageURL;
     private String senderUserId;
     private String senderUserName;
     private Long time;
@@ -24,15 +28,21 @@ public class ChatMessage {
     }
 
 
-    public ChatMessage(String message, String senderUserId, String senderUserName, Long time, String key1_key2) {
-        this.message = message;
+    public ChatMessage( String senderUserId, String senderUserName, Long time, String key1_key2) {
+
         this.senderUserId = senderUserId;
         this.senderUserName = senderUserName;
         this.time = time;
         this.key1_key2 = key1_key2;
     }
 
+    public String getImageURL() {
+        return imageURL;
+    }
 
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
     public String getSenderUserName() {
         return senderUserName;
     }
