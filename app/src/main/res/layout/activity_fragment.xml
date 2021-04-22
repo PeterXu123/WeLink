@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragmentActivity.FragmentActivity">
+    tools:context=".fragmentActivity.FragmentActivity"
+    android:background="@drawable/background">
 
 
-
-<!--    <com-->
+    <!--    <com-->
 
 
     <androidx.appcompat.widget.Toolbar
@@ -37,15 +37,17 @@
 
             </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/displayNameInToolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_alignParentLeft="true"
+                android:layout_marginStart="30dp"
                 android:text="default"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
@@ -60,7 +62,6 @@
                 android:textColor="#E80B0B"
                 android:textSize="18sp" />
         </RelativeLayout>
-
 
 
         <!--        <ImageView-->
@@ -86,8 +87,8 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/iconToolbar"
         android:layout_above="@id/bottom_navigation"
+        android:layout_below="@id/iconToolbar"
 
         />
 
