@@ -34,19 +34,6 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/login_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/prompt_password"
-                android:imeOptions="actionUnspecified"
-                android:importantForAutofill="no"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white" />
-
-            <EditText
                 android:id="@+id/login_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,6 +47,19 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textIsSelectable="false" />
+
+            <EditText
+                android:id="@+id/login_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/prompt_password"
+                android:imeOptions="actionUnspecified"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
 
             <Button
                 android:id="@+id/sign_in_button"
