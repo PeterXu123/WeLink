@@ -31,7 +31,7 @@ import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.ChatMessage;
 import edu.neu.madcourse.welink.utility.User;
 
-public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHolder>{
+public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHolder> {
     private ArrayList<DataSnapshot> msgSnapshots;
     RecyclerView rv;
     String currUserName;
@@ -42,6 +42,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     Target curTarget;
     Intent intent;
     Resources resources;
+
     ChatDetailViewAdapter(DatabaseReference ref, String keypair, User currUser, User curChater, Context context
             , Activity activity, Intent intent, Resources resources) {
         this.currUserName = currUser.getDisplayName();
@@ -65,8 +66,8 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
         @Override
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
             msgSnapshots.add(snapshot);
-            notifyItemInserted(msgSnapshots.size()-1);
-            rv.smoothScrollToPosition(msgSnapshots.size() -1);
+            notifyItemInserted(msgSnapshots.size() - 1);
+            rv.smoothScrollToPosition(msgSnapshots.size() - 1);
         }
 
         @Override
@@ -94,7 +95,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     @NonNull
     @Override
     public ChatDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_row, parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_row, parent, false);
         return new ChatDetailViewHolder(v);
     }
 
@@ -102,63 +103,79 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
     public void onBindViewHolder(@NonNull ChatDetailViewHolder holder, int position) {
         try {
 //            holder.sender.();
-            holder.sender.setText("");
-            holder.message.setText("");
+//            holder.sender.setText("");
+//            holder.message.setText("");
             DataSnapshot newMsgSnapshot = msgSnapshots.get(position);
             String name = newMsgSnapshot.getValue(ChatMessage.class).getSenderUserName();
             String msg = newMsgSnapshot.getValue(ChatMessage.class).getMessage();
+            String imageUri = newMsgSnapshot.getValue(ChatMessage.class).getImageURL();
 //        String[] msgBuf = msg.split("\\?alt");
 //        final String message = msgBuf[0];
+//
+//            SpannableStringBuilder ssb;
+//            boolean isImage;
+//            isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
+//
 
-            SpannableStringBuilder ssb;
-            boolean isImage;
-            isImage = msg.startsWith("https://firebasestorage.googleapis.com") || msg.startsWith("JPEG_");
+//            if (isImage) {
+////                ssb = new SpannableStringBuilder("1");
+//                int msgLenBuf = msg.trim().length() - 1;
+////                int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
+//                // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
+////                StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
+////                String curStoragePath = Uri.parse(msg).getLastPathSegment();
+////                StorageReference ref = mImageStorage.child("messageImage").child(curStoragePath);
+////                        .child(msg);
+//
+//                curTarget = new Target() {
+//                    @Override
+//                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                        Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
+//                        drawable.setBounds(0, 0, 1, 1);
+//                        Bitmap bitmapbuf = ((BitmapDrawable) drawable).getBitmap();
+//                        Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmapbuf, 50, 50, true));
+//                        holder.message.setCompoundDrawablesWithIntrinsicBounds(d, null,null,null);
+//                    }
+//
+//                    @Override
+//                    public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
+//                    }
+//
+//                    @Override
+//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+//
+//                    }
+//                };
+//                Picasso.get()
+//                        .load(msg)   // todo: replace youUrl by message when it has an image format.
+//                        .into(curTarget);
+//
+//            } else {
+////                ssb = new SpannableStringBuilder(msg);
+////                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+//                holder.message.setText(msg);
+//            }
 
-            if (isImage) {
-//                ssb = new SpannableStringBuilder("1");
-                int msgLenBuf = msg.trim().length() - 1;
-//                int imgStartIndex = msgLenBuf < 0 ? 0 : msgLenBuf;
-                // todo: we can also use image url or bitmap to construct the ImageSpan!! -- zzx
-//                StorageReference mImageStorage = FirebaseStorage.getInstance().getReference();
-//                String curStoragePath = Uri.parse(msg).getLastPathSegment();
-//                StorageReference ref = mImageStorage.child("messageImage").child(curStoragePath);
-//                        .child(msg);
-
-                curTarget = new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        Drawable drawable = new BitmapDrawable(activity.getResources(), bitmap);
-                        drawable.setBounds(0, 0, 1, 1);
-                        Bitmap bitmapbuf = ((BitmapDrawable) drawable).getBitmap();
-                        Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmapbuf, 50, 50, true));
-                        holder.message.setCompoundDrawablesWithIntrinsicBounds(d, null,null,null);
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Exception exception, Drawable errorDrawable) {
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                };
+//        holder.message.setText(message);
+            holder.message.setText(null);
+            holder.iv.setImageResource(0);
+            if (imageUri != null) {
                 Picasso.get()
-                        .load(msg)   // todo: replace youUrl by message when it has an image format.
-                        .into(curTarget);
+                        .load(imageUri)   // todo: replace youUrl by message when it has an image format.
+                        .resize(100, 100)
+                        .into(holder.iv);
+                holder.message.setVisibility(View.GONE);
 
-            } else {
-//                ssb = new SpannableStringBuilder(msg);
-//                holder.message.setText(ssb, TextView.BufferType.SPANNABLE);
+            }
+            else {
                 holder.message.setText(msg);
             }
 
-//        holder.message.setText(message);
             if (name == null) {
                 name = "Anonymous";
             }
             if (name.equals(currUserName)) {
-                changeDisplayForSelfMessage(holder, name);
+                changeDisplayForSelfMessage(holder, name, msg != null);
                 holder.sender.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -171,7 +188,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
                     }
                 });
             } else {
-                changeDisplayForFriendMessage(holder, name);
+                changeDisplayForFriendMessage(holder, name, msg !=null);
                 holder.sender.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -187,7 +204,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             holder.sender.setText(formatName(name));
 
         } catch (Exception exception) {
-            System.err.println("error when get msg from firebase:" + exception.getMessage() +"   "
+            System.err.println("error when get msg from firebase:" + exception.getMessage() + "   "
                     + exception.getStackTrace());
         }
     }
@@ -198,35 +215,62 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
         return msgSnapshots.size();
     }
 
-    private void changeDisplayForSelfMessage(ChatDetailViewHolder holder,String name) {
-        RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams)holder.sender.getLayoutParams();
-        senderParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
-        senderParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-        holder.sender.setLayoutParams(senderParams);
+    private void changeDisplayForSelfMessage(ChatDetailViewHolder holder, String name, boolean isMessage) {
+        if (isMessage){
+            RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams) holder.sender.getLayoutParams();
+            senderParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
+            senderParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            holder.sender.setLayoutParams(senderParams);
 
-        RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams)holder.message.getLayoutParams();
-        msgParams.removeRule(RelativeLayout.END_OF);
-        msgParams.addRule(RelativeLayout.START_OF, R.id.message_sender);
-        holder.message.setLayoutParams(msgParams);
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            msgParams.removeRule(RelativeLayout.END_OF);
+            msgParams.addRule(RelativeLayout.START_OF, R.id.message_sender);
+            holder.message.setLayoutParams(msgParams);
+        }
+        else {
+            RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams) holder.sender.getLayoutParams();
+            senderParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
+            senderParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            holder.sender.setLayoutParams(senderParams);
+
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            msgParams.removeRule(RelativeLayout.END_OF);
+            msgParams.addRule(RelativeLayout.START_OF, R.id.message_sender);
+            holder.iv.setLayoutParams(msgParams);
+        }
+
     }
 
-    private void changeDisplayForFriendMessage(ChatDetailViewHolder holder,String name) {
-        RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams)holder.sender.getLayoutParams();
-        senderParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
-        senderParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-        holder.sender.setLayoutParams(senderParams);
+    private void changeDisplayForFriendMessage(ChatDetailViewHolder holder, String name,  boolean isMessage) {
+        if (isMessage) {
+            RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams) holder.sender.getLayoutParams();
+            senderParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
+            senderParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+            holder.sender.setLayoutParams(senderParams);
 
-        RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams)holder.message.getLayoutParams();
-        msgParams.removeRule(RelativeLayout.START_OF);
-        msgParams.addRule(RelativeLayout.END_OF, R.id.message_sender);
-        holder.message.setLayoutParams(msgParams);
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            msgParams.removeRule(RelativeLayout.START_OF);
+            msgParams.addRule(RelativeLayout.END_OF, R.id.message_sender);
+            holder.message.setLayoutParams(msgParams);
+        }
+        else {
+            RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams) holder.sender.getLayoutParams();
+            senderParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
+            senderParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+            holder.sender.setLayoutParams(senderParams);
+
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            msgParams.removeRule(RelativeLayout.START_OF);
+            msgParams.addRule(RelativeLayout.END_OF, R.id.message_sender);
+            holder.iv.setLayoutParams(msgParams);
+        }
+
     }
-
 
 
     private String formatName(String name) {
-        if(name.length() > 8) {
-            name = name.substring(0,8) + "...";
+        if (name.length() > 8) {
+            name = name.substring(0, 8) + "...";
         }
         return name;
     }

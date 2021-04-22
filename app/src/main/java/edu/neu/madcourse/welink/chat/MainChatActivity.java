@@ -363,9 +363,11 @@ public class MainChatActivity extends AppCompatActivity {
                                 Task<Uri> messgae_img_url = taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
+                                        ChatMessage temp =   new ChatMessage(senderUserID, fromUserName,
+                                                System.currentTimeMillis(), keypair);
+                                        temp.setImageURL(uri.toString());
                                         mDatabaseReference.child("message_record").child(keypair).push().setValue(
-                                                new ChatMessage(uri.toString(), senderUserID, fromUserName,
-                                                        System.currentTimeMillis(), keypair));
+                                             temp);
 
 //                                        mDatabaseReference.child("message_record").child(keypair).push().setValue(
 //                                                new ChatMessage(uri.toString(), senderUserID, fromUserName,
@@ -534,10 +536,11 @@ public class MainChatActivity extends AppCompatActivity {
 
                     }
                 });
-
+        ChatMessage temp = new ChatMessage(senderUserID, fromUserName,
+                System.currentTimeMillis(), keypair);
+        temp.setMessage(message);
         mDatabaseReference.child("message_record").child(keypair).push()
-                .setValue(new ChatMessage(message, senderUserID, fromUserName,
-                        System.currentTimeMillis(), keypair));
+                .setValue(temp);
 
         mInputText.setText("");
         sendMessageToDevice(fromUserName, message);

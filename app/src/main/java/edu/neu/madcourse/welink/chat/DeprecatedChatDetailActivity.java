@@ -86,8 +86,10 @@ public class DeprecatedChatDetailActivity extends AppCompatActivity implements D
 
     @Override
     public void launchAction(String selected) {
-        dbRef.child("message_record").child(keypair).push().setValue(new ChatMessage(selected, senderUserID,
-                fromUser, System.currentTimeMillis(), keypair));
+        ChatMessage temp = new ChatMessage(senderUserID,
+                fromUser, System.currentTimeMillis(), keypair);
+        temp.setMessage(selected);
+        dbRef.child("message_record").child(keypair).push().setValue(temp);
         sendMessageToDevice(fromUser, selected);
     }
 
