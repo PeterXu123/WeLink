@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,14 +31,14 @@ public class ProfileActivity extends AppCompatActivity  {
     TextView username;
     String uid;
     ImageView iv;
-    Button uploadImage;
-    Button chat;
+    CardView uploadImage;
+    CardView chat;
     FirebaseAuth auth;
     DatabaseReference mDatabaseReference;
     String token;
-    Button followHim;
+    CardView followHim;
     String currentUserId;
-    Button unfollow;
+    CardView unfollow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

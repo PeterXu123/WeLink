@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +40,7 @@ public class FollowingFragment extends Fragment {
     private String displayName;
     private String email;
     private String token;
-    private Button searchButton;
+    private ImageButton searchButton;
     private EditText searchName;
     private RecyclerView followingListView;
     private BothFollowAdapter mFollowingAdapter;
