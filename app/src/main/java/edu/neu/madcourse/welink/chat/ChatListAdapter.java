@@ -41,8 +41,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
 
     }
 
-
-
     public void addNewChaterToAdapter(User curChater, User curUser, Date date) {
         if( listOfChat.size() == 0){
             listOfChat.add(0, new ChatListRow(curChater, curUser, date));
@@ -58,6 +56,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
         }
         listOfChat.add(new ChatListRow(curChater, curUser, date));
         notifyItemInserted(listOfChat.size()-1);
+
     }
 
     public boolean chatListRowEqual(ChatListRow curChatListRow1, ChatListRow curChatListRow2){

@@ -25,6 +25,7 @@ import edu.neu.madcourse.welink.following.FollowingActivity;
 import edu.neu.madcourse.welink.posts.SelfPostActivity;
 import edu.neu.madcourse.welink.utility.UploadProfileIconActivity;
 import edu.neu.madcourse.welink.utility.User;
+import okhttp3.internal.cache.DiskLruCache;
 
 public class ProfileActivity extends AppCompatActivity  {
     TextView username;
@@ -145,6 +146,22 @@ public class ProfileActivity extends AppCompatActivity  {
                 if (!snapshot.hasChild(targetUid)) {
                     mDatabaseReference.child("following_relation").child(currentUid).child(targetUid).setValue(targetUid);
                     mDatabaseReference.child("follower_relation").child(targetUid).child(currentUid).setValue(currentUid);
+                    mDatabaseReference.child("posts_self").child(targetUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                System.out.println(ds.getKey());
+                                mDatabaseReference.child("posts_followings").child(currentUid).child(ds.getKey()).setValue(ds.getValue(String.class));
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                 }
             }
 
@@ -166,7 +183,20 @@ public class ProfileActivity extends AppCompatActivity  {
                 if (snapshot.hasChild(targetUid)) {
                     mDatabaseReference.child("following_relation").child(currentUid).child(targetUid).removeValue();
                     mDatabaseReference.child("follower_relation").child(targetUid).child(currentUid).removeValue();
+                    mDatabaseReference.child("posts_self").child(targetUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                mDatabaseReference.child("posts_followings").child(currentUid)
+                                        .child(ds.getKey()).setValue(null);
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
 
