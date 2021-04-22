@@ -46,7 +46,7 @@ public class WeLinkMessagingService extends FirebaseMessagingService {
 //        extractPayloadDataForegroundCase(remoteMessage);
 
     }
-
+    //     Reference from https://stackoverflow.com/questions/41295924/how-to-check-is-app-in-foreground-from-service
     private boolean applicationInForeground() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> services = activityManager.getRunningAppProcesses();
