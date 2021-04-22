@@ -4,56 +4,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="5dp"
     app:cardCornerRadius="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        >
+        android:layout_marginBottom="10dp">
 
-        <ImageView
-            android:id="@+id/post_card_user_image"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_image_frame"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="50dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:cardCornerRadius="50dp">
+
+                <ImageView
+                    android:id="@+id/post_card_user_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+
+            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/post_card_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/post_card_user_image"
-            android:layout_marginStart="10dp"
-            android:layout_toRightOf="@id/post_card_user_image"
-            android:text="TextView" />
+            android:layout_alignTop="@id/profile_image_frame"
+            android:layout_marginStart="15dp"
+            android:layout_toRightOf="@id/profile_image_frame"
+            android:text="default"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/post_card_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/post_card_user_name"
+            android:layout_alignBottom="@id/profile_image_frame"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:layout_marginEnd="10dp"
-            android:layout_toRightOf="@id/post_card_user_name"
-            android:ems="10"
-            android:inputType="time" />
+            android:layout_toRightOf="@id/profile_image_frame"
+            android:inputType="time"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/post_card_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/post_card_user_image"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical"
-            android:text="TextView" />
+            android:layout_below="@id/profile_image_frame"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/post_card_text"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <edu.neu.madcourse.welink.utility.MyImageView
@@ -68,6 +93,8 @@
                 android:id="@+id/post_card_post_image2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
                 tools:srcCompat="@tools:sample/avatars" />

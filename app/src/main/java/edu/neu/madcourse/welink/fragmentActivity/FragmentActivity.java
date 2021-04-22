@@ -2,6 +2,7 @@ package edu.neu.madcourse.welink.fragmentActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +51,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
     private BottomNavigationView bottomNavigationView;
     Fragment fragment = null;
     private String iconUrl;
-    private TextView logout;
+    private ImageView logout;
     private AlertDialog exitAlert;
     private Bundle bundle;
 
@@ -83,7 +84,7 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
         getCurrentUserUID();
         addPost = findViewById(R.id.add_post_button);
         iconToolBar = findViewById(R.id.iconToolbar);
-        icon = findViewById(R.id.profileIcon);
+        icon = findViewById(R.id.post_card_user_image);
         loadImageToIcon();
         TextView tv = findViewById(R.id.displayNameInToolbar);
         tv.setText(displayName);
@@ -179,6 +180,11 @@ public class FragmentActivity extends AppCompatActivity implements NearbyPostFra
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            SharedPreferences sharedPreferences = getSharedPreferences("LoginSharedPref", MODE_PRIVATE);
+                            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                            myEdit.clear();
+                            myEdit.commit();
+
                             finish();
                         }
                     })

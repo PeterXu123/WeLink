@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/register"
+
     android:gravity="top"
     android:orientation="vertical"
     android:paddingLeft="10dp"
@@ -13,6 +13,24 @@
     android:paddingRight="10dp"
     android:paddingBottom="10dp"
     tools:context=".login_signup.RegisterActivity">
+
+    <ImageView
+        android:id="@+id/register_logo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/logo_withbackground" />
+
+    <TextView
+        android:id="@+id/register_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/sign_up_title"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/register_displayName"
@@ -24,8 +42,6 @@
         android:imeOptions="actionNext"
         android:inputType="textNoSuggestions"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
         android:textIsSelectable="false" />
 
     <EditText
@@ -38,8 +54,6 @@
         android:imeOptions="actionNext"
         android:inputType="textEmailAddress"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
         android:textIsSelectable="false" />
 
     <EditText
@@ -50,9 +64,7 @@
         android:imeOptions="actionUnspecified"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:maxLines="1"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:maxLines="1" />
 
     <EditText
         android:id="@+id/register_confirm_password"
@@ -62,19 +74,39 @@
         android:imeOptions="actionUnspecified"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:maxLines="1"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:maxLines="1" />
 
     <Button
         android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:backgroundTint="#FAF5F5"
         android:minHeight="@dimen/button_height"
-        android:text="@string/register_button_value"
-        android:textColor="#1E57CA" />
+        android:text="@string/register_button_value" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/already_have_account"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/register_button_in_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:text="@string/sign_in_button_value"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 
 </LinearLayout>

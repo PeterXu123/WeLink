@@ -89,7 +89,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
     @NonNull
     @Override
     public ChatListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_row, parent, false);
         ChatListHolder viewHolder = new ChatListHolder(view, context, new Intent(intent));
 
         return viewHolder;
