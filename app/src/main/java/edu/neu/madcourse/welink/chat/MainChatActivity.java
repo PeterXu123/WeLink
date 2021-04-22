@@ -300,7 +300,7 @@ public class MainChatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
+//            Bundle extras = data.getExtras();
 //            imageBitMap = (Bitmap) extras.get("data");
             File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
             imagesFolder.mkdirs();
