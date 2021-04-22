@@ -16,12 +16,14 @@
         android:orientation="vertical">
 
 
+
+
         <TextView
             android:id="@+id/displayName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginStart="16dp"
+            android:gravity="center_horizontal|center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="username"
@@ -30,7 +32,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.443"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/profileImage"
             app:layout_constraintTop_toTopOf="parent" />
 
