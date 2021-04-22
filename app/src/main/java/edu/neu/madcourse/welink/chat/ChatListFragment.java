@@ -200,7 +200,19 @@ public class ChatListFragment extends Fragment {
 //                                            Intent intent = new Intent(getActivity(), MainChatActivity.class);
                                             chatListAdapter = new ChatListAdapter(context, new Intent(curIntent));
                                         }
-                                        chatListAdapter.addNewChaterToAdapter(curChater, curUser);
+                                        mDatabaseReference.child("chater_relation").child(curUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot innerSnapshot) {
+                                                chatListAdapter.addNewChaterToAdapter(curChater, curUser, innerSnapshot.getValue(Date.class));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+
+//                                        --todo: why add chater here???  4/21/2020 zzx
                                     }
                                 }
                             }
@@ -269,9 +281,9 @@ public class ChatListFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
-                   public void onDataChange(@NonNull DataSnapshot snapshot) {
-                       User u = snapshot.getValue(User.class);
-                       chatListAdapter.addNewChaterToAdapter(u, curUser);
+                   public void onDataChange(@NonNull DataSnapshot innerSnapshot) {
+                       User u = innerSnapshot.getValue(User.class);
+                       chatListAdapter.addNewChaterToAdapter(u, curUser, snapshot.getValue(Date.class));
                    }
 
                    @Override
@@ -279,18 +291,20 @@ public class ChatListFragment extends Fragment {
 
                    }
                });
-
+                // snapshot.getKey() is chater id  .child(snapshot.getKey())
+//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//                Date date = new Date();
+//                System.out.println("snapshot.getKey()   " + snapshot.getKey()+"  date:" +formatter.format(snapshot.getValue(Date.class)));
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                 mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User u  =snapshot.getValue(User.class);
-                        chatListAdapter.removeChaterFromAdapter(u, curUser);
-                        chatListAdapter.addNewChaterToAdapter(u, curUser);
+                    public void onDataChange(@NonNull DataSnapshot innerSnapshot) {
+                        User u  =innerSnapshot.getValue(User.class);
+//                        chatListAdapter.removeChaterFromAdapter(u, curUser);
+                        chatListAdapter.addNewChaterToAdapter(u, curUser, snapshot.getValue(Date.class));
                     }
 
                     @Override
@@ -306,7 +320,7 @@ public class ChatListFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         User u  =snapshot.getValue(User.class);
-                        chatListAdapter.removeChaterFromAdapter(u, curUser);
+//                        chatListAdapter.removeChaterFromAdapter(u, curUser);
                     }
 
                     @Override

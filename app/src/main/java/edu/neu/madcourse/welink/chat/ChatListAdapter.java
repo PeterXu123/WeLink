@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 
 import edu.neu.madcourse.welink.R;
@@ -30,7 +33,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
     Context context;
     Intent intent;
     public ChatListAdapter(Context context, Intent intent) {
-        listOfChat = new LinkedList<>();
+//        listOfChat = new LinkedList<ChatListRow>();
+        listOfChat = new LinkedList<ChatListRow>();
         this.context = context;
         this.intent = intent;
 
@@ -39,10 +43,21 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
 
 
 
-    public void addNewChaterToAdapter(User curChater, User curUser) {
-        listOfChat.add(0, new ChatListRow(curChater, curUser));
-        notifyItemInserted(0);
-
+    public void addNewChaterToAdapter(User curChater, User curUser, Date date) {
+        if( listOfChat.size() == 0){
+            listOfChat.add(0, new ChatListRow(curChater, curUser, date));
+            notifyItemInserted(0);
+            return ;
+        }
+        for(int i=0; i<listOfChat.size(); i++) {
+            if (listOfChat.get(i).getDate().getTime() < date.getTime()) {
+                listOfChat.add(i, new ChatListRow(curChater, curUser, date));
+                notifyItemInserted(i);
+                return ;
+            }
+        }
+        listOfChat.add(new ChatListRow(curChater, curUser, date));
+        notifyItemInserted(listOfChat.size()-1);
     }
 
     public boolean chatListRowEqual(ChatListRow curChatListRow1, ChatListRow curChatListRow2){
@@ -63,6 +78,12 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
                 break;
             }
         }
+        Collections.sort(listOfChat, new Comparator<ChatListRow>() {
+            @Override
+            public int compare(ChatListRow row1, ChatListRow row2) {
+                return (int) (row2.getDate().getTime()/100 - row1.getDate().getTime()/100) ;
+            }
+        });
 
     }
 
