@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "789333707188",
-    "project_id": "welink-6a0e1",
-    "storage_bucket": "welink-6a0e1.appspot.com"
+    "project_number": "379679612184",
+    "firebase_url": "https://welink-56c6e-default-rtdb.firebaseio.com",
+    "project_id": "welink-56c6e",
+    "storage_bucket": "welink-56c6e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:789333707188:android:3176101f5a95ae1f724ae1",
+        "mobilesdk_app_id": "1:379679612184:android:a5a9aac17c56b872ca126d",
         "android_client_info": {
           "package_name": "edu.neu.madcourse.welink"
         }
       },
       "oauth_client": [
         {
-          "client_id": "789333707188-47ich207h8u8hq3p368hhn2ivru44opi.apps.googleusercontent.com",
+          "client_id": "379679612184-gn7hpochit87kpiheuecnq60oh84tiag.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBFdjyPxfQdj8h4pGyQiC_QtcUweuRR-8k"
+          "current_key": "AIzaSyC0nBVe88t3Q4E-rLTa9OazBfogl3U3DNw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "789333707188-47ich207h8u8hq3p368hhn2ivru44opi.apps.googleusercontent.com",
+              "client_id": "379679612184-gn7hpochit87kpiheuecnq60oh84tiag.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
