@@ -548,10 +548,8 @@ public class MainChatActivity extends AppCompatActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (!snapshot.hasChild(id1)) {
                             mDatabaseReference.child("chater_relation").child(id2).child(id1)
                                     .setValue(new Date());
-                        }
                     }
 
                     @Override
