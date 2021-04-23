@@ -53,10 +53,11 @@ public class ProfileActivity extends AppCompatActivity  {
         followHim = findViewById(R.id.FollowHim);
         unfollow = findViewById(R.id.unfollowInProfile);
         unfollow.setVisibility(View.GONE);
-        // if it's current user's profile, token will be null
+        // if it's current user's profile or the user logout, token will be null
         if (getIntent().getExtras().getString("token") != null) {
             token = getIntent().getExtras().getString("token");
         }
+
         if (getIntent().getExtras().getString("uid") != null && getIntent().getExtras().getString("uid").equals(auth.getCurrentUser().getUid())) {
             chat.setVisibility(View.GONE);
             followHim.setVisibility(View.GONE);
@@ -228,6 +229,8 @@ public class ProfileActivity extends AppCompatActivity  {
                 startActivity(intent);
                 break;
             case R.id.ChatInProfile:
+                System.out.println(token);
+                System.out.println("------------------------------------");
                 intent = new Intent(ProfileActivity.this, MainChatActivity.class);
                 intent.putExtra("fromUser", auth.getCurrentUser().getDisplayName());
                 intent.putExtra("curChaterToken", token);

@@ -110,7 +110,9 @@ public class MainChatActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                sendMessageToDevice(chaterToken, fromWhom,selected);
+                if (chaterToken != null) {
+                    sendMessageToDevice(chaterToken, fromWhom, selected);
+                }
             }
         }).start();
     }
@@ -225,11 +227,23 @@ public class MainChatActivity extends AppCompatActivity {
 
             keypair = intent.getExtras().getString("pairKey");
             chaterToken = intent.getExtras().getString("curChaterToken");
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+            mDatabaseReference.child("users").child(curChater.getUid()).child("token").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    chaterToken = snapshot.getValue(String.class);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
             senderUserID = intent.getExtras().getString("curUserID");
             CLIENT_REGISTRATION_TOKEN = chaterToken;
         }
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         storage = FirebaseStorage.getInstance();
         mAuth =  FirebaseAuth.getInstance();
 
