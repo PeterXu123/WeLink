@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -334,6 +335,13 @@ public class MainChatActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
         return bitmap;
     }
+//  reference https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 
     /**
      * To get image url and upload it to firebase. After uploaded, we will send it to firebase's
@@ -349,6 +357,7 @@ public class MainChatActivity extends AppCompatActivity {
             try {
                 Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
 //                Bitmap bmp = imageBitMap;
+                bmp = rotateImage(bmp, 90);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 baos.flush();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
