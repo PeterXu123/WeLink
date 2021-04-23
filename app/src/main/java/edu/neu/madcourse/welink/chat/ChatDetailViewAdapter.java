@@ -225,10 +225,10 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             senderParams.addRule(RelativeLayout.ALIGN_PARENT_END);
             holder.sender.setLayoutParams(senderParams);
 
-            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.msgFrame.getLayoutParams();
             msgParams.removeRule(RelativeLayout.END_OF);
             msgParams.addRule(RelativeLayout.START_OF, R.id.message_sender);
-            holder.message.setLayoutParams(msgParams);
+            holder.msgFrame.setLayoutParams(msgParams);
         }
         else {
             RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams) holder.sender.getLayoutParams();
@@ -236,7 +236,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             senderParams.addRule(RelativeLayout.ALIGN_PARENT_END);
             holder.sender.setLayoutParams(senderParams);
 
-            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.iv.getLayoutParams();
             msgParams.removeRule(RelativeLayout.END_OF);
             msgParams.addRule(RelativeLayout.START_OF, R.id.message_sender);
             holder.iv.setLayoutParams(msgParams);
@@ -251,10 +251,10 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             senderParams.addRule(RelativeLayout.ALIGN_PARENT_START);
             holder.sender.setLayoutParams(senderParams);
 
-            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.msgFrame.getLayoutParams();
             msgParams.removeRule(RelativeLayout.START_OF);
             msgParams.addRule(RelativeLayout.END_OF, R.id.message_sender);
-            holder.message.setLayoutParams(msgParams);
+            holder.msgFrame.setLayoutParams(msgParams);
         }
         else {
             RelativeLayout.LayoutParams senderParams = (RelativeLayout.LayoutParams) holder.sender.getLayoutParams();
@@ -262,7 +262,7 @@ public class ChatDetailViewAdapter extends RecyclerView.Adapter<ChatDetailViewHo
             senderParams.addRule(RelativeLayout.ALIGN_PARENT_START);
             holder.sender.setLayoutParams(senderParams);
 
-            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.message.getLayoutParams();
+            RelativeLayout.LayoutParams msgParams = (RelativeLayout.LayoutParams) holder.iv.getLayoutParams();
             msgParams.removeRule(RelativeLayout.START_OF);
             msgParams.addRule(RelativeLayout.END_OF, R.id.message_sender);
             holder.iv.setLayoutParams(msgParams);

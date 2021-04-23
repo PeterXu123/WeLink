@@ -16,21 +16,35 @@
         android:text="sender"
         android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/message_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/message_content_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
         android:paddingStart="10dp"
         android:paddingEnd="5dp"
-        android:layout_toEndOf="@id/message_sender"
-        android:text="content"
-        android:textSize="24sp" />
+        app:cardCornerRadius="10dp">
+
+        <TextView
+            android:id="@+id/message_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="content"
+            android:textSize="24sp" />
+
+    </androidx.cardview.widget.CardView>
 
     <ImageView
         android:id="@+id/messageImage"
-        android:layout_width="40dip"
-        android:layout_height="40dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
         android:layout_toEndOf="@id/message_sender"
+        android:paddingStart="10dp"
+        android:paddingEnd="5dp"
         tools:srcCompat="@tools:sample/avatars" />
 
 </RelativeLayout>
