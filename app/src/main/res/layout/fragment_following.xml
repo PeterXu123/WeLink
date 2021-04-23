@@ -10,6 +10,8 @@
         android:id="@+id/searchName1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
         android:layout_toLeftOf="@id/searchUserButton1"
         android:ems="10"
         android:hint="search user by username"
@@ -19,7 +21,9 @@
         android:id="@+id/searchUserButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/searchName1"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
         app:srcCompat="@drawable/search_button" />
 
     <androidx.recyclerview.widget.RecyclerView
