@@ -71,7 +71,7 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
     private int PICK_CODE = 19;
     private List<AddImageItem> images;
     private FirebaseStorage  storage = FirebaseStorage.getInstance();
-    private Button addImagesBtn;
+    private ImageButton addImagesBtn;
     private RecyclerView rv;
     private AddPostAdapter rvAdapter;
 
@@ -86,7 +86,7 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
         }
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         content = findViewById(R.id.new_post_content);
-        Button cancelBtn = findViewById(R.id.new_post_cancel);
+        ImageButton cancelBtn = findViewById(R.id.new_post_cancel);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +94,7 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
             }
         });
 
-        Button submitBtn = findViewById(R.id.new_post_submit);
+        ImageButton submitBtn = findViewById(R.id.new_post_submit);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,7 +204,6 @@ public class AddPostActivity extends AppCompatActivity implements LocationListen
 
     private void removeLocationInfo() {
         locationString = null;
-        Toast.makeText(AddPostActivity.this, "null", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -26,6 +26,8 @@ public class AddPostAdapter extends RecyclerView.Adapter<AddPostViewHolder>{
     @Override
     public AddPostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_post_image_card,parent,false);
+        int width = parent.getMeasuredWidth() / 3;
+        view.setLayoutParams(new RecyclerView.LayoutParams(width,width));
         return new AddPostViewHolder(view, listener);
     }
 

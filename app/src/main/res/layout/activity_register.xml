@@ -98,7 +98,8 @@
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:minHeight="@dimen/button_height"
-                android:text="@string/register_button_value" />
+                android:text="@string/register_button_value"
+                android:textColor="@color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
