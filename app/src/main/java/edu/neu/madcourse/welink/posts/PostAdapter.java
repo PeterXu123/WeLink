@@ -18,8 +18,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import edu.neu.madcourse.welink.R;
 import edu.neu.madcourse.welink.utility.PostDAO;
@@ -33,15 +36,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private OpenProfileOnClickListener openProfileOnClickListener;
     private OpenImageOnClickListener openImageOnClickListener;
+    private Map<String, PostDTO> postIdDTOMap;
+    private int totalPostCount = 0;
+    private int loadedPostCount = 0;
+    private User currUser;
 
     PostAdapter(String uid, String type,String location) {
         postDTOs = new ArrayList<>();
+        postIdDTOMap = new HashMap<>();
         switch (type) {
             case "nearby":
                 ref.child("posts_location").child(location).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
                 break;
             case "self":
-                ref.child("posts_self").child(uid).orderByKey().addChildEventListener(childAddListener);
+                ref.child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        currUser = snapshot.getValue(User.class);
+                        ref.child("posts_self").child(uid).orderByKey().addChildEventListener(childAddListener);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
                 break;
             case "user":
                 ref.child("posts_self").child(uid).orderByKey().addListenerForSingleValueEvent(getChildrenOnceListener);
@@ -120,15 +139,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         return postDTOs.size();
     }
 
-    private ValueEventListener findPostById() {
+    private ValueEventListener findPostById(String listenerType) {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                PostDAO post = snapshot.getValue(PostDAO.class);
-                if(post != null) {
-                    PostDTO postDTO = new PostDTO();
-                    postDTO.setByPostDAO(post);
-                    ref.child("users").child(post.getAuthorUID()).addListenerForSingleValueEvent(findUserById(postDTO));
+                PostDAO postDAO = snapshot.getValue(PostDAO.class);
+                String postId = snapshot.getKey();
+                if(postDAO != null) {
+                    if(listenerType.equals("getChildrenOnceListener")) {
+                        PostDTO postDTO= postIdDTOMap.get(postId);
+                        if(postDTO != null) {
+                            postDTO.setByPostDAO(postDAO);
+                            ref.child("users").child(postDAO.getAuthorUID()).addListenerForSingleValueEvent(findUserById(postDTO, listenerType));
+                        }
+                    } else if(listenerType.equals("childAddListener")) {
+                        PostDTO postDTO = new PostDTO();
+                        postDTO.setByPostDAO(postDAO);
+                        postDTO.setAuthor(currUser);
+                        addNewPostToList(postDTO, "childAddListener");
+
+                    }
                 }
             }
 
@@ -139,15 +169,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         };
     }
 
-    private ValueEventListener findUserById(PostDTO postDTO) {
+    private ValueEventListener findUserById(PostDTO postDTO, String listenerType) {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User author = snapshot.getValue(User.class);
                 postDTO.setAuthor(author);
-                addNewPostToList(postDTO);
+                loadedPostCount++;
+                addNewPostToList(postDTO, listenerType);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -155,10 +185,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         };
     }
 
-    private void addNewPostToList(PostDTO post) {
-        postDTOs.add(0,post);
-        notifyItemInserted(0);
-        rv.smoothScrollToPosition(0);
+    private void addNewPostToList(PostDTO post, String listenerType) {
+        if(listenerType.equals("getChildrenOnceListener")) {
+            if(loadedPostCount == totalPostCount) {
+                notifyDataSetChanged();
+            }
+        } else if(listenerType.equals("childAddListener")) {
+            postDTOs.add(0,post);
+            notifyItemInserted(0);
+            rv.smoothScrollToPosition(0);
+        }
     }
 
     private ValueEventListener getChildrenOnceListener = new ValueEventListener() {
@@ -171,9 +207,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
                 DataSnapshot next = iterator.next();
                 posts.add(next.getKey());
             }
+            totalPostCount = posts.size();
             for(String postId : posts) {
-                ref.child("posts").child(postId).addListenerForSingleValueEvent(findPostById());
+                PostDTO newPost= new PostDTO(postId);
+                postIdDTOMap.put(postId, newPost);
+                postDTOs.add(newPost);
+                ref.child("posts").child(postId).addListenerForSingleValueEvent(findPostById("getChildrenOnceListener"));
             }
+            Collections.reverse(postDTOs);
         }
 
         @Override
@@ -188,7 +229,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
             String postId = snapshot.getKey();
             //get Post and author information
             if(postId != null) {
-                ref.child("posts").child(postId).addListenerForSingleValueEvent(findPostById());
+                ref.child("posts").child(postId).addListenerForSingleValueEvent(findPostById("childAddListener"));
             }
         }
 
