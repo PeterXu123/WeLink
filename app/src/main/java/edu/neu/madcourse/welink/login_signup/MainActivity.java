@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                                         myEdit.putString("password", login_password);
                                         myEdit.putString("email", myUser.getEmail());
                                         myEdit.commit();
+                                        password.setText("");
                                         startActivity(intent);
 
                                     }
