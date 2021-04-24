@@ -351,7 +351,7 @@ public class MainChatActivity extends AppCompatActivity {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
     }
-
+    // reference: https://stackoverflow.com/questions/36995146/why-images-are-rotated-90-degree-in-imageview
     public int getCameraPhotoOrientation(Context context, Uri imageUri,
                                          String imagePath) {
         int rotate = 0;
