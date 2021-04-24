@@ -2,11 +2,13 @@ package edu.neu.madcourse.welink.chat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -283,8 +285,6 @@ public class MainChatActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_DENIED){
                     ActivityCompat.requestPermissions(activityInFab, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION);
-
-
                 } else {
                     dispatchTakePictureIntent();
                 }
@@ -352,6 +352,35 @@ public class MainChatActivity extends AppCompatActivity {
                 matrix, true);
     }
 
+    public int getCameraPhotoOrientation(Context context, Uri imageUri,
+                                         String imagePath) {
+        int rotate = 0;
+        try {
+            context.getContentResolver().notifyChange(imageUri, null);
+            File imageFile = new File(imagePath);
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rotate;
+    }
+
     /**
      * To get image url and upload it to firebase. After uploaded, we will send it to firebase's
      * message_record to show another user the information.
@@ -366,7 +395,8 @@ public class MainChatActivity extends AppCompatActivity {
             try {
                 Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
 //                Bitmap bmp = imageBitMap;
-                bmp = rotateImage(bmp, 90);
+                int angle = getCameraPhotoOrientation(getApplicationContext(), photoURI, mCurrentPhotoPath);
+                bmp = rotateImage(bmp, angle);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 baos.flush();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
