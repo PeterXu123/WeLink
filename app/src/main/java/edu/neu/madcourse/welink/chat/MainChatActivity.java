@@ -416,6 +416,36 @@ public class MainChatActivity extends AppCompatActivity {
                                         temp.setImageURL(uri.toString());
                                         mDatabaseReference.child("message_record").child(keypair).push().setValue(
                                              temp);
+                                        String[] idPairInLexiOrder = keypair.split("_");
+                                        String id1 = idPairInLexiOrder[0];
+                                        String id2 = idPairInLexiOrder[1];
+                                        mDatabaseReference.child("chater_relation").child(id1).addListenerForSingleValueEvent(
+                                                new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        mDatabaseReference.child("chater_relation").child(id1).child(id2)
+                                                                .setValue(new Date());
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
+                                        mDatabaseReference.child("chater_relation").child(id2).addListenerForSingleValueEvent(
+                                                new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        mDatabaseReference.child("chater_relation").child(id2).child(id1)
+                                                                .setValue(new Date());
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
 
 //                                        mDatabaseReference.child("message_record").child(keypair).push().setValue(
 //                                                new ChatMessage(uri.toString(), senderUserID, fromUserName,
