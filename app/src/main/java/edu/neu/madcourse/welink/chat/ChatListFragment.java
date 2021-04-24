@@ -279,18 +279,18 @@ public class ChatListFragment extends Fragment {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-               mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(@NonNull DataSnapshot innerSnapshot) {
-                       User u = innerSnapshot.getValue(User.class);
-                       chatListAdapter.addNewChaterToAdapter(u, curUser, snapshot.getValue(Date.class));
-                   }
+                mDatabaseReference.child("users").child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot innerSnapshot) {
+                        User u = innerSnapshot.getValue(User.class);
+                        chatListAdapter.addNewChaterToAdapter(u, curUser, snapshot.getValue(Date.class));
+                    }
 
-                   @Override
-                   public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                   }
-               });
+                    }
+                });
                 // snapshot.getKey() is chater id  .child(snapshot.getKey())
 //                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 //                Date date = new Date();
@@ -386,8 +386,8 @@ public class ChatListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            curIntent = new Intent(getActivity(), MainChatActivity.class);
-            chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
+        curIntent = new Intent(getActivity(), MainChatActivity.class);
+        chatListAdapter = new ChatListAdapter(getContext(), new Intent(curIntent));
         chatListRecyclerView = getView().findViewById(R.id.chat_list_recycler_view);
         curIntent = new Intent(getActivity(), MainChatActivity.class);
 
