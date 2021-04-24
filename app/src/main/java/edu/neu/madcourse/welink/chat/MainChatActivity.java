@@ -282,14 +282,8 @@ public class MainChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_DENIED){
-//                    if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA))
-//                    {
-//                        ActivityCompat.requestPermissions(activityInFab, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION);
-//                    } else {
-//                        Toast.makeText(activityInFab, "You need to allow this app to access camera",
-//                                Toast.LENGTH_LONG).show();
-//                    }
                     ActivityCompat.requestPermissions(activityInFab, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+
 
                 } else {
                     dispatchTakePictureIntent();

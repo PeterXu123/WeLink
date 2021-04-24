@@ -20,6 +20,10 @@ public class PostDTO {
         this.author = author;
     }
 
+    public PostDTO(String postID) {
+        this.postID = postID;
+    }
+
     public String getDisplayTime() {
         return displayTime;
     }

@@ -139,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
-                        showError("Registration failed");
+                        showError("Registration failed and the email has been used for registration");
                     }
                     else {
                         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
